@@ -1,12 +1,16 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { get } from 'http';
+import { Movie } from './entities/movie.entity';
+import { MoviesService } from './movies.service';
 
 @Controller('movies') //url의 엔트리 포인트 담당
 export class MoviesController {
 
+    constructor(private readonly moviesService : MoviesService){}
+    
     @Get("/")
-    getAll():string{
-        return 'jo';
+    getAll():Movie[]{
+        return this.moviesService.getAll();
     }
 
     @Get('search')
@@ -15,19 +19,18 @@ export class MoviesController {
     }
 
     @Get('/:id')
-    getOne(@Param("id") userId:string){//id 파라미터를 userId라는 argument에 string 타입으로 저장
-        return `This will return one movie with : ${userId}`;
+    getOne(@Param("id") userId:string):Movie{//id 파라미터를 userId라는 argument에 string 타입으로 저장
+        return this.moviesService.getOne(userId);
     }
 
     @Post()
     create(@Body() movieData){  //json 데이터 바디 받을 때 쓰는 데코레이터
-        console.log(movieData)
-        return movieData;
+        return this.moviesService.create(movieData);
     }
 
     @Delete('/:id')
     remove(@Param("id") movieId:string){
-        return `This will delete a movie with the id: ${movieId}`;
+        return this.moviesService.delete(movieId);
     }
 
     @Patch('/:id')//리소스의 일부분만 업데이트
