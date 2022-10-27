@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { get } from 'http';
+import { CreateMovieDto } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -19,22 +20,23 @@ export class MoviesController {
     }
 
     @Get('/:id')
-    getOne(@Param("id") userId:string):Movie{//id 파라미터를 userId라는 argument에 string 타입으로 저장
+    getOne(@Param("id") userId:number):Movie{//id 파라미터를 userId라는 argument에 string 타입으로 저장
         return this.moviesService.getOne(userId);
     }
 
     @Post()
-    create(@Body() movieData){  //json 데이터 바디 받을 때 쓰는 데코레이터
+    create(@Body() movieData:CreateMovieDto){  //json 데이터 바디 받을 때 쓰는 데코레이터
+        
         return this.moviesService.create(movieData);
     }
 
     @Delete('/:id')
-    remove(@Param("id") movieId:string){
+    remove(@Param("id") movieId:number){
         return this.moviesService.delete(movieId);
     }
 
     @Patch('/:id')//리소스의 일부분만 업데이트
-    patch(@Param('id') movieId:string, @Body() updateData){
+    patch(@Param('id') movieId:number, @Body() updateData){
         return this.moviesService.update(movieId,updateData);
 
     }
