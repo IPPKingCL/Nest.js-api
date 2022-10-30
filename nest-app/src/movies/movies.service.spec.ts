@@ -53,4 +53,75 @@ describe('MoviesService', () => {
     })
   })
 
+
+  describe("deleteOne", () => {
+    it("deletes a movie", () => {
+      service.create({
+        title:"Text Movie",
+        genres : ['test'],
+        year:2000,
+      });
+
+      console.log(service.getAll());
+
+      const allMovies = service.getAll();
+      service.delete(1);
+      const afterDelete = service.getAll();
+
+      expect(afterDelete.length).toEqual(allMovies.length-1);
+
+    })
+
+    it("should return a 404",() => {
+      try{
+        service.delete(999)
+      }catch(e){
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toEqual(`Movie with ID : 999`);
+      }
+    })
+  })
+
+  describe("create", () => {
+    it("should create a movie", () => {
+      const beforeCreate = service.getAll().length;
+      service.create(
+        {
+          title:"Text Movie",
+          genres : ['test'],
+          year:2000,
+        }
+      );
+      const afterCreate = service.getAll().length;
+      expect(afterCreate).toBeGreaterThan(beforeCreate);
+
+
+    });
+  });
+
+  describe("update",() => {
+    it("should update a movie",() => {
+      service.create(
+        {
+          title:"Text Movie",
+          genres : ['test'],
+          year:2000,
+        }
+      );
+
+      service.update(1,{title:"updated test"});
+      const movie = service.getOne(1);
+      expect(movie.title).toEqual("updated test");
+
+      
+    })
+    it("should throw a NotFoundException error",() => {
+      try{
+        service.update(999,{});
+      }catch(e){
+        expect(e).toBeInstanceOf(NotFoundException);
+       
+      }
+    })
+  })
 });
