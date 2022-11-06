@@ -6,4 +6,9 @@ export class AppController {
     home(){
         return 'Welcome to my Movie';
     }
+
+    @Get()
+    home2() {
+        return 'test push origin master';
+    }
 }
