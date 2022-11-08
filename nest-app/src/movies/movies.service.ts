@@ -38,4 +38,8 @@ export class MoviesService {
         this.movies.push({...movie,...updateData});
 
     }
+
+    test(){
+        
+    }
 }

@@ -42,5 +42,11 @@ export class MoviesController {
 
     }
 
+    @Get('test')
+    test(){
+        return this.moviesService.test();
+    }
+    
+
     
 }
