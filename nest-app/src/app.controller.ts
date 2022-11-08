@@ -11,4 +11,11 @@ export class AppController {
     home2() {
         return 'test push origin master';
     }
+
+
+
+    @Get()
+    home3() {
+        return 'pushpush';
+    }
 }
