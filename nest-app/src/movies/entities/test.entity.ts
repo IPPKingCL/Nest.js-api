@@ -18,3 +18,5 @@ export class testEntity {
   @Column({ length: 60 })
   signupVerifyToken: string;
 }
+
+//https://gist.github.com/anchan828/9e569f076e7bc18daf21c652f7c3d012
