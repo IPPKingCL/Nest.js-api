@@ -68,7 +68,7 @@ describe('MoviesService', () => {
       service.delete(1);
       const afterDelete = service.getAll();
 
-     // expect(afterDelete.length).toEqual(allMovies.length-1);
+      expect(afterDelete.length).toEqual(allMovies.length-1);
 
     })
 
@@ -84,7 +84,7 @@ describe('MoviesService', () => {
 
   describe("create", () => {
     it("should create a movie", () => {
-     // const beforeCreate = service.getAll().length;
+      const beforeCreate = service.getAll().length;
       service.create(
         {
           title:"Text Movie",
@@ -92,8 +92,8 @@ describe('MoviesService', () => {
           year:2000,
         }
       );
-      //const afterCreate = service.getAll().length;
-     // expect(afterCreate).toBeGreaterThan(beforeCreate);
+      const afterCreate = service.getAll().length;
+      expect(afterCreate).toBeGreaterThan(beforeCreate);
 
 
     });
