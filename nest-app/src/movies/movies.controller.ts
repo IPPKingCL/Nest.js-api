@@ -4,6 +4,7 @@ import { get } from 'http';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
+import { testEntity } from './entities/test.entity';
 import { MoviesService } from './movies.service';
 
 @Controller('movies') //url의 엔트리 포인트 담당
@@ -12,8 +13,13 @@ export class MoviesController {
     constructor(private readonly moviesService : MoviesService){}
     
     @Get("/")
-    getAll():Movie[]{
+    getAll(): Promise<testEntity[]>{
         return this.moviesService.getAll();
+    }
+
+    @Get("/insert")
+    getInsert(): void {
+        this.moviesService.insert();
     }
 
     @ApiOperation({summary:'wow'})
