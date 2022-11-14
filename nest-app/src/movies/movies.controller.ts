@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { get } from 'http';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -15,6 +16,7 @@ export class MoviesController {
         return this.moviesService.getAll();
     }
 
+    @ApiOperation({summary:'wow'})
     @Get('search')
     search(@Query("year") searchingYear:string){  //url에서 파라미터 값 받을 때
         return `we are searching for a movie after ${searchingYear}`
