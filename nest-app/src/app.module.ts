@@ -38,14 +38,3 @@ import { env } from 'process';
 })
 export class AppModule {}
 
-
-TypeOrmModule.forRoot({
-  type: 'mysql',
-  host: process.env.RDS_HOST,
-  port: 3306,
-  username: process.env.RDS_USER,
-  password: process.env.RDS_PSWORD,
-  database: process.env.RDS_DATABASE,
-  entities: [testEntity],
-  synchronize: true,
-})

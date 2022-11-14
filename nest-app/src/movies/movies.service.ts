@@ -2,12 +2,24 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
+import { testEntity } from './entities/test.entity';
 
 @Injectable()
 export class MoviesService {
     private movies:Movie[] =[];
 
+    constructor(
+        @InjectRepository(UserRepository) private userRepository: UserRepository,
+      ) {}
     getAll():Movie[]{
+        
+        const test = new testEntity();
+        test.id='qudqud97';
+        test.email='qudqud97@naver.com';
+        test.name='hi';
+        test.password='1234';
+        test.signupVerifyToken='true';
+        
         return this.movies;
     }
 
