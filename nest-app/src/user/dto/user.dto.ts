@@ -19,7 +19,7 @@ export class UserDto {
     readonly nickname : String;
 
     @IsString()
-    readonly userId : String;
+    readonly userId : string;
 
     @IsString()
     readonly password : String;

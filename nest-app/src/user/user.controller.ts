@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { Query } from 'typeorm/driver/Query';
+import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -20,4 +22,12 @@ export class UserController {
         console.log(userData);
         return await this.userService.insertUser(userData);
     }
+
+    @ApiOperation({summary:'회원가입 중 아이디 중복 체크'})
+    @Post('/checkUser')
+    async checkUser(@Body('userId') userId:string){
+        console.log(userId);
+        return await this.userService.checkUser(userId);
+    }
+
 }

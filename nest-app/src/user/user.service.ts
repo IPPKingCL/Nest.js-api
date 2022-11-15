@@ -29,7 +29,31 @@ export class UserService {
             await this.repository.save(user);
             return {success:true}
         }catch(err){
-            return {success:false}
+            return {success:false, msg : "회원 가입 중 에러발생"}
         }
     }
+
+    async checkUser(userId : string) : Promise<object>{
+         
+        //console.log("res : "+res.);
+        try{
+            console.log(userId);
+            const res = await this.repository.createQueryBuilder('user')
+            .where('userId = :id',{id :userId})
+            .getOne();
+            
+            if(res==null){
+                return {success:true}
+            }else{
+                return {success :false , msg : "이미 존재하는 아이디 입니다"}
+            }
+            
+        }catch(err){
+            console.log(err)
+            return {success:false, msg:"회원 조회 중 에러발생"};
+        }
+        
+    }
+
+
 }
