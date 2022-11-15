@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { UserDto } from './dto/user.dto';
+import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './repository/user.repository';
 @Injectable()
@@ -10,17 +12,20 @@ export class UserService {
         return this.repository.find();
     }
 
-    insertUser() : object {
-        const user = new UserEntity();
-        user.name = 'hi'
-        user.age = 18;
-        user.sex = 'm';
-        user.nickname = 'hi'
-        user.userId = 'qudqud97';
-        user.password ='1234';
-        user.email = 'qudqud97@naver.com';
-        user.job = '개발자'
+    async insertUser(userData:UserCreateDto) :Promise<object> {
+        let user = new UserEntity();
+        user.name = userData.name;
+        user.age = userData.age;
+        user.birth = new Date(userData.birth);
+        user.sex = userData.sex;
+        user.nickname = userData.nickname;
+        user.userId = userData.userId;
+        user.password = userData.password;
+        user.email = userData.email;
+        user.job = userData.job;
+                
         try{
+            console.log(user)
             this.repository.save(user);
             return {success:true}
         }catch{
