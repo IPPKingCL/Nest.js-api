@@ -13,9 +13,9 @@ export class MoviesController {
     constructor(private readonly moviesService : MoviesService){}
     
     @Get("/")
-    getAll(): Promise<testEntity[]>{
-        return this.moviesService.getAll();
-    }
+    //getAll(): Promise<testEntity[]>{
+       // return this.moviesService.getAll();
+   // }
 
     @Get("/insert")
     getInsert(): void {

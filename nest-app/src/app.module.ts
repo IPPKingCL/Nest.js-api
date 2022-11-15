@@ -34,8 +34,8 @@ import { UserEntity } from './user/entities/user.entity';
       entities: [testEntity,UserEntity],
       synchronize: true,
     }),],
-  controllers: [AppController, UserController, BoardController, AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
-  providers: [UserService, BoardService, AlcoholService],
+  controllers: [AppController, BoardController, AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  providers: [],
 })
 export class AppModule {}
 

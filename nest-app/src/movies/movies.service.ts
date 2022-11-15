@@ -3,13 +3,13 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { testEntity } from './entities/test.entity';
-import { UserRepository } from "./repository/user.repository";
+//import { UserRepository } from "./repository/user.repository";
 
 @Injectable()
 export class MoviesService {
     private movies: Movie[] = [];
 
-    constructor(private readonly repository: UserRepository) { }
+    //constructor(private readonly repository: UserRepository) { }
 
     // getAll(): Movie[] {
 
@@ -23,11 +23,11 @@ export class MoviesService {
     //     return this.movies;
     // }
 
-    getAll(): Promise<testEntity[]> {
+    //getAll(): Promise<testEntity[]> {
 
-        return this.repository.find();
+        //return this.repository.find();
 
-    }
+    //}
 
     getOne(id: number): Movie {
         const movie = this.movies.find(movie => movie.id === (id));
@@ -45,7 +45,7 @@ export class MoviesService {
         test.password = '1234';
         test.signupVerifyToken = 'true';
         
-        this.repository.save(test);
+        //this.repository.save(test);
     }
 
     delete(id: number): boolean {
