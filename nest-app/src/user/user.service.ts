@@ -13,6 +13,7 @@ export class UserService {
     }
 
     async insertUser(userData:UserCreateDto) :Promise<object> {
+        /*Dto를 entitiy에 저장*/
         let user = new UserEntity();
         user.name = userData.name;
         user.age = userData.age;
@@ -25,10 +26,9 @@ export class UserService {
         user.job = userData.job;
                 
         try{
-            console.log(user)
-            this.repository.save(user);
+            await this.repository.save(user);
             return {success:true}
-        }catch{
+        }catch(err){
             return {success:false}
         }
     }
