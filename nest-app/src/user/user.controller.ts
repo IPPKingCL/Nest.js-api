@@ -30,4 +30,11 @@ export class UserController {
         return await this.userService.checkUser(userId);
     }
 
+    @ApiOperation({summary:'이메일 유뮤 체크'})
+    @Post('/checkEmail')
+    async checkEmail(@Body('email') email:string){
+        console.log(email);
+        return await this.userService.chectEmail(email);
+    }
+
 }

@@ -55,5 +55,21 @@ export class UserService {
         
     }
 
+    async chectEmail(email : string) : Promise<object>{
+        try{
+            const res = await this.repository.createQueryBuilder("user")
+            .where('email = :email',{email:email})
+            .getOne();
+
+            if(res==null){
+                return {success:true};
+            }else{
+                return {success:false, msg:'존재하는 사용자'};
+            }
+        }catch(err){
+            return {success:false, msg:"회원 조회 중 에러발생"};
+        }
+    }
+
 
 }
