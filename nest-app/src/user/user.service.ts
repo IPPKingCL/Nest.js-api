@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './repository/user.repository';
 @Injectable()
 export class UserService {
@@ -57,18 +57,16 @@ export class UserService {
 
     async chectEmail(email : string) : Promise<object>{
         try{
-            console.log("star  t")
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:email})
             .getOne();
-            console.log(res);
+
             if(res==null){
                 return {success:true};
             }else{
                 return {success:false, msg:'존재하는 사용자'};
             }
         }catch(err){
-            console.log(err);
             return {success:false, msg:"회원 조회 중 에러발생"};
         }
     }

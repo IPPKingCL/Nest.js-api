@@ -11,11 +11,11 @@ import { AlcoholController } from './alcohol/alcohol.controller';
 import { AlcoholService } from './alcohol/alcohol.service';
 import { AlcoholModule } from './alcohol/alcohol.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { testEntity } from './entities/test.entity';
+import { testEntity } from './movies/entities/test.entity';
 import { ConfigModule } from '@nestjs/config';
 import { env } from 'process';
-import { UserEntity } from './entities/user.entity';
-import { BoardEntity } from './entities/board.entity';
+import { UserEntity } from './user/entities/user.entity';
+import { BoardEntity } from './board/entities/board.entity';
 
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
@@ -32,7 +32,7 @@ import { BoardEntity } from './entities/board.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [__dirname+'./entities/*.entity.ts' ],
+      entities: [testEntity,UserEntity, BoardEntity],
       synchronize: true,
     }),],
   controllers: [AppController, BoardController, AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
