@@ -19,20 +19,21 @@ export class UserController {
     @ApiOperation({summary:' 회원가입'})
     @Post('/insert')
     async insertUser(@Body() userData:UserCreateDto){
-        console.log(userData);
+        console.log("---------------insertUser : "+userData);
         return await this.userService.insertUser(userData);
     }
 
     @ApiOperation({summary:'회원가입 중 아이디 중복 체크'})
     @Post('/checkUser')
     async checkUser(@Body('nickname') nickname:string){
+        console.log("---------------checkNickName : "+nickname);
         return await this.userService.checkUser(nickname);
     }
 
     @ApiOperation({summary:'이메일 유뮤 체크'})
     @Post('/checkEmail')
     async checkEmail(@Body('email') email:string){
-        console.log(email);
+        console.log("---------------checkEmail : "+email);
         return await this.userService.chectEmail(email);
     }
 
