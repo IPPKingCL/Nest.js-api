@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BoardEntity } from 'src/board/entities/board.entity';
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class UserEntity {
@@ -32,5 +33,7 @@ export class UserEntity {
 
     @Column({length:20})
     job : string;
+
+    
 
 }
