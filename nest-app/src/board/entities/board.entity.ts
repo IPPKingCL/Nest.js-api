@@ -19,8 +19,8 @@ export class BoardEntity {
     @Column()
     dateTime : Date;
     
-    // @Column({ type:'enum' ,enum:"STATUS"})
-    // boardType :string; 
+    @Column({type :'enum', enum:STATUS})
+    boardType :STATUS; 
 
     @Column()
     isDeleted : Boolean;
