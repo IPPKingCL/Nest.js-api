@@ -25,9 +25,8 @@ export class UserController {
 
     @ApiOperation({summary:'회원가입 중 아이디 중복 체크'})
     @Post('/checkUser')
-    async checkUser(@Body('userId') userId:string){
-        console.log(userId);
-        return await this.userService.checkUser(userId);
+    async checkUser(@Body('nickname') nickname:string){
+        return await this.userService.checkUser(nickname);
     }
 
     @ApiOperation({summary:'이메일 유뮤 체크'})
