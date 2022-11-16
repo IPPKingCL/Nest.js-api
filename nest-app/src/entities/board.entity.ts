@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/entities/user.entity';
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 enum STATUS{
     ALCOHOL = "A",
@@ -19,8 +19,8 @@ export class BoardEntity {
     @Column()
     dateTime : Date;
     
-    // @Column({ type:'enum' ,enum:"STATUS"})
-    // boardType :string; 
+    @Column({ type:'enum' ,enum:"STATUS"})
+    boardType :string; 
 
     @Column()
     isDeleted : Boolean;

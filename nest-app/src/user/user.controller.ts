@@ -3,7 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
