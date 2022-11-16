@@ -34,6 +34,7 @@ export class UserEntity {
     @Column({length:20})
     job : string;
 
-    
+    @OneToMany((type)=>BoardEntity, (boardEntity)=> boardEntity.user)
+    boardEntitys : BoardEntity[];
 
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 enum STATUS{
     ALCOHOL = "A",
     FREE ="F"
@@ -26,4 +27,7 @@ export class BoardEntity {
 
     @Column()
     isModified : Boolean;
+
+    @ManyToOne((type) => UserEntity,(userEntity)=>userEntity.boardEntitys)
+    user : UserEntity;
 }
