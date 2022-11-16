@@ -29,6 +29,7 @@ export class UserService {
             await this.repository.save(user);
             return {success:true}
         }catch(err){
+            console.log(err)
             return {success:false, msg : "회원 가입 중 에러발생"}
         }
     }
