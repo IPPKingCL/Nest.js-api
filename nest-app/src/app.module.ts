@@ -35,7 +35,7 @@ import { BoardEntity } from './board/entities/board.entity';
       entities: [testEntity,UserEntity, BoardEntity],
       synchronize: true,
     }),],
-  controllers: [AppController, BoardController, AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  controllers: [AppController,AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [],
 })
 export class AppModule {}
