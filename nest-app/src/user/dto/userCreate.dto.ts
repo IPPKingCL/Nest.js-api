@@ -6,8 +6,8 @@ export class UserCreateDto {
     @IsString()
     readonly name:string;
 
-    @IsNumber()
-    readonly age:number;
+    @IsString()
+    readonly age:string;
 
     @IsString()
     readonly birth : string;

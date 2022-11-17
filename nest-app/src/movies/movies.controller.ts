@@ -17,6 +17,9 @@ export class MoviesController {
        // return this.moviesService.getAll();
    // }
 
+    /*@Get("/:id")
+    test(@Param("id") test:string)
+    */
     @Get("/insert")
     getInsert(): void {
         this.moviesService.insert();
@@ -30,6 +33,7 @@ export class MoviesController {
 
     @Get('/:id')
     getOne(@Param("id") userId:number):Movie{//id 파라미터를 userId라는 argument에 string 타입으로 저장
+        console.log(userId);
         return this.moviesService.getOne(userId);
     }
 

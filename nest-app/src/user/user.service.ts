@@ -16,7 +16,7 @@ export class UserService {
         /*Dto를 entitiy에 저장*/
         let user = new UserEntity();
         user.name = userData.name;
-        user.age = userData.age;
+        user.age = parseInt(userData.age);
         user.birth = new Date(userData.birth);
         user.sex = userData.sex;
         user.nickname = userData.nickname;
