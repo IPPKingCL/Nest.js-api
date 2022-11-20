@@ -34,4 +34,18 @@ export class BoardService {
         }
         
     }
+
+    async readOne(id:number) : Promise<object>{
+        try{
+            const res = await this.repository.createQueryBuilder('board')
+            .where('id=:id',{id : id})
+            .getOne();
+
+            console.log(res);
+            return res;
+        }catch(err){
+            console.log(err);
+            return {success:false, msg:"글 조회 중 에러 발생"};
+        }
+    }
 }
