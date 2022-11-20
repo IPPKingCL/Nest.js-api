@@ -26,7 +26,8 @@ export class UserService {
         user.job = userData.job;
                 
         try{
-            await this.repository.save(user);
+            console.log("save console log" + (await this.repository.save(user)).name);
+            await this.repository.save(user);            
             return {success:true}
         }catch(err){
             console.log(err)
