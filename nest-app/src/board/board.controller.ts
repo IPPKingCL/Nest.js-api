@@ -26,5 +26,7 @@ export class BoardController {
         console.log('---------------'+id +' 게시글 알람');
         return await this.boardService.readOne(id);
     }
+
+  
 }
 

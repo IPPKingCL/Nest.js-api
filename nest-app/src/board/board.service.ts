@@ -8,7 +8,9 @@ export class BoardService {
 
     getAll() : Promise<BoardEntity[]>{
         try{
-            return this.repository.find();
+            return this.repository.createQueryBuilder('board')
+                    .leftJoinAndSelect('board.user', 'user.id')
+                    .getMany();
         }catch(err){
             console.log("게시판 목록 조회 중 에러 발생")
         }
@@ -35,7 +37,7 @@ export class BoardService {
         
     }
 
-    async readOne(id:number) : Promise<object>{
+    async readOne(id:number) : Promise<BoardEntity[] | object>{
         try{
             const res = await this.repository.createQueryBuilder('board')
             .where('id=:id',{id : id})
@@ -46,6 +48,16 @@ export class BoardService {
         }catch(err){
             console.log(err);
             return {success:false, msg:"글 조회 중 에러 발생"};
+        }
+    }
+
+    async test() :  Promise<BoardEntity[] | object>{
+        try{
+            console.log(this.repository.createQueryBuilder('board'))
+            return this.repository.createQueryBuilder('board').leftJoinAndSelect('board.user', 'user.id').getMany();
+
+        }catch(err){
+            console.log("게시판 목록 조회 중 에러 발생")
         }
     }
 }
