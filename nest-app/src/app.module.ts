@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 import { env } from 'process';
 import { UserEntity } from './user/entities/user.entity';
 import { BoardEntity } from './board/entities/board.entity';
+import { CommentEntity } from './board/entities/comment.entity';
 
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
@@ -32,7 +33,7 @@ import { BoardEntity } from './board/entities/board.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity],
       synchronize: true,
     }),],
   controllers: [AppController,AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
