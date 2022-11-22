@@ -49,6 +49,7 @@ export class BoardService {
         board.user = writeData.userId;
         board.boardType = writeData.boardType;
         
+        console.log(board);
         try{
             await this.repository.save(board);
             return {success:true};

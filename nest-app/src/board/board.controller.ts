@@ -13,9 +13,10 @@ export class BoardController {
         return await this.boardService.getAll();
     }
 
+    @ApiOperation({summary:' 게시판 타입 별 조회'})
     @Post('/')
     async getTypeBoard(@Body() type){
-        console.log(type);
+        console.log("---------------게시글 타입 별 조회")
         return await this.boardService.getTypeBoard(type.boardType);
     }
 

@@ -3,7 +3,8 @@ import { Column, Entity,OneToMany, ManyToMany, ManyToOne, PrimaryColumn, Primary
 import { CommentEntity } from './comment.entity';
 enum STATUS{
     ALCOHOL = "A",
-    FREE ="F"
+    FREE ="F",
+    RECEIPE="R"
 }
 @Entity('board')
 export class BoardEntity {
