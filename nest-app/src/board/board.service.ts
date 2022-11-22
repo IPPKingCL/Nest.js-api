@@ -87,7 +87,7 @@ export class BoardService {
             return {success:false, msg:"글 조회 중 에러 발생"};
         }
     }
-
+/*
     async modifyBoard(writeData) : Promise<object>{
         const board = new BoardEntity();
         board.id = writeData.id;
@@ -108,7 +108,7 @@ export class BoardService {
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
-    }
+    }*/
 
 
 /* raw 쿼리 이용하는 법
