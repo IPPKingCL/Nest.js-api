@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
+import { CommentEntity } from './entities/comment.entity';
 import { BoardRepository } from './repository/board.repository';
+import { CommentRepository } from './repository/comment.repository';
 
 @Injectable()
 export class BoardService {
-    constructor(private readonly repository : BoardRepository){}
-
+    constructor(
+        private readonly repository : BoardRepository,
+        private readonly coRepository : CommentRepository){}
+    
     getAll() : Promise<BoardEntity[]>{
         try{
             return this.repository.createQueryBuilder('board')
@@ -16,6 +20,10 @@ export class BoardService {
             console.log("게시판 목록 조회 중 에러 발생")
         }
         
+    }
+
+    testAll() : Promise<CommentEntity[]>{
+        return this.coRepository.find();
     }
 
     async write(writeData) : Promise<object>{

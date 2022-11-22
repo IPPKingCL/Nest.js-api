@@ -27,6 +27,11 @@ export class BoardController {
         return await this.boardService.readOne(id);
     }
 
+    @Get('test')
+    async test(){
+        return await this.boardService.testAll();
+    }
+
   
 }
 
