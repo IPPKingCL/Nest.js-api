@@ -22,6 +22,19 @@ export class BoardService {
         
     }
 
+    getTypeBoard(type:string): Promise<BoardEntity[] | object>{
+        try{
+            return this.repository.createQueryBuilder('board')
+                    .leftJoinAndSelect('board.user', 'user.id')
+                    .where('boardType=:type',{type:type})
+                    .getMany()
+        }catch(err){
+            console.log(err)
+            console.log("게시글 조회 중 에러 발생")
+            //return {success:false, msg : "게시글 조회 중 에러 발생"}
+        }
+    }
+
     testAll() : Promise<CommentEntity[]>{
         return this.coRepository.find();
     }
@@ -73,6 +86,14 @@ export class BoardService {
             return {success:false, msg:"글 조회 중 에러 발생"};
         }
     }
+
+
+/* raw 쿼리 이용하는 법
+    async increaseViewCount(id: number): Promise<void> {
+        await this.query(
+            `UPDATE article SET view_count = view_count + 1 WHERE id=${id}`,
+        );
+    }*/
 
     
 }

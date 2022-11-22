@@ -13,6 +13,12 @@ export class BoardController {
         return await this.boardService.getAll();
     }
 
+    @Post('/')
+    async getTypeBoard(@Body() type){
+        console.log(type);
+        return await this.boardService.getTypeBoard(type.boardType);
+    }
+
     @ApiOperation({summary:' 게시판 글작성'})
     @Post('/write')
     async write(@Body() boardData:writeDataDto){
@@ -20,7 +26,7 @@ export class BoardController {
         return await this.boardService.write(boardData);
     }
 
-    @ApiOperation({summary:'게시글 열람'})
+    @ApiOperation({summary:' 게시글 열람'})
     @Get('/read/:id')
     async readOne(@Param("id") id:number){
         console.log('---------------'+id +' 게시글 알람');
