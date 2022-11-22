@@ -88,6 +88,28 @@ export class BoardService {
         }
     }
 
+    async modifyBoard(writeData) : Promise<object>{
+        const board = new BoardEntity();
+        board.id = writeData.id;
+        board.title = writeData.title;
+        board.contents = writeData.contents;
+        board.dateTime = new Date();
+        board.isDeleted = false;
+        board.isModified = false;
+        board.user = writeData.userId;
+        board.boardType = writeData.boardType;
+        
+        console.log(board);
+        try{
+            await this.repository.update(board);
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success:false, msg : "게시판 글 등록 중 에러발생"}
+        }
+        
+    }
+
 
 /* raw 쿼리 이용하는 법
     async increaseViewCount(id: number): Promise<void> {
