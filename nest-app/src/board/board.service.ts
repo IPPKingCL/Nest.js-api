@@ -140,6 +140,17 @@ export class BoardService {
         }
     }
 
+    async commentAll(id:number): Promise<CommentEntity[] | object>{
+        try{
+            return await this.coRepository.createQueryBuilder('comment')
+                        .where("boardId=:id",{id:id})
+                        .getMany();
+        }catch(err){
+            console.log(err);
+            return {success:false, msg: "게시판 조회 중 에러 발생"}
+        }
+    }
+
 
 /* raw 쿼리 이용하는 법
     async increaseViewCount(id: number): Promise<void> {

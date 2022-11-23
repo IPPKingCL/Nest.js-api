@@ -49,15 +49,16 @@ export class BoardController {
         return await this.boardService.testAll();
     }
 
-    @Get('/read/comment')
-    async commentAll(){
-
+    @Get('/comment/:id')
+    async commentAll(@Param("id") id:number){
+        console.log('---------------'+id +' 게시글 열람');
+        return await this.boardService.commentAll(id);
     }
 
     @ApiOperation({summary:' 게시글 댓글 저장'})
     @Post('/insertComment')
     async insertComment(@Body() commentData:commentDto){
-        console.log('---------------'+commentData.boardId +' 게시글 열람');
+        console.log('---------------'+commentData.boardId +' 게시글 댓글 저장');
         return await this.boardService.insertComment(commentData);
     }
 
