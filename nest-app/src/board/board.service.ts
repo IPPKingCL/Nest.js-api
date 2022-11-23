@@ -125,10 +125,10 @@ export class BoardService {
     async insertComment(commentData): Promise<object>{
         const comment = new CommentEntity();
         comment.contents = commentData.contents;
-        comment.dateTime = commentData.dateTime;
+        comment.dateTime = new Date();
         comment.nickname = commentData.nickname;
-        comment.isDeleted = commentData.isDeleted;
-        comment.isModified = commentData.isModified;
+        comment.isDeleted = false;
+        comment.isModified = false;
         comment.board = commentData.boardId;
 
         try{

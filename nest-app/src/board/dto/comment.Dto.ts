@@ -7,19 +7,10 @@ export class commentDto{
     contents : string;
 
     @IsString()
-    dateTime : Date;
-
-    @IsString()
     nickname : string;
 
-    @IsBoolean()
-    isDeleted : boolean;
-
-    @IsBoolean()
-    isModified : boolean;
-
-    @IsNumber()
-    boardId : number;
+    @IsString()
+    boardId : string;
 
     
 }
