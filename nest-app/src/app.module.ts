@@ -35,6 +35,7 @@ import { CommentEntity } from './board/entities/comment.entity';
       database: process.env.RDS_DATABASE,
       entities: [testEntity,UserEntity, BoardEntity,CommentEntity],
       synchronize: true,
+      logging : true,
     }),],
   controllers: [AppController,AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [],
