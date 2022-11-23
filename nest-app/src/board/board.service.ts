@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { commentDto } from './dto/comment.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
 import { CommentEntity } from './entities/comment.entity';
@@ -119,6 +120,24 @@ export class BoardService {
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
+    }
+
+    async insertComment(commentData): Promise<object>{
+        const comment = new CommentEntity();
+        comment.contents = commentData.contents;
+        comment.dateTime = commentData.dateTime;
+        comment.nickname = commentData.nickname;
+        comment.isDeleted = commentData.isDeleted;
+        comment.isModified = commentData.isModified;
+        comment.board = commentData.boardId;
+
+        try{
+            await this.coRepository.save(comment);
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success:false, msg: "게시판 댓글 등록 중 에러 발생"}
+        }
     }
 
 

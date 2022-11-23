@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { BoardService } from './board.service';
+import { commentDto } from './dto/comment.Dto';
 import { modifyDto } from './dto/modifyData.Dto';
 import { writeDataDto } from './dto/writeData.Dto';
 
@@ -35,6 +36,7 @@ export class BoardController {
         return await this.boardService.readOne(id);
     }
 
+    @ApiOperation({summary:' 게시글 수정'})
     @Post('/modify')
     async modifyBiard(@Body() modifyData:modifyDto){
         console.log('---------------'+modifyData.id +' 게시글 수정');
@@ -45,6 +47,18 @@ export class BoardController {
     @Get('test')
     async test(){
         return await this.boardService.testAll();
+    }
+
+    @Get('/read/comment')
+    async commentAll(){
+
+    }
+
+    @ApiOperation({summary:' 게시글 댓글 저장'})
+    @Post('/insertComment')
+    async insertComment(@Body() commentData:commentDto){
+        console.log('---------------'+commentData.boardId +' 게시글 열람');
+        return await this.boardService.insertComment(commentData);
     }
 
   
