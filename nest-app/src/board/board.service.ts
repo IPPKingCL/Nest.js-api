@@ -144,10 +144,25 @@ export class BoardService {
         try{
             return await this.coRepository.createQueryBuilder('comment')
                         .where("boardId=:id",{id:id})
+                        .andWhere("isDeleted=false")
                         .getMany();
         }catch(err){
             console.log(err);
             return {success:false, msg: "게시판 조회 중 에러 발생"}
+        }
+    }
+
+    async deleteComment(id:number) : Promise<object> {
+        try{
+            await this.coRepository.createQueryBuilder()
+                .update('comment')
+                .set({isDeleted : true})
+                .where("id=:id",{id:id})
+                .execute();
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success:false, msg:"댓글 삭제 실패"};
         }
     }
 

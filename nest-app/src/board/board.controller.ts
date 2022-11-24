@@ -49,9 +49,10 @@ export class BoardController {
         return await this.boardService.testAll();
     }
 
+    @ApiOperation({summary:' 게시글 댓글 열람'})
     @Get('/comment/:id')
     async commentAll(@Param("id") id:number){
-        console.log('---------------'+id +' 게시글 열람');
+        console.log('---------------'+id +' 게시글 댓글 열람');
         return await this.boardService.commentAll(id);
     }
 
@@ -62,6 +63,12 @@ export class BoardController {
         return await this.boardService.insertComment(commentData);
     }
 
+    @ApiOperation({summary:' 게시글 댓글 삭제'})
+    @Get('/deleteComment/:commentId')
+    async deleteComment(@Param("commentId") id:number){
+        console.log('---------------'+id +' 번 댓글 삭제 ');
+        return await this.boardService.deleteComment(id);
+    }
   
 }
 
