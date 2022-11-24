@@ -10,6 +10,7 @@ export class BoardController {
 
     constructor(private readonly boardService : BoardService){}
 
+    @ApiOperation({summary:' 게시판 전체 조회'})
     @Get('/')
     async getTest(){
         return await this.boardService.getAll();
