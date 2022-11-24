@@ -16,6 +16,7 @@ export class BoardService {
         try{
             return this.repository.createQueryBuilder('board')
                     .leftJoinAndSelect('board.user', 'user.id')
+                    .andWhere("isDeleted=false")
                     .getMany();
         }catch(err){
             console.log("게시판 목록 조회 중 에러 발생")
@@ -28,6 +29,7 @@ export class BoardService {
             return this.repository.createQueryBuilder('board')
                     .leftJoinAndSelect('board.user', 'user.id')
                     .where('boardType=:type',{type:type})
+                    .andWhere("isDeleted=false")
                     .getMany()
         }catch(err){
             console.log(err)
@@ -120,6 +122,20 @@ export class BoardService {
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
+    }
+
+    async deleteBoard(id:number) : Promise<object> {
+        try{
+            await this.repository.createQueryBuilder()
+                .update('board')
+                .set({isDeleted : true})
+                .where("id=:id",{id:id})
+                .execute();
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success:false, msg:"댓글 삭제 실패"};
+        }
     }
 
     async insertComment(commentData): Promise<object>{
