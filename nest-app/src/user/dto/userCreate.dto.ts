@@ -1,4 +1,5 @@
 import { IsDate, IsNumber, IsString } from "class-validator";
+import { userStatus } from "../enumType/userStatus";
 
 export class UserCreateDto {
     
@@ -29,4 +30,7 @@ export class UserCreateDto {
 
     @IsString()
     readonly job : string;
+
+    @IsString()
+    readonly LoginType : userStatus;
 }

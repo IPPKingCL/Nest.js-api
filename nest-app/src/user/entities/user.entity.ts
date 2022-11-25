@@ -1,13 +1,7 @@
 import { BoardEntity } from 'src/board/entities/board.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { userStatus } from '../enumType/userStatus';
 
-enum userStatus{
-    default="d",
-    google="g",
-    naver="n",
-    kakao="k",
-    normal="nor"
-}
 @Entity('user')
 export class UserEntity {
 
