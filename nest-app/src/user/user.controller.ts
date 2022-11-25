@@ -19,7 +19,8 @@ export class UserController {
     @ApiOperation({summary:' 회원가입'})
     @Post('/insert')
     async insertUser(@Body() userData:UserCreateDto){
-        console.log("---------------insertUser : "+userData);
+        console.log("---------------insertUser : "+userData.birth);
+        // console.log("---------------insertUser : "+userData.LoginType);
         return await this.userService.insertUser(userData);
     }
 

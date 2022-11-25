@@ -24,6 +24,9 @@ export class UserService {
         user.password = userData.password;
         user.email = userData.email;
         user.job = userData.job;
+        // user.userLoginType = userData.LoginType;
+
+        console.log(user.userLoginType);
                 
         try{
             console.log("save console log" + (await this.repository.save(user)).name);
