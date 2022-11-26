@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
+import { userStatus } from './enumType/userStatus';
 import { UserRepository } from './repository/user.repository';
 @Injectable()
 export class UserService {
@@ -24,7 +25,12 @@ export class UserService {
         user.password = userData.password;
         user.email = userData.email;
         user.job = userData.job;
-        // user.userLoginType = userData.LoginType;
+        if(userData.loginType == 'g') {
+            user.userLoginType = userStatus.google;
+        }else {
+            user.userLoginType = userStatus.default;
+        }
+        
 
         console.log(user.userLoginType);
                 

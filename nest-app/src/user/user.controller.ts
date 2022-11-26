@@ -20,7 +20,7 @@ export class UserController {
     @Post('/insert')
     async insertUser(@Body() userData:UserCreateDto){
         console.log("---------------insertUser : "+userData.birth);
-        // console.log("---------------insertUser : "+userData.LoginType);
+        console.log("---------------insertUser : "+userData.loginType);
         return await this.userService.insertUser(userData);
     }
 
