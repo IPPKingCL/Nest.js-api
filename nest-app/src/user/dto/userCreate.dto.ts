@@ -31,5 +31,5 @@ export class UserCreateDto {
     @IsString()
     readonly job : string;
 
-    readonly LoginType : userStatus;
+    readonly loginType : string;
 }
