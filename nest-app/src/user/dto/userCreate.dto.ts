@@ -31,5 +31,9 @@ export class UserCreateDto {
     @IsString()
     readonly job : string;
 
+<<<<<<< HEAD
+=======
+    @IsString()
+>>>>>>> dfbc39271ed956fc848d31eab493c1aa17129e5d
     readonly loginType : string;
 }
