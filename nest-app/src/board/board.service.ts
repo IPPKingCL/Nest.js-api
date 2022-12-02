@@ -81,6 +81,7 @@ export class BoardService {
             readOne.isModified = res.isModified;
             readOne.userId = res.user.userId;
             readOne.nickname = res.user.nickname;
+            readOne.recommend = res.recommend;
 
             console.log(readOne);
 
@@ -134,10 +135,25 @@ export class BoardService {
             return {success:true};
         }catch(err){
             console.log(err);
-            return {success:false, msg:"댓글 삭제 실패"};
+            return {success:false, msg:"게시글 삭제 실패"};
         }
     }
 
+    //추천 orm 수정 예정
+    async recommend(id:number) :Promise<object>{
+        try{
+            await this.repository.createQueryBuilder()
+                .update('board')
+                .set('recommend:recommend+1')
+                .where("id=:id",{id:id})
+                //.execute();
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success:false, msg:"게시글 추천 실패"};
+        }
+    }
+    /*******************comment*******************/
     async insertComment(commentData): Promise<object>{
         const comment = new CommentEntity();
         comment.contents = commentData.contents;

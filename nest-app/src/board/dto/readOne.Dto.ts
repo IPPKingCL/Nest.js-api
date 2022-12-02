@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class readOneDto{
     readonly id:number;
@@ -26,4 +26,7 @@ export class readOneDto{
 
     @IsString()
     nickname:string;
+
+    @IsNumber()
+    recommend:number;
 }

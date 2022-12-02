@@ -30,6 +30,9 @@ export class BoardEntity {
     @Column()
     isModified : Boolean;
 
+    @Column()
+    recommend : number;
+
     @ManyToOne((type) => UserEntity,(userEntity)=>userEntity.boardEntitys)
     user : UserEntity;
 

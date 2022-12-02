@@ -44,11 +44,18 @@ export class BoardController {
         return await this.boardService.modifyBoard(modifyData);
     }
 
-    @ApiOperation({summary:' 게시글  삭제'})
+    @ApiOperation({summary:' 게시글 삭제'})
     @Get('/deleteBoard/:boardId')
     async deleteBoard(@Param("boardId") id:number){
         console.log('---------------'+id +' 번 게시글 삭제 ');
         return await this.boardService.deleteBoard(id);
+    }
+
+    @ApiOperation({summary:' 게시글 추천'})
+    @Get('/recommendBoard/:boardId')
+    async recommend(@Param("boardId") id:number){
+        console.log('---------------'+id +' 번 게시글 추천 ');
+        return await this.boardService.recommend(id);
     }
 
     /** 댓글 레포지토리 테스트**/
