@@ -139,13 +139,16 @@ export class BoardService {
         }
     }
 
-    //추천 orm 수정 예정
+    //추천 orm 
     async recommend(id:number) :Promise<object>{
         try{
-            await this.repository.createQueryBuilder()
-                .update('board')
-                .set('recommend:recommend+1')
-                .where("id=:id",{id:id})
+            await this.repository.query(
+                'update board set recommend=recommend+1 where id='+id
+            )
+            /*await this.repository.createQueryBuilder()
+                .update('id',{recommend:()=>'recommend+1'})
+                /*.set('recommend:recommend+1')
+                .where("id=:id",{id:id})*/
                 //.execute();
             return {success:true};
         }catch(err){
