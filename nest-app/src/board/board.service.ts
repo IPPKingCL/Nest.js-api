@@ -9,8 +9,8 @@ import { CommentRepository } from './repository/comment.repository';
 @Injectable()
 export class BoardService {
     constructor(
-        private readonly repository : BoardRepository,
-        private readonly coRepository : CommentRepository){}
+        private readonly repository : BoardRepository,  //게시글 
+        private readonly coRepository : CommentRepository){}  //댓글
     
     getAll() : Promise<BoardEntity[]>{
         try{
@@ -139,7 +139,7 @@ export class BoardService {
         }
     }
 
-    //추천 orm 
+    //추천 orm update가 비효율적인거 같아 raw query로 작성
     async recommend(id:number) :Promise<object>{
         try{
             await this.repository.query(
@@ -154,6 +154,20 @@ export class BoardService {
         }catch(err){
             console.log(err);
             return {success:false, msg:"게시글 추천 실패"};
+        }
+    }
+
+    async orderbyLimit(): Promise<BoardEntity[]|object>{
+        try{
+            const response = await this.repository.createQueryBuilder('board')
+                .orderBy("recommend","DESC")
+                .limit(5)
+                .getMany();
+                                
+            return response;
+        }catch(err){
+            console.log(err);
+            return {success:false, msg:"게시글 상위 추천 조회 실패"};
         }
     }
     /*******************comment*******************/

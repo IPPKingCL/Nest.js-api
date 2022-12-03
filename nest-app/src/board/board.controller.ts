@@ -58,6 +58,12 @@ export class BoardController {
         return await this.boardService.recommend(id);
     }
 
+    @ApiOperation({summary: " 게시글 추천 상위 조회"})
+    @Get('/orderbyLimit')
+    async orderbyLimit(){
+        console.log('--------------- 추천 상위 게시글 ');
+        return await this.boardService.orderbyLimit();
+    }
     /** 댓글 레포지토리 테스트**/
     @Get('test')
     async test(){
