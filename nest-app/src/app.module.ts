@@ -18,11 +18,15 @@ import { UserEntity } from './user/entities/user.entity';
 import { BoardEntity } from './board/entities/board.entity';
 import { CommentEntity } from './board/entities/comment.entity';
 import { ScheduleModule } from '@nestjs/schedule';
+import { WeatherService } from './weather/weather.service';
+import { WeatherController } from './weather/weather.controller';
+import { WeatherModule } from './weather/weather.module';
 
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
-  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,
+  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule,
+    
     ScheduleModule.forRoot(),
     
     ConfigModule.forRoot({
@@ -38,8 +42,9 @@ import { ScheduleModule } from '@nestjs/schedule';
       entities: [testEntity,UserEntity, BoardEntity,CommentEntity],
       synchronize: true,
       logging : true,
-    }),],
-  controllers: [AppController,AlcoholController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+    }),
+    WeatherModule,],
+  controllers: [AppController,AlcoholController, ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [],
 })
 export class AppModule {}
