@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class WeatherService {
-    @Cron('45*****')
+    
+    private readonly logger = new Logger(WeatherService.name);
+    @Cron('45 * * * * *')
     handleCron(){
-        console.log('test');
+        this.logger.debug('Called when the current second is 45');
     }
 }

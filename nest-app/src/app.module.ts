@@ -26,9 +26,7 @@ import { WeatherModule } from './weather/weather.module';
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
   imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule,
-    
-    ScheduleModule.forRoot(),
-    
+
     ConfigModule.forRoot({
       isGlobal:true
     }),
@@ -43,9 +41,9 @@ import { WeatherModule } from './weather/weather.module';
       synchronize: true,
       logging : true,
     }),
-    WeatherModule,],
-  controllers: [AppController,AlcoholController, ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+    ], 
+  controllers: [AppController,AlcoholController ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [],
-})
-export class AppModule {}
+}) 
+export class AppModule {}   
 
