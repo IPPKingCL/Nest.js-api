@@ -17,11 +17,13 @@ import { env } from 'process';
 import { UserEntity } from './user/entities/user.entity';
 import { BoardEntity } from './board/entities/board.entity';
 import { CommentEntity } from './board/entities/comment.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
   imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,
+    ScheduleModule.forRoot(),
     
     ConfigModule.forRoot({
       isGlobal:true
