@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
@@ -8,6 +8,7 @@ import { UserRepository } from './repository/user.repository';
 export class UserService {
     //constructor 하면서 에러남
     constructor(private readonly repository : UserRepository) {}
+    private readonly logger = new Logger(UserService.name);
 
     getAll() : Promise<UserEntity[]>{
         return this.repository.find();
@@ -35,11 +36,11 @@ export class UserService {
         console.log(user.userLoginType);
                 
         try{
-            console.log("save console log" + (await this.repository.save(user)).name);
+            this.logger.debug("save console log" + (await this.repository.save(user)).name);
             await this.repository.save(user);            
             return {success:true}
         }catch(err){
-            console.log(err)
+            this.logger.error(err)
             return {success:false, msg : "회원 가입 중 에러발생"}
         }
     }
@@ -48,7 +49,7 @@ export class UserService {
          
         //console.log("res : "+res.);
         try{
-            console.log(userId);
+            this.logger.log(userId);
             const res = await this.repository.createQueryBuilder('user')
             .where('userId = :id',{id :userId})
             .getOne();
@@ -60,7 +61,7 @@ export class UserService {
             }
             
         }catch(err){
-            console.log(err)
+            this.logger.error(err)
             return {success:false, msg:"회원 조회 중 에러발생"};
         }
         
@@ -78,6 +79,7 @@ export class UserService {
                 return {success:false, msg:'존재하는 사용자'};
             }
         }catch(err){
+            this.logger.error(err);
             return {success:false, msg:"회원 조회 중 에러발생"};
         }
     }

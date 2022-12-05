@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { commentDto } from './dto/comment.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
@@ -8,6 +8,7 @@ import { CommentRepository } from './repository/comment.repository';
 
 @Injectable()
 export class BoardService {
+    private readonly logger = new Logger(BoardService.name);
     constructor(
         private readonly repository : BoardRepository,  //게시글 
         private readonly coRepository : CommentRepository){}  //댓글
@@ -19,7 +20,7 @@ export class BoardService {
                     .andWhere("isDeleted=false")
                     .getMany();
         }catch(err){
-            console.log("게시판 목록 조회 중 에러 발생")
+            this.logger.error("게시판 목록 조회 중 에러 발생")
         }
         
     }
@@ -32,8 +33,8 @@ export class BoardService {
                     .andWhere("isDeleted=false")
                     .getMany()
         }catch(err){
-            console.log(err)
-            console.log("게시글 조회 중 에러 발생")
+            this.logger.log(err)
+            this.logger.error("게시글 조회 중 에러 발생")
             //return {success:false, msg : "게시글 조회 중 에러 발생"}
         }
     }
@@ -52,12 +53,12 @@ export class BoardService {
         board.user = writeData.userId;
         board.boardType = writeData.boardType;
         
-        console.log(board);
+        this.logger.log(board);
         try{
             await this.repository.save(board);
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
@@ -70,7 +71,7 @@ export class BoardService {
             .where('board.id=:id',{id : id})
             .getOne();
 
-            console.log(res);
+            this.logger.log(res);
             const readOne = new readOneDto();
        
             readOne.title = res.title;
@@ -83,11 +84,11 @@ export class BoardService {
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
 
-            console.log(readOne);
+            this.logger.log(readOne);
 
             return readOne;
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg:"글 조회 중 에러 발생"};
         }
     }
@@ -103,7 +104,7 @@ export class BoardService {
         board.user = writeData.userId;
         board.boardType = writeData.boardType;
         
-        console.log(board);
+        this.logger.log(board);
         try{
             await this.repository.createQueryBuilder()
                     .update('board')
@@ -119,7 +120,7 @@ export class BoardService {
                     .execute();
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
@@ -134,7 +135,7 @@ export class BoardService {
                 .execute();
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg:"게시글 삭제 실패"};
         }
     }
@@ -152,7 +153,7 @@ export class BoardService {
                 //.execute();
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg:"게시글 추천 실패"};
         }
     }
@@ -166,7 +167,7 @@ export class BoardService {
                                 
             return response;
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg:"게시글 상위 추천 조회 실패"};
         }
     }
@@ -184,7 +185,7 @@ export class BoardService {
             await this.coRepository.save(comment);
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg: "게시판 댓글 등록 중 에러 발생"}
         }
     }
@@ -196,7 +197,7 @@ export class BoardService {
                         .andWhere("isDeleted=false")
                         .getMany();
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg: "게시판 조회 중 에러 발생"}
         }
     }
@@ -210,7 +211,7 @@ export class BoardService {
                 .execute();
             return {success:true};
         }catch(err){
-            console.log(err);
+            this.logger.error(err);
             return {success:false, msg:"댓글 삭제 실패"};
         }
     }
