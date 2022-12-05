@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as session from 'express-session';
 
 async function bootstrap() {
   
@@ -14,6 +15,13 @@ async function bootstrap() {
     })  //유효성을 검사하기 위한 일종의 미들웨어 api에서 받은걸 타입을 맞춰줌
   );
 
+  app.use(
+    session({
+      secret : "MY_SESSION_ID", //세션아이디
+      resave: false, //세션이 수정되지 않아도 지속적으로 저장하게 하는 옵션
+      saveUninitialized: false //초기화되지 않는 세션을 저장하게 함
+    })
+  )
   /*Swagger 자동 api 문서 생성*/ 
   const config = new DocumentBuilder()
     .setTitle('칵테일 서버 API')
