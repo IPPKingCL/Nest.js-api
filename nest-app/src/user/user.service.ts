@@ -81,9 +81,9 @@ export class UserService {
 
             console.log(loginToken);
             if(res==null){
-                return {success:true};
+                return {success:true, token : loginToken};
             }else{
-                return {success:false, msg:'존재하는 사용자'};
+                return {success:false, msg:'존재하는 사용자',token : loginToken};
             }
         }catch(err){
             this.logger.error(err);

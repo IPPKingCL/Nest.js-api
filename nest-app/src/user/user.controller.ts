@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
+import { JwtAuthGuard } from './jwt/jwt.guard';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -33,6 +34,7 @@ export class UserController {
     }
 
     @ApiOperation({summary:'이메일 유뮤 체크'})
+    @UseGuards(JwtAuthGuard)
     @Post('/checkEmail')
     async checkEmail(@Body('email') email:string){
         this.logger.log("---------------checkEmail : "+email);
