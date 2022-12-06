@@ -1,13 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException} from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
 import { userStatus } from './enumType/userStatus';
 import { UserRepository } from './repository/user.repository';
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class UserService {
     //constructor 하면서 에러남
-    constructor(private readonly repository : UserRepository) {}
+    constructor(private readonly repository : UserRepository,private jwtService: JwtService) {}
     private readonly logger = new Logger(UserService.name);
 
     getAll() : Promise<UserEntity[]>{
@@ -37,7 +39,8 @@ export class UserService {
                 
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
-            await this.repository.save(user);            
+            await this.repository.save(user);    
+              
             return {success:true}
         }catch(err){
             this.logger.error(err)
@@ -67,12 +70,16 @@ export class UserService {
         
     }
 
-    async chectEmail(email : string) : Promise<object>{
+    async chectEmail(email : string) : Promise<object>{  //token 
         try{
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:email})
             .getOne();
 
+            const payload = { email: email, sub: '0' };
+            const loginToken = this.jwtService.sign(payload);
+
+            console.log(loginToken);
             if(res==null){
                 return {success:true};
             }else{
@@ -84,5 +91,7 @@ export class UserService {
         }
     }
 
+
+    
 
 }
