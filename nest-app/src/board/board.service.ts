@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { commentDto } from './dto/comment.Dto';
+import { deleteDto } from './dto/delete.Dto';
 import { modiOneDto } from './dto/modiOne.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
@@ -86,7 +87,7 @@ export class BoardService {
             readOne.boardType = res.boardType;
             readOne.isDeleted = res.isDeleted;
             readOne.isModified = res.isModified;
-            readOne.userId = res.user.userId;
+            readOne.userId = res.user.id;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
 
@@ -116,7 +117,7 @@ export class BoardService {
             readOne.boardType = res.boardType;
             readOne.isDeleted = res.isDeleted;
             readOne.isModified = res.isModified;
-            readOne.userId = res.user.userId;
+            readOne.userId = res.user.id;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
             
@@ -169,14 +170,22 @@ export class BoardService {
         
     }
 
-    async deleteBoard(id:number) : Promise<object> {
+    async deleteBoard(deleteOne:deleteDto) : Promise<object> {
         try{
-            await this.repository.createQueryBuilder()
+            const token = this.jwtService.decode(deleteOne.token);
+            console.log(deleteOne.userId)
+            console.log(token["id"])
+            if(deleteOne.userId==(token['id'])){
+                await this.repository.createQueryBuilder()
                 .update('board')
                 .set({isDeleted : true})
-                .where("id=:id",{id:id})
+                .where("id=:id",{id:deleteOne.id})
                 .execute();
-            return {success:true};
+                return {success:true};
+            }else{
+                return {success:false, msg: '권한이 없습니다'};
+            }
+            
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:"게시글 삭제 실패"};

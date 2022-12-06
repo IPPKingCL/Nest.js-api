@@ -21,8 +21,8 @@ export class readOneDto{
     @IsBoolean()
     isModified:Boolean;
 
-    @IsString()
-    userId:string;
+    @IsNumber()
+    userId:number;
 
     @IsString()
     nickname:string;
