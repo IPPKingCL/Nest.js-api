@@ -1,9 +1,9 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class modiOneDto{
-    @IsNumber()
-    id:number;
+    @IsString()
+    id:string;
 
     @IsString()
-    token: string
+    token: string;
 }

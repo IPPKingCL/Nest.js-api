@@ -119,16 +119,19 @@ export class BoardService {
             readOne.userId = res.user.userId;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
-
-            if(token["id"]==res.user.id){
+            
+            const tokenNumberId:number =parseInt(token["id"]);
+            console.log(tokenNumberId);
+            console.log(res.user.id)
+            if(tokenNumberId==res.user.id){
                 return readOne;
             }else{
-                return {success:false, auth:false, msg:"권한이 없습니다"};
+                return {success:true, auth:false, msg:"권한이 없습니다"};
             }
 
         }catch(err){
             this.logger.error(err);
-            return {success:false,msg:"에러 발생"};
+            return {success:true,msg:"에러 발생"};
         }
     }
 

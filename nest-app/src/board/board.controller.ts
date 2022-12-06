@@ -27,7 +27,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Post('/write')
     async write(@Body() boardData:writeDataDto){
         this.logger.log("---------------게시글 등록")
@@ -41,6 +41,8 @@ export class BoardController {
         return await this.boardService.readOne(id);
     }
 
+    @ApiOperation({summary:' 게시글 수정 권한 조회 및 불러오기'})
+    //@UseGuards(JwtAuthGuard)
     @Post('/modi')
     async modiOne(@Body() modiOne:modiOneDto){
         this.logger.log("---------------게시글 수정 권한 여부")
