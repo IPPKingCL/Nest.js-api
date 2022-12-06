@@ -19,9 +19,9 @@ export class modifyDto{
     @IsBoolean()
     readonly isModified:boolean;
 */
-    @IsNumber()
-    readonly userId:number;
-
     @IsString()
     readonly boardType:string;
+
+    @IsString()
+    readonly token:string;
 }

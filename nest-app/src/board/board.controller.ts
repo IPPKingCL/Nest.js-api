@@ -4,6 +4,7 @@ import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { BoardService } from './board.service';
 import { commentDto } from './dto/comment.Dto';
 import { modifyDto } from './dto/modifyData.Dto';
+import { modiOneDto } from './dto/modiOne.Dto';
 import { writeDataDto } from './dto/writeData.Dto';
 
 @Controller('board')
@@ -26,7 +27,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/write')
     async write(@Body() boardData:writeDataDto){
         this.logger.log("---------------게시글 등록")
@@ -38,6 +39,12 @@ export class BoardController {
     async readOne(@Param("id") id:number){
         this.logger.log('---------------'+id +' 게시글 열람');
         return await this.boardService.readOne(id);
+    }
+
+    @Post('/modi')
+    async modiOne(@Body() modiOne:modiOneDto){
+        this.logger.log("---------------게시글 수정 권한 여부")
+        return await this.boardService.modiOne(modiOne);
     }
 
     @ApiOperation({summary:' 게시글 수정'})

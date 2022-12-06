@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { commentDto } from './dto/comment.Dto';
+import { modiOneDto } from './dto/modiOne.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
 import { CommentEntity } from './entities/comment.entity';
@@ -98,7 +99,41 @@ export class BoardService {
         }
     }
 
+    async modiOne(modiOne:modiOneDto) : Promise<readOneDto | object>{
+        try{
+            const token = this.jwtService.decode(modiOne.token);
+
+            const res = await this.repository.createQueryBuilder('board')
+            .leftJoinAndSelect('board.user', 'user.id')
+            .where('board.id=:id',{id : modiOne.id})
+            .getOne();
+
+            const readOne = new readOneDto();
+       
+            readOne.title = res.title;
+            readOne.contents = res.contents;
+            readOne.dateTime = res.dateTime;
+            readOne.boardType = res.boardType;
+            readOne.isDeleted = res.isDeleted;
+            readOne.isModified = res.isModified;
+            readOne.userId = res.user.userId;
+            readOne.nickname = res.user.nickname;
+            readOne.recommend = res.recommend;
+
+            if(token["id"]==res.user.id){
+                return readOne;
+            }else{
+                return {success:false, auth:false, msg:"권한이 없습니다"};
+            }
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false,msg:"에러 발생"};
+        }
+    }
+
     async modifyBoard(writeData) : Promise<object>{
+        //const token = this.jwtService.decode(writeData.token)
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
