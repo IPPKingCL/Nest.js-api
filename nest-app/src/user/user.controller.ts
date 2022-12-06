@@ -34,7 +34,7 @@ export class UserController {
     }
 
     @ApiOperation({summary:'이메일 유뮤 체크'})
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Post('/checkEmail')
     async checkEmail(@Body('email') email:string){
         this.logger.log("---------------checkEmail : "+email);

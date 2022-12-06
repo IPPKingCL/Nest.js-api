@@ -40,8 +40,10 @@ export class UserService {
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
             await this.repository.save(user);    
-              
-            return {success:true}
+            const payload = { email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
+            const loginToken = this.jwtService.sign(payload); 
+
+            return {success:true,token:loginToken}
         }catch(err){
             this.logger.error(err)
             return {success:false, msg : "회원 가입 중 에러발생"}
@@ -76,13 +78,15 @@ export class UserService {
             .where('email = :email',{email:email})
             .getOne();
 
-            const payload = { email: email, sub: '0' };
-            const loginToken = this.jwtService.sign(payload);
-
-            console.log(loginToken);
+           
             if(res==null){
-                return {success:true, token : loginToken};
+                return {success:true};
             }else{
+                const payload = { email: email, name: res.name, nickname : res.nickname , sub: '0' };
+                const loginToken = this.jwtService.sign(payload);
+    
+                console.log(loginToken);
+                //console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
                 return {success:false, msg:'존재하는 사용자',token : loginToken};
             }
         }catch(err){
