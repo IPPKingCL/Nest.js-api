@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UserService {
     //constructor 하면서 에러남
-    constructor(private readonly repository : UserRepository,private jwtService: JwtService) {}
+    constructor(private readonly repository : UserRepository, private jwtService: JwtService) {}
     private readonly logger = new Logger(UserService.name);
 
     getAll() : Promise<UserEntity[]>{
@@ -24,7 +24,7 @@ export class UserService {
         user.birth = new Date(userData.birth);
         user.sex = userData.sex;
         user.nickname = userData.nickname;
-        user.userId = userData.userId;
+        //user.userId = userData.userId;
         user.password = userData.password;
         user.email = userData.email;
         user.job = userData.job;
@@ -39,8 +39,9 @@ export class UserService {
                 
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
-            await this.repository.save(user);    
-            const payload = { email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
+            const res = await this.repository.save(user);
+               
+            const payload = { id:res.id, email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
             const loginToken = this.jwtService.sign(payload); 
 
             return {success:true,token:loginToken}
@@ -82,11 +83,11 @@ export class UserService {
             if(res==null){
                 return {success:true};
             }else{
-                const payload = { email: email, name: res.name, nickname : res.nickname , sub: '0' };
+                const payload = {id:res.id, email: email, name: res.name, nickname : res.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload);
-    
+
                 console.log(loginToken);
-                //console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
+                console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
                 return {success:false, msg:'존재하는 사용자',token : loginToken};
             }
         }catch(err){

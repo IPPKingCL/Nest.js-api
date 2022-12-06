@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { commentDto } from './dto/comment.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
@@ -11,7 +12,9 @@ export class BoardService {
     private readonly logger = new Logger(BoardService.name);
     constructor(
         private readonly repository : BoardRepository,  //게시글 
-        private readonly coRepository : CommentRepository){}  //댓글
+        private readonly coRepository : CommentRepository,
+        private jwtService: JwtService
+        ){}  //댓글
     
     getAll() : Promise<BoardEntity[]>{
         try{
@@ -44,13 +47,15 @@ export class BoardService {
     }
 
     async write(writeData) : Promise<object>{
+        const token = this.jwtService.decode(writeData.token);
+        console.log('\n'+token["id"]+'\n');
         const board = new BoardEntity();
         board.title = writeData.title;
         board.contents = writeData.contents;
         board.dateTime = new Date();
         board.isDeleted = false;
         board.isModified = false;
-        board.user = writeData.userId;
+        board.user = token["id"];
         board.boardType = writeData.boardType;
         
         this.logger.log(board);

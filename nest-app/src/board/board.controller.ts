@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { BoardService } from './board.service';
 import { commentDto } from './dto/comment.Dto';
 import { modifyDto } from './dto/modifyData.Dto';
@@ -25,6 +26,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
+    //@UseGuards(JwtAuthGuard)
     @Post('/write')
     async write(@Body() boardData:writeDataDto){
         this.logger.log("---------------게시글 등록")
