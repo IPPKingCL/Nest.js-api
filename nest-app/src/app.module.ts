@@ -21,11 +21,17 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { WeatherService } from './weather/weather.service';
 import { WeatherController } from './weather/weather.controller';
 import { WeatherModule } from './weather/weather.module';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
   imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule,
+
+    JwtModule.register({
+      secret : process.env.secretOrKey,
+      signOptions : {expiresIn: '60s'},
+    }),
 
     ConfigModule.forRoot({
       isGlobal:true
