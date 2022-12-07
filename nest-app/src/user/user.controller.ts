@@ -41,15 +41,6 @@ export class UserController {
         return await this.userService.chectEmail(email);
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('all')
-    getAllUser() {
-      return {
-        success: true,
-        user: {
-          email: 'test@test.com',
-        },
-      };
-    }
+   
 
 }
