@@ -262,14 +262,20 @@ export class BoardService {
         }
     }
 
-    async deleteComment(id:number) : Promise<object> {
+    async deleteComment(id:number, header:string) : Promise<object> {
         try{
-            await this.coRepository.createQueryBuilder()
-                .update('comment')
-                .set({isDeleted : true})
-                .where("id=:id",{id:id})
-                .execute();
-            return {success:true};
+            const head = header.split(' ');
+            const token = this.jwtService.decode(head[1]);
+            if(id==(token['id'])){
+                await this.coRepository.createQueryBuilder()
+                    .update('comment')
+                    .set({isDeleted : true})
+                    .where("id=:id",{id:id})
+                    .execute();
+                return {success:true};
+            }else{
+                return {success:false, msg: '권한이 없습니다'};
+            }
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:"댓글 삭제 실패"};

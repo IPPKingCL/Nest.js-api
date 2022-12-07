@@ -4,6 +4,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { BoardService } from './board.service';
 import { commentDto } from './dto/comment.Dto';
+import { delCommentDto } from './dto/delComment.Dto';
 import { deleteDto } from './dto/delete.Dto';
 import { modifyDto } from './dto/modifyData.Dto';
 import { modiOneDto } from './dto/modiOne.Dto';
@@ -115,10 +116,10 @@ export class BoardController {
 
     @ApiOperation({summary:' 게시글 댓글 삭제'})
     @UseGuards(JwtAuthGuard)
-    @Get('/deleteComment/:commentId')
-    async deleteComment(@Param("commentId") id:number){
-        this.logger.log('---------------'+id +' 번 댓글 삭제 ');
-        return await this.boardService.deleteComment(id);
+    @Post('/deleteComment')
+    async deleteComment(@Body() delComment:delCommentDto,@Headers() header){
+        this.logger.log('---------------'+delComment.id +' 번 댓글 삭제 ');
+        return await this.boardService.deleteComment(delComment.id, header.authorization);
     }
 
     
