@@ -28,7 +28,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/write')
     async write(@Body() boardData:writeDataDto){
         this.logger.log("---------------게시글 등록")

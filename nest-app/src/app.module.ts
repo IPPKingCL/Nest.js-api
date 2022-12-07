@@ -22,7 +22,7 @@ import { WeatherService } from './weather/weather.service';
 import { WeatherController } from './weather/weather.controller';
 import { WeatherModule } from './weather/weather.module';
 import { JwtModule } from '@nestjs/jwt';
-
+import { JwtStrategy } from './user/jwt/jwt.strategy';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -49,7 +49,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     ], 
   controllers: [AppController,AlcoholController ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
-  providers: [],
+  providers: [JwtStrategy],
 }) 
 export class AppModule {}   
 
