@@ -55,9 +55,9 @@ export class BoardController {
 
     @ApiOperation({summary:' 게시글 수정'})
     @Post('/modify')
-    async modifyBiard(@Body() modifyData:modifyDto){
+    async modifyBiard(@Body() modifyData:modifyDto, @Headers() header){
         this.logger.log('---------------'+modifyData.id +' 게시글 수정');
-        return await this.boardService.modifyBoard(modifyData);
+        return await this.boardService.modifyBoard(modifyData,header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 삭제'})

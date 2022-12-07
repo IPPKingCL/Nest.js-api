@@ -139,8 +139,9 @@ export class BoardService {
         }
     }
 
-    async modifyBoard(writeData) : Promise<object>{
-        //const token = this.jwtService.decode(writeData.token)
+    async modifyBoard(writeData, header) : Promise<object>{
+        const head = header.split(' ');
+        const token = this.jwtService.decode(head[1]);
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
