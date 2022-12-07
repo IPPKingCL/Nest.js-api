@@ -6,8 +6,6 @@ export class commentDto{
     @IsString()
     contents : string;
 
-    @IsString()
-    nickname : string;
 
     @IsString()
     boardId : string;

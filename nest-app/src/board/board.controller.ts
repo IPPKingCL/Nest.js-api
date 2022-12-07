@@ -108,9 +108,9 @@ export class BoardController {
     @ApiOperation({summary:' 게시글 댓글 저장'})
     @UseGuards(JwtAuthGuard)
     @Post('/insertComment')
-    async insertComment(@Body() commentData:commentDto){
+    async insertComment(@Body() commentData:commentDto, @Headers() header){
         this.logger.log('---------------'+commentData.boardId +' 게시글 댓글 저장');
-        return await this.boardService.insertComment(commentData);
+        return await this.boardService.insertComment(commentData, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 댓글 삭제'})

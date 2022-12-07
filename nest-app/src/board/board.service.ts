@@ -230,11 +230,13 @@ export class BoardService {
         }
     }
     /*******************comment*******************/
-    async insertComment(commentData): Promise<object>{
+    async insertComment(commentData, header): Promise<object>{
+        const head = header.split(' ');
+        const token = this.jwtService.decode(head[1]);
         const comment = new CommentEntity();
         comment.contents = commentData.contents;
         comment.dateTime = new Date();
-        comment.nickname = commentData.nickname;
+        comment.nickname = token['nickname'];
         comment.isDeleted = false;
         comment.isModified = false;
         comment.board = commentData.boardId;
