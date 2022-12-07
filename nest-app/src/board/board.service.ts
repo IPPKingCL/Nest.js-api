@@ -103,9 +103,10 @@ export class BoardService {
         }
     }
 
-    async modiOne(modiOne:modiOneDto) : Promise<readOneDto | object>{
+    async modiOne(modiOne:modiOneDto,header) : Promise<readOneDto | object>{
         try{
-            const token = this.jwtService.decode(modiOne.token);
+            const head = header.split(' ');
+            const token = this.jwtService.decode(head[1]);
 
             const res = await this.repository.createQueryBuilder('board')
             .leftJoinAndSelect('board.user', 'user.id')

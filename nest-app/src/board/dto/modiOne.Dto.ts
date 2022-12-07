@@ -4,6 +4,4 @@ export class modiOneDto{
     @IsString()
     id:string;
 
-    @IsString()
-    token: string;
 }

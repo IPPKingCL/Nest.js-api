@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards, Req,Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
@@ -21,6 +21,7 @@ export class BoardController {
         return await this.boardService.getAll();
     }
 
+    @ApiOperation({summary:' 토큰 여부 체크'})
     @UseGuards(JwtAuthGuard)
     @Get('/check')
     check(){
@@ -38,7 +39,7 @@ export class BoardController {
     @UseGuards(JwtAuthGuard)
     //@UseGuards(AuthGuard())
     @Post('/write')
-    async write(@Body() boardData:writeDataDto, @Req() req, @Headers() header){
+    async write(@Body() boardData:writeDataDto, @Headers() header){
         //console.log(header.authorization);
         this.logger.log("---------------게시글 등록")
         return await this.boardService.write(boardData, header.authorization);
@@ -54,9 +55,9 @@ export class BoardController {
     @ApiOperation({summary:' 게시글 수정 권한 조회 및 불러오기'})
     @UseGuards(JwtAuthGuard)
     @Post('/modi')
-    async modiOne(@Body() modiOne:modiOneDto){
+    async modiOne(@Body() modiOne:modiOneDto, @Headers() header){
         this.logger.log("---------------게시글 수정 권한 여부")
-        return await this.boardService.modiOne(modiOne);
+        return await this.boardService.modiOne(modiOne, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 수정'})
