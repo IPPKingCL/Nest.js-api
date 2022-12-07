@@ -20,7 +20,7 @@ import { TypeOrmExModule } from './repository/typeorm-ex.module';
               secret: config.get<string>('secretOrKey'),
               signOptions: { expiresIn: '1d' },
             }),
-          }),
+          }),/*https://velog.io/@daep93/Nestjs-secretOrPrivateKey-must-have-a-value * env 해결 블로그 */
         /*JwtModule.register({
             secret: 'secret',
             signOptions: { expiresIn: '1y' },

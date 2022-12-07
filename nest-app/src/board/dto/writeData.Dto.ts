@@ -20,7 +20,5 @@ export class writeDataDto{
 */
     @IsString()
     readonly boardType:string;
-
-    @IsString()
-    readonly token:string;
+   
 }

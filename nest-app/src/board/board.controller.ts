@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards, Header, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Req,Headers } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { BoardService } from './board.service';
@@ -29,11 +30,12 @@ export class BoardController {
 
     @ApiOperation({summary:' 게시판 글작성'})
     @UseGuards(JwtAuthGuard)
+    //@UseGuards(AuthGuard())
     @Post('/write')
-    async write(@Body() boardData:writeDataDto, @Req() request){
-        console.log(request.headers);
+    async write(@Body() boardData:writeDataDto, @Req() req, @Headers() header){
+        //console.log(header.authorization);
         this.logger.log("---------------게시글 등록")
-        return await this.boardService.write(boardData);
+        return await this.boardService.write(boardData, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 열람'})

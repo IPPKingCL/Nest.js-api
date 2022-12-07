@@ -48,8 +48,11 @@ export class BoardService {
         return this.coRepository.find();
     }
 
-    async write(writeData) : Promise<object>{
-        const token = this.jwtService.decode(writeData.token);
+    async write(writeData , header) : Promise<object>{
+        console.log(header)
+        const head = header.split(' ');
+        console.log(head[1])
+        const token = this.jwtService.decode(head[1]);
         console.log('\n'+token["id"]+'\n');
         const board = new BoardEntity();
         board.title = writeData.title;
