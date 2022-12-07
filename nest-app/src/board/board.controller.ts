@@ -21,6 +21,12 @@ export class BoardController {
         return await this.boardService.getAll();
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('/check')
+    check(){
+        return {success:true};
+    }
+
     @ApiOperation({summary:' 게시판 타입 별 조회'})
     @Post('/')
     async getTypeBoard(@Body() type){
