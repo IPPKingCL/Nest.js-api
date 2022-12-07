@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Header, Req } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { BoardService } from './board.service';
@@ -28,9 +28,10 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/write')
-    async write(@Body() boardData:writeDataDto){
+    async write(@Body() boardData:writeDataDto, @Req() request){
+        console.log(request.headers);
         this.logger.log("---------------게시글 등록")
         return await this.boardService.write(boardData);
     }
@@ -43,7 +44,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 수정 권한 조회 및 불러오기'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/modi')
     async modiOne(@Body() modiOne:modiOneDto){
         this.logger.log("---------------게시글 수정 권한 여부")
@@ -58,6 +59,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 삭제'})
+    //@UseGuards(JwtAuthGuard)
     @Post('/deleteBoard')
     async deleteBoard(@Body() deleteOne:deleteDto){
         this.logger.log('--------------- 게시글 삭제 ');
@@ -77,6 +79,8 @@ export class BoardController {
         this.logger.log('--------------- 추천 상위 게시글 ');
         return await this.boardService.orderbyLimit();
     }
+
+    
     /** 댓글 레포지토리 테스트**/
     @Get('test')
     async test(){
@@ -103,6 +107,7 @@ export class BoardController {
         this.logger.log('---------------'+id +' 번 댓글 삭제 ');
         return await this.boardService.deleteComment(id);
     }
-  
+
+    
 }
 
