@@ -22,6 +22,4 @@ export class modifyDto{
     @IsString()
     readonly boardType:string;
 
-    @IsString()
-    readonly token:string;
 }

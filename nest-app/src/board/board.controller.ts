@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards, Req,Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
@@ -21,6 +21,13 @@ export class BoardController {
         return await this.boardService.getAll();
     }
 
+    @ApiOperation({summary:' 토큰 여부 체크'})
+    @UseGuards(JwtAuthGuard)
+    @Get('/check')
+    check(){
+        return {success:true};
+    }
+
     @ApiOperation({summary:' 게시판 타입 별 조회'})
     @Post('/')
     async getTypeBoard(@Body() type){
@@ -32,7 +39,7 @@ export class BoardController {
     @UseGuards(JwtAuthGuard)
     //@UseGuards(AuthGuard())
     @Post('/write')
-    async write(@Body() boardData:writeDataDto, @Req() req, @Headers() header){
+    async write(@Body() boardData:writeDataDto, @Headers() header){
         //console.log(header.authorization);
         this.logger.log("---------------게시글 등록")
         return await this.boardService.write(boardData, header.authorization);
@@ -48,27 +55,29 @@ export class BoardController {
     @ApiOperation({summary:' 게시글 수정 권한 조회 및 불러오기'})
     @UseGuards(JwtAuthGuard)
     @Post('/modi')
-    async modiOne(@Body() modiOne:modiOneDto){
+    async modiOne(@Body() modiOne:modiOneDto, @Headers() header){
         this.logger.log("---------------게시글 수정 권한 여부")
-        return await this.boardService.modiOne(modiOne);
+        return await this.boardService.modiOne(modiOne, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 수정'})
+    @UseGuards(JwtAuthGuard)
     @Post('/modify')
-    async modifyBiard(@Body() modifyData:modifyDto){
+    async modifyBiard(@Body() modifyData:modifyDto, @Headers() header){
         this.logger.log('---------------'+modifyData.id +' 게시글 수정');
-        return await this.boardService.modifyBoard(modifyData);
+        return await this.boardService.modifyBoard(modifyData,header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 삭제'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/deleteBoard')
-    async deleteBoard(@Body() deleteOne:deleteDto){
+    async deleteBoard(@Body() deleteOne:deleteDto,@Headers() header){
         this.logger.log('--------------- 게시글 삭제 ');
-        return await this.boardService.deleteBoard(deleteOne);
+        return await this.boardService.deleteBoard(deleteOne, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 추천'})
+    @UseGuards(JwtAuthGuard)
     @Get('/recommendBoard/:boardId')
     async recommend(@Param("boardId") id:number){
         this.logger.log('---------------'+id +' 번 게시글 추천 ');
@@ -97,13 +106,15 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 댓글 저장'})
+    @UseGuards(JwtAuthGuard)
     @Post('/insertComment')
-    async insertComment(@Body() commentData:commentDto){
+    async insertComment(@Body() commentData:commentDto, @Headers() header){
         this.logger.log('---------------'+commentData.boardId +' 게시글 댓글 저장');
-        return await this.boardService.insertComment(commentData);
+        return await this.boardService.insertComment(commentData, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 댓글 삭제'})
+    @UseGuards(JwtAuthGuard)
     @Get('/deleteComment/:commentId')
     async deleteComment(@Param("commentId") id:number){
         this.logger.log('---------------'+id +' 번 댓글 삭제 ');

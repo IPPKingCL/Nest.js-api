@@ -103,9 +103,10 @@ export class BoardService {
         }
     }
 
-    async modiOne(modiOne:modiOneDto) : Promise<readOneDto | object>{
+    async modiOne(modiOne:modiOneDto,header) : Promise<readOneDto | object>{
         try{
-            const token = this.jwtService.decode(modiOne.token);
+            const head = header.split(' ');
+            const token = this.jwtService.decode(head[1]);
 
             const res = await this.repository.createQueryBuilder('board')
             .leftJoinAndSelect('board.user', 'user.id')
@@ -139,8 +140,9 @@ export class BoardService {
         }
     }
 
-    async modifyBoard(writeData) : Promise<object>{
-        //const token = this.jwtService.decode(writeData.token)
+    async modifyBoard(writeData, header) : Promise<object>{
+        const head = header.split(' ');
+        const token = this.jwtService.decode(head[1]);
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
@@ -173,9 +175,10 @@ export class BoardService {
         
     }
 
-    async deleteBoard(deleteOne:deleteDto) : Promise<object> {
+    async deleteBoard(deleteOne:deleteDto, header) : Promise<object> {
         try{
-            const token = this.jwtService.decode(deleteOne.token);
+            const head = header.split(' ');
+            const token = this.jwtService.decode(head[1]);
             console.log(deleteOne.userId)
             console.log(token["id"])
             if(deleteOne.userId==(token['id'])){
@@ -227,11 +230,13 @@ export class BoardService {
         }
     }
     /*******************comment*******************/
-    async insertComment(commentData): Promise<object>{
+    async insertComment(commentData, header): Promise<object>{
+        const head = header.split(' ');
+        const token = this.jwtService.decode(head[1]);
         const comment = new CommentEntity();
         comment.contents = commentData.contents;
         comment.dateTime = new Date();
-        comment.nickname = commentData.nickname;
+        comment.nickname = token['nickname'];
         comment.isDeleted = false;
         comment.isModified = false;
         comment.board = commentData.boardId;
