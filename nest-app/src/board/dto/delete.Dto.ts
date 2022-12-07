@@ -7,6 +7,5 @@ export class deleteDto{
     @IsNumber()
     userId:number;
 
-    @IsString()
-    token:string;
+    
 }

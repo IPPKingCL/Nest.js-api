@@ -173,9 +173,10 @@ export class BoardService {
         
     }
 
-    async deleteBoard(deleteOne:deleteDto) : Promise<object> {
+    async deleteBoard(deleteOne:deleteDto, header) : Promise<object> {
         try{
-            const token = this.jwtService.decode(deleteOne.token);
+            const head = header.split(' ');
+            const token = this.jwtService.decode(head[1]);
             console.log(deleteOne.userId)
             console.log(token["id"])
             if(deleteOne.userId==(token['id'])){

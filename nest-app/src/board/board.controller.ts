@@ -61,11 +61,11 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 삭제'})
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('/deleteBoard')
-    async deleteBoard(@Body() deleteOne:deleteDto){
+    async deleteBoard(@Body() deleteOne:deleteDto,@Headers() header){
         this.logger.log('--------------- 게시글 삭제 ');
-        return await this.boardService.deleteBoard(deleteOne);
+        return await this.boardService.deleteBoard(deleteOne, header.authorization);
     }
 
     @ApiOperation({summary:' 게시글 추천'})
