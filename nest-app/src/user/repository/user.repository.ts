@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { CustomRepository } from "./typeorm-ex.decorator";
+import { CustomRepository } from "../../typeorm-ex.decorator";
 import { UserEntity } from "../entities/user.entity";
 
 @CustomRepository(UserEntity)

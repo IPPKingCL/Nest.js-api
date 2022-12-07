@@ -23,10 +23,14 @@ import { WeatherController } from './weather/weather.controller';
 import { WeatherModule } from './weather/weather.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './user/jwt/jwt.strategy';
+import { RecommandController } from './recommand/recommand.controller';
+import { RecommandService } from './recommand/recommand.service';
+import { RecommandModule } from './recommand/recommand.module';
+import { dataEntity } from './recommand/entities/data.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
-  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule,
+  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule,
 
     JwtModule.register({
       secret : process.env.secretOrKey,
@@ -43,10 +47,11 @@ import { JwtStrategy } from './user/jwt/jwt.strategy';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity],
       synchronize: true,
       logging : true,
     }),
+    RecommandModule,
     ], 
   controllers: [AppController,AlcoholController ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy],
