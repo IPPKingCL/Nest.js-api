@@ -54,6 +54,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 수정'})
+    @UseGuards(JwtAuthGuard)
     @Post('/modify')
     async modifyBiard(@Body() modifyData:modifyDto, @Headers() header){
         this.logger.log('---------------'+modifyData.id +' 게시글 수정');
@@ -69,6 +70,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 추천'})
+    @UseGuards(JwtAuthGuard)
     @Get('/recommendBoard/:boardId')
     async recommend(@Param("boardId") id:number){
         this.logger.log('---------------'+id +' 번 게시글 추천 ');
@@ -97,6 +99,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 댓글 저장'})
+    @UseGuards(JwtAuthGuard)
     @Post('/insertComment')
     async insertComment(@Body() commentData:commentDto){
         this.logger.log('---------------'+commentData.boardId +' 게시글 댓글 저장');
@@ -104,6 +107,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 댓글 삭제'})
+    @UseGuards(JwtAuthGuard)
     @Get('/deleteComment/:commentId')
     async deleteComment(@Param("commentId") id:number){
         this.logger.log('---------------'+id +' 번 댓글 삭제 ');
