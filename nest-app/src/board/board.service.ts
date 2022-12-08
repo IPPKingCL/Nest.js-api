@@ -240,6 +240,7 @@ export class BoardService {
         comment.isDeleted = false;
         comment.isModified = false;
         comment.board = commentData.boardId;
+        comment.user = token['id'];
 
         try{
             await this.coRepository.save(comment);
@@ -253,28 +254,29 @@ export class BoardService {
     async commentAll(id:number): Promise<CommentEntity[] | object>{
         try{
             return await this.coRepository.createQueryBuilder('comment')
-                        .where("boardId=:id",{id:id})
-                        .andWhere("isDeleted=false")
-                        .getMany();
+                    .leftJoinAndSelect('comment.user','user.id')
+                    .where("boardId=:id",{id:id})
+                    .andWhere("isDeleted=false")
+                    .getMany();
         }catch(err){
             this.logger.error(err);
             return {success:false, msg: "게시판 조회 중 에러 발생"}
         }
     }
 
-    async deleteComment(id:number, header:string) : Promise<object> {
+    async deleteComment(deleteComment, header:string) : Promise<object> {
         try{
             const head = header.split(' ');
             const token = this.jwtService.decode(head[1]);
-            if(id==(token['id'])){
+            if(deleteComment.userId==(token['id'])){
                 await this.coRepository.createQueryBuilder()
                     .update('comment')
                     .set({isDeleted : true})
-                    .where("id=:id",{id:id})
+                    .where("id=:id",{id:deleteComment.id})
                     .execute();
                 return {success:true};
             }else{
-                return {success:false, msg: '권한이 없습니다'};
+                return {success:false, msg: 'fail'};
             }
         }catch(err){
             this.logger.error(err);
