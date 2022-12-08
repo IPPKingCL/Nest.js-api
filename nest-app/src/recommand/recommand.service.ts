@@ -10,10 +10,9 @@ export class RecommandService {
     ){}
 
 
-    getAll() : Promise<dataEntity[]> {
+    async getAll() : Promise<dataEntity[]> {
         try {
-            return this.dataRepository.createQueryBuilder('data')
-            .getMany();
+            return await this.dataRepository.find();
         }catch(err) {
             this.logger.error("불러오기 오류");
         }
