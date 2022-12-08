@@ -1,4 +1,5 @@
 import { BoardEntity } from 'src/board/entities/board.entity';
+import { CommentEntity } from 'src/board/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { userStatus } from '../enumType/userStatus';
 
@@ -41,4 +42,6 @@ export class UserEntity {
     @OneToMany((type)=>BoardEntity, (boardEntity)=> boardEntity.user)
     boardEntitys : BoardEntity[];
 
+    @OneToMany((type)=>CommentEntity, (commentEntity)=> commentEntity.user)
+    commentEntitiys : CommentEntity[];
 }

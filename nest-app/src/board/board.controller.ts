@@ -119,7 +119,7 @@ export class BoardController {
     @Post('/deleteComment')
     async deleteComment(@Body() delComment:delCommentDto,@Headers() header){
         this.logger.log('---------------'+delComment.id +' 번 댓글 삭제 ');
-        return await this.boardService.deleteComment(delComment.id, header.authorization);
+        return await this.boardService.deleteComment(delComment, header.authorization);
     }
 
     
