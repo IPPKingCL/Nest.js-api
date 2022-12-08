@@ -10,11 +10,7 @@ export class RecommandService {
     ){}
 
 
-    async getAll() : Promise<dataEntity[]> {
-        try {
-            return await this.dataRepository.find();
-        }catch(err) {
-            this.logger.error("불러오기 오류");
-        }
+    async tokenDecoding() : number {
+        return 0;
     }
 }
