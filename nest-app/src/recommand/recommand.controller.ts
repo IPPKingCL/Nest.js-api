@@ -12,7 +12,8 @@ export class RecommandController {
     @ApiOperation({summary:'추천 알고리즘 토큰 여부 체크'})
     @UseGuards(JwtAuthGuard)
     @Get('')
-    check(){
+    recommand(){
+        
         return {success:true};
     }
 }
