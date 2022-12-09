@@ -8,6 +8,7 @@ import { BoardEntity } from './entities/board.entity';
 import { CommentEntity } from './entities/comment.entity';
 import { BoardRepository } from './repository/board.repository';
 import { CommentRepository } from './repository/comment.repository';
+const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
 export class BoardService {
@@ -196,6 +197,11 @@ export class BoardService {
             this.logger.error(err);
             return {success:false, msg:"게시글 삭제 실패"};
         }
+    }
+
+    async s3url(){
+        const url = await generateUploadURL();
+        return {data:url};
     }
 
     //추천 orm update가 비효율적인거 같아 raw query로 작성

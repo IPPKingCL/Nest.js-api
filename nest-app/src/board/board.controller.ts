@@ -92,7 +92,11 @@ export class BoardController {
         return await this.boardService.orderbyLimit();
     }
 
-    
+    @Get('/s3url')
+    async s3url(){
+        return await this.boardService.s3url();
+    }
+
     /** 댓글 레포지토리 테스트**/
     @Get('test')
     async test(){
