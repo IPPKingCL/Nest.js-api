@@ -27,10 +27,11 @@ import { RecommandController } from './recommand/recommand.controller';
 import { RecommandService } from './recommand/recommand.service';
 import { RecommandModule } from './recommand/recommand.module';
 import { dataEntity } from './recommand/entities/data.entity';
+import { AlchoEntity } from './alcohol/entities/alcho.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
-  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule,
+  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule, AlcoholModule,
 
     JwtModule.register({
       secret : process.env.secretOrKey,
@@ -47,13 +48,13 @@ import { dataEntity } from './recommand/entities/data.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity],
       synchronize: true,
       logging : true,
     }),
     RecommandModule,
     ], 
-  controllers: [AppController,AlcoholController ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  controllers: [AppController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy],
 }) 
 export class AppModule {}   
