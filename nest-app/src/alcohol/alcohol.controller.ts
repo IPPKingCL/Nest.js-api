@@ -15,4 +15,11 @@ export class AlcoholController {
     async getDetail(@Param('id') id:number){
         return await this.alchoService.getOne(id);
     }
+
+    @Get('/category/:category')
+    async getCategory(@Param('category') category:string){
+        return await this.alchoService.getCategory(category);
+    }
+
+    
 }
