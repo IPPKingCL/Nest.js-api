@@ -28,6 +28,7 @@ import { RecommandService } from './recommand/recommand.service';
 import { RecommandModule } from './recommand/recommand.module';
 import { dataEntity } from './recommand/entities/data.entity';
 import { AlchoEntity } from './alcohol/entities/alcho.entity';
+import { FavoriteEntity } from './user/entities/favoritList.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -48,7 +49,7 @@ import { AlchoEntity } from './alcohol/entities/alcho.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity],
       synchronize: true,
       logging : true,
       

@@ -2,6 +2,7 @@ import { BoardEntity } from 'src/board/entities/board.entity';
 import { CommentEntity } from 'src/board/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { userStatus } from '../enumType/userStatus';
+import { FavoriteEntity, } from './favoritList.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -39,9 +40,15 @@ export class UserEntity {
     @Column({type :'enum', enum:userStatus})
     userLoginType : userStatus;
 
+    @Column()
+    price : number;
+
     @OneToMany((type)=>BoardEntity, (boardEntity)=> boardEntity.user)
     boardEntitys : BoardEntity[];
 
     @OneToMany((type)=>CommentEntity, (commentEntity)=> commentEntity.user)
     commentEntitiys : CommentEntity[];
+
+    @OneToMany((type)=>FavoriteEntity,(favoriteEntity)=>favoriteEntity.user)
+    favoriteEntitys : FavoriteEntity[];
 }
