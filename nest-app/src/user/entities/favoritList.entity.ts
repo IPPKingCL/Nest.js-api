@@ -5,7 +5,7 @@ import { UserEntity } from "./user.entity";
 @Entity('favorite')
 export class FavoriteEntity{
     @PrimaryGeneratedColumn('increment')
-    id:bigint;
+    id:number;
 
     @ManyToOne((type) => UserEntity,(userEntity)=>userEntity.favoriteEntitys)
     user:UserEntity;

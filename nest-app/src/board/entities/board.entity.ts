@@ -10,7 +10,7 @@ enum STATUS{
 export class BoardEntity {
 
     @PrimaryGeneratedColumn('increment')
-    id : bigint;
+    id : number;
 
     @Column({length : 50})
     title : string;

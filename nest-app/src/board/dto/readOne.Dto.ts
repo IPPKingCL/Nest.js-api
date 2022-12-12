@@ -1,7 +1,7 @@
 import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class readOneDto{
-    readonly id:bigint;
+    readonly id:number;
 
     @IsString()
     title:string;
@@ -22,7 +22,7 @@ export class readOneDto{
     isModified:Boolean;
 
     @IsNumber()
-    userId:bigint;
+    userId:number;
 
     @IsString()
     nickname:string;

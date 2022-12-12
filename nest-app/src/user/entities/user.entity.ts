@@ -8,7 +8,7 @@ import { FavoriteEntity, } from './favoritList.entity';
 export class UserEntity {
 
     @PrimaryGeneratedColumn('increment')
-    id : bigint;
+    id : number;
 
     @Column({length :30})
     name : string;
