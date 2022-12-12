@@ -119,4 +119,18 @@ export class UserService {
         
     }
 
+    async selectUser(header) : Promise<UserCreateDto|object>{
+        const head = header.split(' ');
+        const token = this.jwtService.decode(head[1]);
+        
+        try{
+            const res = await this.repository.createQueryBuilder('user')
+                        .where('id=:id',{id:token['id']})
+                        .getOne();
+            return res;
+        }catch(err){
+            return {success:false}
+        }
+    }
+
 }

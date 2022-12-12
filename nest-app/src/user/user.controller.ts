@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
@@ -49,6 +49,14 @@ export class UserController {
     async checkNickName(@Body('nickname') nickname:string){
         this.logger.log("---------------checkNickName : "+nickname);
         return await this.userService.checkNickName(nickname);
+    }
+
+    @ApiOperation({summary:'마이페이지 유저정보 가져오기'})
+    @UseGuards(JwtAuthGuard)
+    @Get('/selectUser')
+    async selectUser(@Headers() header){
+        this.logger.log("---------------selectUser ");
+        return await this.userService.selectUser(header.authorization);
     }
 
    
