@@ -18,6 +18,10 @@ export class UserController {
         return this.userService.getAll();
     }
 
+    @Get('/test')
+    rrTest(){
+        return {data:'hi'};
+    }
     @ApiOperation({summary:' 회원가입'})
     @Post('/insert')
     async insertUser(@Body() userData:UserCreateDto){
@@ -28,17 +32,23 @@ export class UserController {
 
     @ApiOperation({summary:'회원가입 중 아이디 중복 체크'})
     @Post('/checkUser')
-    async checkUser(@Body('nickname') nickname:string){
-        this.logger.log("---------------checkNickName : "+nickname);
-        return await this.userService.checkUser(nickname);
+    async checkUser(@Body('id') id:string){
+        this.logger.log("---------------checkUserId : "+id);
+        return await this.userService.checkUser(id);
     }
 
     @ApiOperation({summary:'이메일 유뮤 체크'})
-    //@UseGuards(JwtAuthGuard)
     @Post('/checkEmail')
     async checkEmail(@Body('email') email:string){
         this.logger.log("---------------checkEmail : "+email);
         return await this.userService.chectEmail(email);
+    }
+
+    @ApiOperation({summary:'회원가입 중 닉네임 중복 체크'})
+    @Post('/checkNickName')
+    async checkNickName(@Body('nickname') nickname:string){
+        this.logger.log("---------------checkNickName : "+nickname);
+        return await this.userService.checkNickName(nickname);
     }
 
    

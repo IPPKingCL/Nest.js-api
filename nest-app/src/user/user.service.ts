@@ -97,6 +97,26 @@ export class UserService {
     }
 
 
-    
+    async checkNickName(nickname : string) : Promise<object>{
+         
+        //console.log("res : "+res.);
+        try{
+            this.logger.log(nickname);
+            const res = await this.repository.createQueryBuilder('user')
+                        .where('nickname = :nickname',{nickname :nickname})
+                        .getOne();
+            
+            if(res==null){
+                return {success:true, msg : "사용 가능한 닉네임 입니다"};
+            }else{
+                return {success :false , msg : "이미 존재하는 닉네임 입니다"};
+            }
+            
+        }catch(err){
+            this.logger.error(err)
+            return {success:false, msg:"회원 조회 중 에러발생"};
+        }
+        
+    }
 
 }

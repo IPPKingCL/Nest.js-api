@@ -51,6 +51,7 @@ import { AlchoEntity } from './alcohol/entities/alcho.entity';
       entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity],
       synchronize: true,
       logging : true,
+      
     }),
     RecommandModule,
     ], 
