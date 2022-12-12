@@ -2,7 +2,7 @@ import { IsNumber, IsString } from "class-validator";
 
 export class readAlchoDto{
     @IsNumber()
-    id:number;
+    id:bigint;
 
     @IsString()
     name : string;

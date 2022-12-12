@@ -7,7 +7,7 @@ import { BoardEntity } from "./board.entity";
 export class CommentEntity{
 
     @PrimaryGeneratedColumn('increment')
-    id : number;
+    id : bigint;
 
     @Column({length : 1000})
     contents : string;

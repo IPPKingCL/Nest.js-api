@@ -126,7 +126,7 @@ export class BoardService {
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
             
-            const tokenNumberId:number =parseInt(token["id"]);
+            const tokenNumberId : bigint =BigInt(token["id"]);
             console.log(tokenNumberId);
             console.log(res.user.id)
             if(tokenNumberId==res.user.id){
