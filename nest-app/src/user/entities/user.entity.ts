@@ -43,6 +43,9 @@ export class UserEntity {
     @Column()
     price : number;
 
+    @Column()
+    img : string;
+
     @OneToMany((type)=>BoardEntity, (boardEntity)=> boardEntity.user)
     boardEntitys : BoardEntity[];
 
