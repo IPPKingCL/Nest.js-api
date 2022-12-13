@@ -41,5 +41,19 @@ export class AlcoholService {
         }
     }
 
+    async getAllCategory() : Promise<object[]|object>{
+        try{
+            const res = await this.alchoRepository.createQueryBuilder('alcho')
+                        .select('category')
+                        .distinct(true)
+                        .getRawMany();
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"카테고리 종류 조회 중 에러 발생"}
+        }
+
+    }
+
 
 }

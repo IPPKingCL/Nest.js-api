@@ -55,7 +55,7 @@ export class UserService {
                
             const fres = await this.insertFavorite(res, favorite)  
 
-            if(fres.success){
+            if(fres['success']){
                 const payload = { id:res.id, email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload); 
     
@@ -70,7 +70,7 @@ export class UserService {
         }
     }
 
-    async insertFavorite(res, arr){
+    async insertFavorite(res, arr) : Promise<object>{
         const data = new FavoriteEntity();
         
         //console.log(id)

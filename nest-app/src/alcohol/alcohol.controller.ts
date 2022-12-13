@@ -25,5 +25,11 @@ export class AlcoholController {
         return await this.alchoService.getCategory(category);
     }
 
+    @ApiOperation({summary:' 카테고리 종류 조회'})
+    @Get('/category')
+    async getAllCategory(){
+        return await this.alchoService.getAllCategory();
+    }
+
     
 }
