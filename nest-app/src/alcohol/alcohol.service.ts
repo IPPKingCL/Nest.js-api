@@ -43,10 +43,9 @@ export class AlcoholService {
 
     async getAllCategory() : Promise<object[]|object>{
         try{
-            const res = await this.alchoRepository.createQueryBuilder('alcho')
-                        .select('category')
-                        .distinct(true)
-                        .getRawMany();
+            const res = await this.alchoRepository.query(
+                'select id, category from Alcho group by category'
+            )
             return res;
         }catch(err){
             this.logger.error(err);
