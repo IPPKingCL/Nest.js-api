@@ -6,11 +6,16 @@ import { userStatus } from './enumType/userStatus';
 import { UserRepository } from './repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import { FavoriteEntity } from './entities/favoritList.entity';
+import { FavoriteRepository } from './repository/favorite.repository';
 
 @Injectable()
 export class UserService {
+    
     //constructor 하면서 에러남
-    constructor(private readonly repository : UserRepository, private jwtService: JwtService) {}
+    constructor(
+        private readonly repository : UserRepository,
+        private jwtService: JwtService,
+        private fRepository : FavoriteRepository) {}
     private readonly logger = new Logger(UserService.name);
 
     getAll() : Promise<UserEntity[]>{
@@ -36,25 +41,53 @@ export class UserService {
         }
         
         let favorite = new Array();
-        let i = 0;
-        for(i;i<userData.favorite.length;i++){
-           favorite.push(userData.favorite);
-        }
+        
+        
+        favorite.push(userData.favorite);
+        
         console.log(favorite);
         console.log(user.userLoginType);
-                
+              
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
             const res = await this.repository.save(user);
                
-            const payload = { id:res.id, email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
-            const loginToken = this.jwtService.sign(payload); 
+            const fres = await this.insertFavorite(res, favorite)  
 
-            return {success:true,token:loginToken}
+            if(fres.success){
+                const payload = { id:res.id, email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
+                const loginToken = this.jwtService.sign(payload); 
+    
+                return {success:true,token:loginToken}
+            }else{
+                return {success:false, msg : "술 삽입 중 에러발생"}
+            }
+            
         }catch(err){
             this.logger.error(err)
             return {success:false, msg : "회원 가입 중 에러발생"}
         }
+    }
+
+    async insertFavorite(res, arr){
+        const data = new FavoriteEntity();
+        
+        //console.log(id)
+        try{
+            let i = 0;
+            for(i;i<arr[0].length;i++){
+                await this.fRepository.query(
+                    `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i]+`)`,
+                );
+            }
+            return {success:true};
+        }catch(err){
+            console.log(err)
+            return {success:false}
+        }
+    }
+    async test(){
+        return await this.fRepository.find();
     }
 
     async checkUser(userId : string) : Promise<object>{

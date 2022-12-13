@@ -18,10 +18,6 @@ export class UserController {
         return this.userService.getAll();
     }
 
-    @Get('/test')
-    rrTest(){
-        return {data:'hi'};
-    }
     @ApiOperation({summary:' 회원가입'})
     @Post('/insert')
     async insertUser(@Body() userData:UserCreateDto){
@@ -58,6 +54,11 @@ export class UserController {
         this.logger.log("---------------selectUser ");
         console.log(header)
         return await this.userService.selectUser(header.authorization);
+    }
+
+    @Get('/test2')
+    async test(){
+        return await this.userService.test();
     }
 
    
