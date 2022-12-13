@@ -32,6 +32,7 @@ export class UserService {
         user.nickname = userData.nickname;
         user.userId = userData.userId;
         user.password = userData.password;
+        user.price = userData.price;
         user.email = userData.email;
         user.job = userData.job;
         if(userData.loginType == 'g') {
