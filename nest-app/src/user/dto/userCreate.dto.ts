@@ -1,4 +1,4 @@
-import { IsDate, IsNumber, IsString } from "class-validator";
+import { IsArray, IsDate, IsNumber, IsString } from "class-validator";
 import { userStatus } from "../enumType/userStatus";
 
 export class UserCreateDto {
@@ -33,4 +33,6 @@ export class UserCreateDto {
 
     @IsString()
     readonly loginType : string;
+
+    readonly favorite : number[];
 }

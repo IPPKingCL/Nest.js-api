@@ -56,6 +56,7 @@ export class UserController {
     @Get('/selectUser')
     async selectUser(@Headers() header){
         this.logger.log("---------------selectUser ");
+        console.log(header)
         return await this.userService.selectUser(header.authorization);
     }
 

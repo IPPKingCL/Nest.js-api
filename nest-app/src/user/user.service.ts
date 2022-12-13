@@ -5,6 +5,7 @@ import { UserEntity } from './entities/user.entity';
 import { userStatus } from './enumType/userStatus';
 import { UserRepository } from './repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
+import { FavoriteEntity } from './entities/favoritList.entity';
 
 @Injectable()
 export class UserService {
@@ -24,7 +25,7 @@ export class UserService {
         user.birth = new Date(userData.birth);
         user.sex = userData.sex;
         user.nickname = userData.nickname;
-        //user.userId = userData.userId;
+        user.userId = userData.userId;
         user.password = userData.password;
         user.email = userData.email;
         user.job = userData.job;
@@ -34,7 +35,12 @@ export class UserService {
             user.userLoginType = userStatus.default;
         }
         
-
+        let favorite = new Array();
+        let i = 0;
+        for(i;i<userData.favorite.length;i++){
+           favorite.push(userData.favorite);
+        }
+        console.log(favorite);
         console.log(user.userLoginType);
                 
         try{
