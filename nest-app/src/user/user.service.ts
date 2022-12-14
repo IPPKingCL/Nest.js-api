@@ -7,6 +7,7 @@ import { UserRepository } from './repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import { FavoriteEntity } from './entities/favoritList.entity';
 import { FavoriteRepository } from './repository/favorite.repository';
+import { getToken } from 'src/util/token';
 
 @Injectable()
 export class UserService {
@@ -160,8 +161,8 @@ export class UserService {
     }
 
     async selectUser(header) : Promise<UserCreateDto|object>{
-        const head = header.split(' ');
-        const token = this.jwtService.decode(head[1]);
+        
+        const token = this.jwtService.decode(header);
         
         try{
             const res = await this.repository.createQueryBuilder('user')
@@ -171,6 +172,11 @@ export class UserService {
         }catch(err){
             return {success:false}
         }
+    }
+
+    async selectFavorite(header){
+        const token = this.jwtService.decode(header);
+        
     }
 
 }

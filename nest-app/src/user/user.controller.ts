@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { getToken } from 'src/util/token';
 import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
@@ -53,12 +54,12 @@ export class UserController {
     async selectUser(@Headers() header){
         this.logger.log("---------------selectUser ");
         console.log(header)
-        return await this.userService.selectUser(header.authorization);
+        return await this.userService.selectUser(getToken(header));
     }
 
     @Get('/test2')
-    async test(){
-        return await this.userService.test();
+    async test(@Headers() header){
+        return await this.userService.selectFavorite(getToken(header));
     }
 
    
