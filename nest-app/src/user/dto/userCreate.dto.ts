@@ -34,8 +34,8 @@ export class UserCreateDto {
     @IsString()
     readonly loginType : string;
 
-    @IsNumber()
-    readonly price : number;
+    @IsString()
+    readonly price : string;
 
     @IsArray()
     readonly favorite : number[];

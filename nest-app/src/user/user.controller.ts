@@ -44,6 +44,7 @@ export class UserController {
     @Post('/checkNickName')
     async checkNickName(@Body('nickname') nickname:string){
         this.logger.log("---------------checkNickName : "+nickname);
+        console.log(nickname);
         return await this.userService.checkNickName(nickname);
     }
 

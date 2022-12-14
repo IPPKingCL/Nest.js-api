@@ -41,7 +41,7 @@ export class UserEntity {
     userLoginType : userStatus;
 
     @Column()
-    price : number;
+    price : string;
 
     @Column()
     img : string;

@@ -44,9 +44,10 @@ export class UserService {
         let favorite = new Array();
         
         
-        favorite.push(userData.favorite);
+        favorite.push(userData.favorite[0]);
         
-        console.log(favorite);
+        console.log("favor = " + favorite[0]["id"]);
+        console.log("favor = " + userData.favorite);
         console.log(user.userLoginType);
               
         try{
