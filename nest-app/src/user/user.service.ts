@@ -7,6 +7,7 @@ import { UserRepository } from './repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import { FavoriteEntity } from './entities/favoritList.entity';
 import { FavoriteRepository } from './repository/favorite.repository';
+import { getToken } from 'src/util/token';
 
 @Injectable()
 export class UserService {
@@ -161,8 +162,8 @@ export class UserService {
     }
 
     async selectUser(header) : Promise<UserCreateDto|object>{
-        const head = header.split(' ');
-        const token = this.jwtService.decode(head[1]);
+        
+        const token = this.jwtService.decode(header);
         
         try{
             const res = await this.repository.createQueryBuilder('user')
@@ -172,6 +173,23 @@ export class UserService {
         }catch(err){
             return {success:false}
         }
+    }
+
+    async selectFavorite(header) : Promise<FavoriteEntity|object>{
+        const token = this.jwtService.decode(header);
+
+        try{
+            const res = await this.fRepository.createQueryBuilder('favorite')
+                        .leftJoinAndSelect('favorite.alcho', 'alcho.id')
+                        .where('userId=:id',{id:token['id']})
+                        .getMany();
+            console.log(res);
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false , msg : "좋아하는 술 목록 조회 실패"};
+        }
+        
     }
 
 }

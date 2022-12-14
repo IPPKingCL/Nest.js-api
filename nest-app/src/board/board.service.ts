@@ -50,10 +50,8 @@ export class BoardService {
     }
 
     async write(writeData , header) : Promise<object>{
-        console.log(header)
-        const head = header.split(' ');
-        console.log(head[1])
-        const token = this.jwtService.decode(head[1]);
+       
+        const token = this.jwtService.decode(header);
         console.log('\n'+token["id"]+'\n');
         const board = new BoardEntity();
         board.title = writeData.title;
@@ -106,8 +104,8 @@ export class BoardService {
 
     async modiOne(modiOne:modiOneDto,header) : Promise<readOneDto | object>{
         try{
-            const head = header.split(' ');
-            const token = this.jwtService.decode(head[1]);
+            
+            const token = this.jwtService.decode(header);
 
             const res = await this.repository.createQueryBuilder('board')
             .leftJoinAndSelect('board.user', 'user.id')
@@ -142,8 +140,8 @@ export class BoardService {
     }
 
     async modifyBoard(writeData, header) : Promise<object>{
-        const head = header.split(' ');
-        const token = this.jwtService.decode(head[1]);
+        
+        const token = this.jwtService.decode(header);
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
@@ -178,8 +176,8 @@ export class BoardService {
 
     async deleteBoard(deleteOne:deleteDto, header) : Promise<object> {
         try{
-            const head = header.split(' ');
-            const token = this.jwtService.decode(head[1]);
+            
+            const token = this.jwtService.decode(header);
             console.log(deleteOne.userId)
             console.log(token["id"])
             if(deleteOne.userId==(token['id'])){
@@ -237,8 +235,8 @@ export class BoardService {
     }
     /*******************comment*******************/
     async insertComment(commentData, header): Promise<object>{
-        const head = header.split(' ');
-        const token = this.jwtService.decode(head[1]);
+        
+        const token = this.jwtService.decode(header);
         const comment = new CommentEntity();
         comment.contents = commentData.contents;
         comment.dateTime = new Date();
@@ -272,8 +270,8 @@ export class BoardService {
 
     async deleteComment(deleteComment, header:string) : Promise<object> {
         try{
-            const head = header.split(' ');
-            const token = this.jwtService.decode(head[1]);
+            
+            const token = this.jwtService.decode(header);
             if(deleteComment.userId==(token['id'])){
                 await this.coRepository.createQueryBuilder()
                     .update('comment')
