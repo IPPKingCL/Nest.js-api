@@ -57,8 +57,11 @@ export class UserController {
         return await this.userService.selectUser(getToken(header));
     }
 
+    @ApiOperation({summary:'유저 별 선호 주류 가져오기'})
+    @UseGuards(JwtAuthGuard)
     @Get('/test2')
     async test(@Headers() header){
+        this.logger.log("---------------selectFavorite ");
         return await this.userService.selectFavorite(getToken(header));
     }
 

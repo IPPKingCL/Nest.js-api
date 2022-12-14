@@ -174,8 +174,20 @@ export class UserService {
         }
     }
 
-    async selectFavorite(header){
+    async selectFavorite(header) : Promise<FavoriteEntity|object>{
         const token = this.jwtService.decode(header);
+
+        try{
+            const res = await this.fRepository.createQueryBuilder('favorite')
+                        .leftJoinAndSelect('favorite.alcho', 'alcho.id')
+                        .where('userId=:id',{id:token['id']})
+                        .getMany();
+            console.log(res);
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false , msg : "좋아하는 술 목록 조회 실패"};
+        }
         
     }
 
