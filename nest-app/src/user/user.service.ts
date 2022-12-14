@@ -45,9 +45,9 @@ export class UserService {
         let favorite = new Array();
         
         
-        favorite.push(userData.favorite[0]);
+        favorite.push(userData.favorite);
         
-        console.log("favor = " + favorite[0]["id"]);
+        console.log("favor = " + favorite[0][0]["id"]);
         console.log("favor = " + userData.favorite);
         console.log(user.userLoginType);
               
@@ -55,6 +55,7 @@ export class UserService {
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
             const res = await this.repository.save(user);
                
+            console.log(favorite);
             const fres = await this.insertFavorite(res, favorite)  
 
             if(fres['success']){
@@ -74,18 +75,20 @@ export class UserService {
 
     async insertFavorite(res, arr) : Promise<object>{
         const data = new FavoriteEntity();
-        
+        console.log("arr = " + arr);
         //console.log(id)
         try{
             let i = 0;
             for(i;i<arr[0].length;i++){
+                console.log(arr[0][i].id);
                 await this.fRepository.query(
-                    `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i]+`)`,
+                    `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i].id+`)`,
                 );
             }
             return {success:true};
         }catch(err){
             console.log(err)
+
             return {success:false}
         }
     }
