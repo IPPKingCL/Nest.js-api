@@ -4,10 +4,10 @@ const { promisify } = require('util')
 const randomBytes = promisify(crypto1.randomBytes)
 
 
-const region = process.env.AWS_S3_REGION_NAME;
 const bucketName = "alcoholcocktail"
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const region='';
+const accessKeyId ='';
+const secretAccessKey='';
 
 const s3 = new aws.S3({
     region  ,
@@ -17,6 +17,13 @@ const s3 = new aws.S3({
 })
 
 async function generateUploadURL() {
+    const s3 = new aws.S3({
+      region : process.env.AWS_S3_REGION_NAME,
+      accessKeyId:process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY,
+      signatureVersion:"v4"
+    })
+
     const rawBytes = await randomBytes(16);
     const imageName = rawBytes.toString('hex')
   
