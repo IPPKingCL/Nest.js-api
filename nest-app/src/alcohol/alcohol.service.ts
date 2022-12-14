@@ -54,5 +54,16 @@ export class AlcoholService {
 
     }
 
+    async search(name:string) : Promise<readAlchoDto[] | object>{
+        try{
+            const res = await this.alchoRepository.createQueryBuilder('Alcho')
+                        .where("name=:name",{name:name})
+                        .getMany();
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg: '검색 오류 발생'};
+        }
+    }
 
 }
