@@ -30,6 +30,6 @@ export class readOneDto{
     @IsNumber()
     recommend:number;
 
-    @IsString()
-    imgUrl:string;
+    
+    imgUrl:string|null;
 }
