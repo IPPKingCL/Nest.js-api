@@ -8,6 +8,7 @@ import { BoardEntity } from './entities/board.entity';
 import { CommentEntity } from './entities/comment.entity';
 import { BoardRepository } from './repository/board.repository';
 import { CommentRepository } from './repository/comment.repository';
+import { ImgRepositoy } from './repository/img.repository';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -16,6 +17,7 @@ export class BoardService {
     constructor(
         private readonly repository : BoardRepository,  //게시글 
         private readonly coRepository : CommentRepository,
+        private readonly imgRepository : ImgRepositoy,
         private jwtService: JwtService
         ){}  //댓글
     
