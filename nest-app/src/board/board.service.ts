@@ -53,7 +53,7 @@ export class BoardService {
     }
 
     async write(writeData , header) : Promise<object>{
-       
+        
         const token = this.jwtService.decode(header);
         console.log('\n'+token["id"]+'\n');
         const board = new BoardEntity();
@@ -104,6 +104,11 @@ export class BoardService {
             .where('board.id=:id',{id : id})
             .getOne();
 
+            const resImg = await this.imgRepository.createQueryBuilder('img')
+            .where('boardType=:type',{type:'b'})
+            .andWhere('boardId=:id',{id:res.id})
+            .getOne();
+
             this.logger.log(res);
             const readOne = new readOneDto();
        
@@ -116,6 +121,7 @@ export class BoardService {
             readOne.userId = res.user.id;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
+            readOne.imgUrl = resImg.imgUrl;
 
             this.logger.log(readOne);
 
