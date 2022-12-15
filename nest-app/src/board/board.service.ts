@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { commentDto } from './dto/comment.Dto';
 import { deleteDto } from './dto/delete.Dto';
+import { imgDto } from './dto/img.Dto';
 import { modiOneDto } from './dto/modiOne.Dto';
 import { readOneDto } from './dto/readOne.Dto';
 import { BoardEntity } from './entities/board.entity';
@@ -66,13 +67,34 @@ export class BoardService {
         
         this.logger.log(board);
         try{
-            await this.repository.save(board);
-            return {success:true};
+            const res = await this.repository.save(board);
+            const imgRes = await this.writeImg(writeData.imgUrl, res.id);
+            if(imgRes['success']){
+                return {success:true};
+            }else{
+                return {success:false, msg: '이미지 등록 중 에러 발생'}
+            }
+            
         }catch(err){
             this.logger.error(err);
             return {success:false, msg : "게시판 글 등록 중 에러발생"}
         }
         
+    }
+
+    async writeImg(url:string, id:number) : Promise<object>{
+        try{
+            const imgdto = new imgDto();
+            imgdto.boardId = id;
+            imgdto.boardType = 'b';
+            imgdto.imgUrl = url;
+            await this.imgRepository.save(imgdto);
+            
+            return {success:true};
+        }catch(err){
+            console.log(err);
+            return {success : false};
+        }
     }
 
     async readOne(id:number) : Promise<readOneDto | object>{
