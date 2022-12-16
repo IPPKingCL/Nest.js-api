@@ -3,6 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { getToken } from 'src/util/token';
 import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
+import { UserModifyDto } from './dto/usermodify.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from './jwt/jwt.guard';
@@ -63,6 +64,14 @@ export class UserController {
     async test(@Headers() header){
         this.logger.log("---------------selectFavorite ");
         return await this.userService.selectFavorite(getToken(header));
+    }
+
+    @ApiOperation({summary:'마이페이지 유저 데이터 수정'})
+    @UseGuards(JwtAuthGuard)
+    @Post('/modify')
+    async modify(@Headers() header, @Body() modiData:UserModifyDto){
+        this.logger.log("---------------modify userData ");
+        return await this.userService.modify(getToken(header), modiData);
     }
 
    

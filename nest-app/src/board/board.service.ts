@@ -108,8 +108,8 @@ export class BoardService {
             .where('boardType=:type',{type:'b'})
             .andWhere('boardId=:id',{id:res.id})
             .getOne();
-            console.log("=================="+resImg);
-            this.logger.log(res);
+            
+            this.logger.debug(res);
             const readOne = new readOneDto();
        
             readOne.title = res.title; 
@@ -125,7 +125,6 @@ export class BoardService {
                 readOne.imgUrl = resImg.imgUrl;
             }
             
-
             this.logger.log(readOne);
 
             return readOne;

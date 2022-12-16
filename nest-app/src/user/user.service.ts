@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { FavoriteEntity } from './entities/favoritList.entity';
 import { FavoriteRepository } from './repository/favorite.repository';
 import { getToken } from 'src/util/token';
+import { UserModifyDto } from './dto/usermodify.dto';
 
 @Injectable()
 export class UserService {
@@ -63,8 +64,6 @@ export class UserService {
                 const loginToken = this.jwtService.sign(payload); 
     
                 return {success:true,token:loginToken}
-            }else{
-                return {success:false, msg : "술 삽입 중 에러발생"}
             }
             
         }catch(err){
@@ -194,5 +193,73 @@ export class UserService {
         }
         
     }
+
+    async modify(header, body:UserModifyDto) {
+        const token = this.jwtService.decode(header);
+        let favorite = new Array();
+        
+        favorite.push(body.favorite);
+
+        try{
+            const user = new UserEntity();
+            user.birth = new Date(body.birth);
+            console.log(user.birth);
+            await this.repository.query(
+                'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
+                                '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+
+                                ' where id='+token['id']   
+            );
+            const dres = await this.deleteFavorite(token['id']);
+            let fres;
+            if(dres['success']){
+                fres = await this.modifyFavorite(token['id'],favorite);
+            }else{
+                return {success:false, msg : "술 삭제 중 에러발생"}
+            }
+
+            
+            if(fres['success']){
+                return {success:true}
+            }else{
+                return {success:false, msg : "술 수정 중 에러발생"}
+            }
+            
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg : "수정 실패"};
+        }
+    }
+
+    async deleteFavorite(id){
+        try{
+            await this.fRepository.query(
+                'delete from favorite where userId='+id
+            );
+            return {success:true};
+        }catch(err){
+            this.logger.error(err)
+            return {success:false};
+        }
+        
+    }
+    async modifyFavorite(id,arr){
+        try{
+            let i = 0;
+            for(i;i<arr[0].length;i++){
+                console.log(arr[0][i].id);
+                await this.fRepository.query(
+                    `insert into favorite(userId,alchoId) values (`+id+`,`+arr[0][i].id+`)`,    
+                );
+    
+            }
+            return {success:true};
+        }catch(err){
+            console.log(err)
+
+            return {success:false}
+        }
+    }
+
 
 }
