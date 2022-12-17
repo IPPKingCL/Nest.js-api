@@ -8,6 +8,8 @@ import { UserCreateDto } from './dto/userCreate.dto';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from './jwt/jwt.guard';
 import { UserService } from './user.service';
+import { async } from 'rxjs';
+import { UserEmailDto } from './dto/userEmail.dto';
 
 @Controller('user')
 export class UserController {
@@ -35,7 +37,7 @@ export class UserController {
         return await this.userService.checkUser(id);
     }
 
-    @ApiOperation({summary:'이메일 유뮤 체크'})
+    @ApiOperation({summary:'이메일 유뮤 체크(구글로그인)'})
     @Post('/checkEmail')
     async checkEmail(@Body('email') email:string){
         this.logger.log("---------------checkEmail : "+email);
@@ -72,6 +74,14 @@ export class UserController {
     async modify(@Headers() header, @Body() modiData:UserModifyDto){
         this.logger.log("---------------modify userData ");
         return await this.userService.modify(getToken(header), modiData);
+    }
+
+    @ApiOperation({summary:'EmailLogin 모듈 (자체로그인)'})
+    @Post('/EmailLogin')
+    async emailLogin(@Body() emailData:UserEmailDto) {
+        this.logger.log("---------------Email Login");
+        console.log(emailData);
+        return await this.userService.emailLogin(emailData);
     }
 
    
