@@ -9,6 +9,7 @@ import { FavoriteEntity } from './entities/favoritList.entity';
 import { FavoriteRepository } from './repository/favorite.repository';
 import { getToken } from 'src/util/token';
 import { UserModifyDto } from './dto/usermodify.dto';
+import { UserEmailDto } from './dto/userEmail.dto';
 
 @Injectable()
 export class UserService {
@@ -258,6 +259,29 @@ export class UserService {
             console.log(err)
 
             return {success:false}
+        }
+    }
+
+    async emailLogin(emailLoginDto : UserEmailDto) {
+        try{
+            const res = await this.repository.createQueryBuilder("user")
+            .where('email = :email',{email:emailLoginDto.email})
+            .getOne();
+
+           
+            if(res==null){
+                return {success:true};
+            }else{
+                const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
+                const loginToken = this.jwtService.sign(payload);
+
+                console.log(loginToken);
+                console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
+                return {success:false, msg:'존재하는 사용자',token : loginToken};
+            }
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"회원 조회 중 에러발생"};
         }
     }
 
