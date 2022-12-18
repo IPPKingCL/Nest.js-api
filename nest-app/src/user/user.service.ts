@@ -206,8 +206,8 @@ export class UserService {
             console.log(user.birth);
             await this.repository.query(
                 'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
-                                '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+
-                                ' where id='+token['id']   
+                                '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+', img=\''+body.img+
+                                '\' where id='+token['id']   
             );
             const dres = await this.deleteFavorite(token['id']);
             let fres;

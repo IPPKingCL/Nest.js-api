@@ -24,6 +24,9 @@ export class UserModifyDto{
     @IsString()
     readonly password : string;
 
+    @IsString()
+    readonly img : string;
+
     @IsArray()
     readonly favorite : number[];
 }
