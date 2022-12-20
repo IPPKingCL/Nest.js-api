@@ -27,6 +27,7 @@ export class BoardService {
             return this.repository.createQueryBuilder('board')
                     .leftJoinAndSelect('board.user', 'user.id')
                     .andWhere("isDeleted=false")
+                    .orderBy("dateTime","DESC")
                     .getMany();
         }catch(err){
             this.logger.error("게시판 목록 조회 중 에러 발생")
@@ -40,6 +41,7 @@ export class BoardService {
                     .leftJoinAndSelect('board.user', 'user.id')
                     .where('boardType=:type',{type:type})
                     .andWhere("isDeleted=false")
+                    .orderBy("dateTime","DESC")
                     .getMany()
         }catch(err){
             this.logger.log(err)
