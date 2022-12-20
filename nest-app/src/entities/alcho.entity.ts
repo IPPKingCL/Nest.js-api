@@ -27,6 +27,9 @@ export class AlchoEntity{
     @Column({length:500})
     imgUrl : string;
 
+    @Column()
+    like : number;
+
     @OneToMany((type)=> FavoriteEntity,(favoriteEntity)=>favoriteEntity.alcho)
     favoriteEntitys : FavoriteEntity[];
 
