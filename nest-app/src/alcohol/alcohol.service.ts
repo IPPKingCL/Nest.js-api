@@ -66,4 +66,16 @@ export class AlcoholService {
         }
     }
 
+    async like(id:number) : Promise<object>{
+        try{
+            await this.alchoRepository.query(
+                'update Alcho set like=like+1 where id='+id
+            )
+            return {success:true}
+        }catch(err){
+            this.logger.log(err);
+            return {success:false, msg:"추천 도중 오류 발생"}
+        }
+    }
+
 }
