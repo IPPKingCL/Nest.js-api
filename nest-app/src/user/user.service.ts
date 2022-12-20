@@ -201,15 +201,26 @@ export class UserService {
         
         favorite.push(body.favorite);
 
+        console.log("body : "+body.img)
+
         try{
             const user = new UserEntity();
             user.birth = new Date(body.birth);
             console.log(user.birth);
-            await this.repository.query(
-                'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
-                                '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+', img=\''+body.img+
-                                '\' where id='+token['id']   
-            );
+            if(body.img!==''){
+                await this.repository.query(
+                    'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
+                                    '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+', img=\''+body.img+
+                                    '\' where id='+token['id']   
+                );
+            }else{
+                await this.repository.query(
+                    'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
+                                    '\',sex=\''+body.sex +'\',job=\''+body.job+'\',price='+body.price+
+                                    ' where id='+token['id']   
+                );
+            }
+           
             const dres = await this.deleteFavorite(token['id']);
             let fres;
             if(dres['success']){
@@ -220,7 +231,12 @@ export class UserService {
 
             
             if(fres['success']){
-                return {success:true}
+                const payload = {id:token["id"], email: token['email'], name: token['name'], nickname : body.nickname , sub: '0' };
+                const loginToken = this.jwtService.sign(payload);
+
+                console.log(payload);
+                return {success:true, token : loginToken};
+                
             }else{
                 return {success:false, msg : "술 수정 중 에러발생"}
             }
