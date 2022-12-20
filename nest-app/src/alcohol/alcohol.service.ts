@@ -69,7 +69,7 @@ export class AlcoholService {
     async like(id:number) : Promise<object>{
         try{
             await this.alchoRepository.query(
-                'update Alcho set like=like+1 where id='+id
+                'update Alcho set likeOne=likeOne+1 where id='+id
             )
             return {success:true}
         }catch(err){
