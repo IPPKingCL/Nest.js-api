@@ -23,7 +23,7 @@ async function bootstrap() {
       saveUninitialized: false //초기화되지 않는 세션을 저장하게 함
     }),
 
-  )
+  ) 
 
   app.enableCors({
     credentials: true, // << totally ruins it

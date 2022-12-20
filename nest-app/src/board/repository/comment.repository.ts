@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { CommentEntity } from "../entities/comment.entity";
+import { CommentEntity } from "../../entities/comment.entity";
 import { CustomRepository } from "../../typeorm-ex.decorator";
 
 @CustomRepository(CommentEntity)

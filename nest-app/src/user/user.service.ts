@@ -1,11 +1,11 @@
 import { Injectable, Logger, UnauthorizedException} from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { userStatus } from './enumType/userStatus';
 import { UserRepository } from './repository/user.repository';
 import { JwtService } from '@nestjs/jwt';
-import { FavoriteEntity } from './entities/favoritList.entity';
+import { FavoriteEntity } from '../entities/favoritList.entity';
 import { FavoriteRepository } from './repository/favorite.repository';
 import { getToken } from 'src/util/token';
 import { UserModifyDto } from './dto/usermodify.dto';

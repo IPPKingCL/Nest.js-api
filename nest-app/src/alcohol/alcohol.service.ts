@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { readAlchoDto } from './dto/readAlcho.Dto';
-import { AlchoEntity } from './entities/alcho.entity';
+import { AlchoEntity } from '../entities/alcho.entity';
 import { alchoRepository } from './repository/alcho.repository';
 
 @Injectable()
