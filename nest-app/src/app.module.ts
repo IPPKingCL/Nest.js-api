@@ -30,6 +30,7 @@ import { dataEntity } from './entities/data.entity';
 import { AlchoEntity } from './entities/alcho.entity';
 import { FavoriteEntity } from './entities/favoritList.entity';
 import { ImgEntity } from './entities/img.entity';
+import { AlchoCommentEntity } from './entities/alchoComment.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -50,7 +51,7 @@ import { ImgEntity } from './entities/img.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity,ImgEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,AlchoCommentEntity],
       synchronize: true,
       logging : true,
       
