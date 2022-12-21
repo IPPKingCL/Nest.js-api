@@ -1,4 +1,4 @@
-import { UserEntity } from "src/user/entities/user.entity";
+import { UserEntity } from "src/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { BoardEntity } from "./board.entity";

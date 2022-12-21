@@ -14,9 +14,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { testEntity } from './movies/entities/test.entity';
 import { ConfigModule } from '@nestjs/config';
 import { env } from 'process';
-import { UserEntity } from './user/entities/user.entity';
-import { BoardEntity } from './board/entities/board.entity';
-import { CommentEntity } from './board/entities/comment.entity';
+import { UserEntity } from './entities/user.entity';
+import { BoardEntity } from './entities/board.entity';
+import { CommentEntity } from './entities/comment.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WeatherService } from './weather/weather.service';
 import { WeatherController } from './weather/weather.controller';
@@ -26,10 +26,10 @@ import { JwtStrategy } from './user/jwt/jwt.strategy';
 import { RecommandController } from './recommand/recommand.controller';
 import { RecommandService } from './recommand/recommand.service';
 import { RecommandModule } from './recommand/recommand.module';
-import { dataEntity } from './recommand/entities/data.entity';
-import { AlchoEntity } from './alcohol/entities/alcho.entity';
-import { FavoriteEntity } from './user/entities/favoritList.entity';
-import { ImgEntity } from './board/entities/img.entity';
+import { dataEntity } from './entities/data.entity';
+import { AlchoEntity } from './entities/alcho.entity';
+import { FavoriteEntity } from './entities/favoritList.entity';
+import { ImgEntity } from './entities/img.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   

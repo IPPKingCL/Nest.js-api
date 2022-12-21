@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { readAlchoDto } from './dto/readAlcho.Dto';
-import { AlchoEntity } from './entities/alcho.entity';
+import { AlchoEntity } from '../entities/alcho.entity';
 import { alchoRepository } from './repository/alcho.repository';
 
 @Injectable()
@@ -63,6 +63,18 @@ export class AlcoholService {
         }catch(err){
             this.logger.error(err);
             return {success:false, msg: '검색 오류 발생'};
+        }
+    }
+
+    async like(id:number) : Promise<object>{
+        try{
+            await this.alchoRepository.query(
+                'update Alcho set likeOne=likeOne+1 where id='+id
+            )
+            return {success:true}
+        }catch(err){
+            this.logger.log(err);
+            return {success:false, msg:"추천 도중 오류 발생"}
         }
     }
 

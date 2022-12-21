@@ -5,8 +5,8 @@ import { deleteDto } from './dto/delete.Dto';
 import { imgDto } from './dto/img.Dto';
 import { modiOneDto } from './dto/modiOne.Dto';
 import { readOneDto } from './dto/readOne.Dto';
-import { BoardEntity } from './entities/board.entity';
-import { CommentEntity } from './entities/comment.entity';
+import { BoardEntity } from '../entities/board.entity';
+import { CommentEntity } from '../entities/comment.entity';
 import { BoardRepository } from './repository/board.repository';
 import { CommentRepository } from './repository/comment.repository';
 import { ImgRepositoy } from './repository/img.repository';
@@ -27,6 +27,7 @@ export class BoardService {
             return this.repository.createQueryBuilder('board')
                     .leftJoinAndSelect('board.user', 'user.id')
                     .andWhere("isDeleted=false")
+                    .orderBy("dateTime","DESC")
                     .getMany();
         }catch(err){
             this.logger.error("게시판 목록 조회 중 에러 발생")
@@ -40,6 +41,7 @@ export class BoardService {
                     .leftJoinAndSelect('board.user', 'user.id')
                     .where('boardType=:type',{type:type})
                     .andWhere("isDeleted=false")
+                    .orderBy("dateTime","DESC")
                     .getMany()
         }catch(err){
             this.logger.log(err)

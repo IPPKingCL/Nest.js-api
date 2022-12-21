@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { dataEntity } from './entities/data.entity';
+import { dataEntity } from '../entities/data.entity';
 import {dataRepository} from './repository/data.repository'
 
 @Injectable()

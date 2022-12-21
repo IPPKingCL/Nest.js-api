@@ -5,7 +5,7 @@ import { Query } from 'typeorm/driver/Query';
 import { UserDto } from './dto/user.dto';
 import { UserModifyDto } from './dto/usermodify.dto';
 import { UserCreateDto } from './dto/userCreate.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { JwtAuthGuard } from './jwt/jwt.guard';
 import { UserService } from './user.service';
 import { async } from 'rxjs';

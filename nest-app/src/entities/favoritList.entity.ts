@@ -1,4 +1,4 @@
-import { AlchoEntity } from "src/alcohol/entities/alcho.entity";
+import { AlchoEntity } from "src/entities/alcho.entity";
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "./user.entity";
 

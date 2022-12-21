@@ -1,4 +1,4 @@
-import { FavoriteEntity,  } from "src/user/entities/favoritList.entity";
+import { FavoriteEntity,  } from "src/entities/favoritList.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Alcho')
@@ -26,6 +26,9 @@ export class AlchoEntity{
 
     @Column({length:500})
     imgUrl : string;
+
+    @Column()
+    likeOne : number;
 
     @OneToMany((type)=> FavoriteEntity,(favoriteEntity)=>favoriteEntity.alcho)
     favoriteEntitys : FavoriteEntity[];

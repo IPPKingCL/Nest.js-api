@@ -1,7 +1,7 @@
-import { BoardEntity } from 'src/board/entities/board.entity';
-import { CommentEntity } from 'src/board/entities/comment.entity';
+import { BoardEntity } from 'src/entities/board.entity';
+import { CommentEntity } from 'src/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { userStatus } from '../enumType/userStatus';
+import { userStatus } from '../user/enumType/userStatus';
 import { FavoriteEntity, } from './favoritList.entity';
 
 @Entity('user')
@@ -20,7 +20,7 @@ export class UserEntity {
     birth : Date;
 
     @Column({length : 10})
-    sex : string;
+    sex : string; 
 
     @Column({length:30})
     nickname : string;
