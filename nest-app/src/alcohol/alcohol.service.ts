@@ -3,13 +3,17 @@ import { readAlchoDto } from './dto/readAlcho.Dto';
 import { AlchoEntity } from '../entities/alcho.entity';
 import { alchoRepository } from './repository/alcho.repository';
 import { alchoCommentRepository } from './repository/alchoComment.repository';
+import { AlchoCommentDto } from './dto/alchoComment.Dto';
+import { AlchoCommentEntity } from 'src/entities/alchoComment.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AlcoholService {
     private readonly logger = new Logger(AlcoholService.name)
     constructor(
         private readonly alchoRepository : alchoRepository,
-        private readonly alchoCommentRepository : alchoCommentRepository
+        private readonly alchoCommentRepository : alchoCommentRepository,
+        private jwtService: JwtService
     ){}
 
     getAll() : Promise<AlchoEntity[]>{
@@ -80,4 +84,28 @@ export class AlcoholService {
         }
     }
 
+    /*****************술 정보 댓글 *****************/
+
+    async insertComment(commentDto:AlchoCommentDto, header) : Promise<object>{
+        try{
+            const token = this.jwtService.decode(header);
+
+            console.log(token)
+            const alchoCommentEntity = new AlchoCommentEntity();
+            alchoCommentEntity.content = commentDto.content;
+            alchoCommentEntity.dateTime = new Date();
+            alchoCommentEntity.isDeleted = false;
+            alchoCommentEntity.user = token["id"];
+            //alchoCommentEntity.alcho= commentDto.alchoId;
+            alchoCommentEntity.nickname = token["nickname"];
+
+            await this.alchoCommentRepository.save(alchoCommentEntity);
+            
+            return {success:true}
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg : "댓글 등록 중 에러 발생"};
+        }
+    }
 }

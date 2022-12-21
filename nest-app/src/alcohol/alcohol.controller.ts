@@ -1,7 +1,9 @@
-import { Controller, Get, Logger, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, UseGuards , Headers} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
+import { getToken } from 'src/util/token';
 import { AlcoholService } from './alcohol.service';
+import { AlchoCommentDto } from './dto/alchoComment.Dto';
 
 @Controller('alcohol')
 export class AlcoholController {
@@ -37,7 +39,7 @@ export class AlcoholController {
         return await this.alchoService.getAllCategory();
     }
 
-    @ApiOperation({summary: "술 추천"})
+    @ApiOperation({summary: "술 추천하기"})
     @UseGuards(JwtAuthGuard)
     @Get('/like/:id')
     async like(@Param('id') id:number){
@@ -45,6 +47,15 @@ export class AlcoholController {
         return await this.alchoService.like(id);
     }
 
+
+    /************술 댓글***********/
+    @ApiOperation({summary: "술 정보 댓글 달기"})
+    @UseGuards(JwtAuthGuard)
+    @Post('/insertComment')
+    async insertComment(@Body() commentDto:AlchoCommentDto, @Headers() header){
+        this.logger.log("---------------comment alcohol id : "+commentDto.alchoId);
+        return await this.alchoService.insertComment(commentDto, getToken(header));
+    }
     
 
     
