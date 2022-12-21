@@ -1,5 +1,6 @@
-import { Controller, Get, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Logger, Param, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { AlcoholService } from './alcohol.service';
 
 @Controller('alcohol')
@@ -37,6 +38,7 @@ export class AlcoholController {
     }
 
     @ApiOperation({summary: "술 추천"})
+    @UseGuards(JwtAuthGuard)
     @Get('/like/:id')
     async like(@Param('id') id:number){
         this.logger.log("---------------recommend alcohol id : "+id);
