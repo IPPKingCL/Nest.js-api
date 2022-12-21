@@ -266,6 +266,7 @@ export class UserService {
         try{
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:emailLoginDto.email})
+            .andWhere('password = :password',{password:emailLoginDto.password})
             .getOne();
 
            
