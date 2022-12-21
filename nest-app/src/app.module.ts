@@ -62,7 +62,7 @@ import { CocktailEntity } from './entities/cocktail.entity';
     RecommandModule,
     CocktailModule,
     ], 
-  controllers: [AppController, CocktailController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  controllers: [AppController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy],
 }) 
 export class AppModule {}   
