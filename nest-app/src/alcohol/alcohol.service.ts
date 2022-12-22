@@ -86,7 +86,7 @@ export class AlcoholService {
 
     /*****************술 정보 댓글 *****************/
 
-    async insertComment(commentDto:AlchoCommentDto, header) : Promise<object>{
+    async insertComment(commentDto, header) : Promise<object>{
         try{
             const token = this.jwtService.decode(header);
 
@@ -96,7 +96,7 @@ export class AlcoholService {
             alchoCommentEntity.dateTime = new Date();
             alchoCommentEntity.isDeleted = false;
             alchoCommentEntity.user = token["id"];
-            //alchoCommentEntity.alcho= commentDto.alchoId;
+            alchoCommentEntity.alcho= commentDto.alchoId;
             alchoCommentEntity.nickname = token["nickname"];
 
             await this.alchoCommentRepository.save(alchoCommentEntity);
