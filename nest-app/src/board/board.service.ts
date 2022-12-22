@@ -298,7 +298,7 @@ export class BoardService {
                     .getMany();
         }catch(err){
             this.logger.error(err);
-            return {success:false, msg: "게시판 조회 중 에러 발생"}
+            return {success:false, msg: "게시판 댓글 조회 중 에러 발생"}
         }
     }
 

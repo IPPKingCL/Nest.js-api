@@ -108,4 +108,18 @@ export class AlcoholService {
             return {success:false, msg : "댓글 등록 중 에러 발생"};
         }
     }
+
+    async commentAll(id:number) {
+        try{
+            return await this.alchoCommentRepository.createQueryBuilder('alchoComment')
+                        .leftJoinAndSelect('alchoComment.user','user.id')
+                        .where("alchoId=:id",{id:id})
+                        .andWhere("isDeleted=false")
+                        .getMany();
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg : "댓글 조회 중 에러 발생"};
+        }
+
+    }
 }

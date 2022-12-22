@@ -56,6 +56,13 @@ export class AlcoholController {
         this.logger.log("---------------comment alcohol id : "+commentDto.alchoId);
         return await this.alchoService.insertComment(commentDto, getToken(header));
     }
+
+    @ApiOperation({summary: "술 댓글 조회"})
+    @Get('/commentAll/:id')
+    async commentAll(@Param("id") id : number){
+        this.logger.log("---------------comment alcohol id : "+id);
+        return await this.alchoService.commentAll(id);
+    }
     
 
     
