@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Logger, Param, Post, UseGuards , Headers} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { delCommentDto } from 'src/board/dto/delComment.Dto';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { AlcoholService } from './alcohol.service';
@@ -63,6 +64,16 @@ export class AlcoholController {
         this.logger.log("---------------comment alcohol id : "+id);
         return await this.alchoService.commentAll(id);
     }
+
+    @ApiOperation({summary: "댓글 삭제"})
+    @UseGuards(JwtAuthGuard)
+    @Post('delete')
+    async deleteComment(@Body() deleteComment:delCommentDto, @Headers() header){
+        this.logger.log("---------------delete comment alcohol ");
+        return await this.alchoService.deleteComment(deleteComment,getToken(header));
+    }
+
+
     
 
     

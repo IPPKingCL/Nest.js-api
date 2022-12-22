@@ -122,4 +122,21 @@ export class AlcoholService {
         }
 
     }
+
+    async deleteComment(deleteComment, header:string) : Promise<object>{
+        try{
+            const token = this.jwtService.decode(header);
+            if(deleteComment.userId==(token['id'])){
+                await this.alchoCommentRepository.createQueryBuilder()
+                    .update("alchoComment")
+                    .set({isDeleted:true})
+                    .where("id=:id",{id:deleteComment.id})
+                    .execute();
+                return {success:true}
+            }
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg : "댓글 삭제 실패"}
+        }
+    }
 }
