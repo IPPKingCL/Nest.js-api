@@ -4,6 +4,6 @@ export class AlchoCommentDto{
     @IsString()
     content : string;
 
-    @IsNumber()
-    alchoId : number;
+    @IsString()
+    alchoId : string;
 }
