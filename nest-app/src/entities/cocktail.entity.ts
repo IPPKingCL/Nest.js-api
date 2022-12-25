@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlchoEntity } from "./alcho.entity";
+import { AlchoRecipeEntity } from "./alchoRecipe.entity";
 
 @Entity('cocktail')
 export class CocktailEntity{
@@ -18,5 +19,7 @@ export class CocktailEntity{
     @Column()
     likeOne : number;
 
+    @OneToMany((type)=> AlchoRecipeEntity,(alchoRecipeEntity)=>alchoRecipeEntity.cocktail)
+    alchoRecipeEntitys : AlchoRecipeEntity[];
 
 }
