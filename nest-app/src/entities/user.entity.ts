@@ -2,6 +2,7 @@ import { BoardEntity } from 'src/entities/board.entity';
 import { CommentEntity } from 'src/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { userStatus } from '../user/enumType/userStatus';
+import { AlchoCommentEntity } from './alchoComment.entity';
 import { FavoriteEntity, } from './favoritList.entity';
 
 @Entity('user')
@@ -54,4 +55,9 @@ export class UserEntity {
 
     @OneToMany((type)=>FavoriteEntity,(favoriteEntity)=>favoriteEntity.user)
     favoriteEntitys : FavoriteEntity[];
+
+    @OneToMany((type)=>AlchoCommentEntity,(alchoCommentEntity)=> alchoCommentEntity.user)
+    alchoCommentEntitys : AlchoCommentEntity[];
+
+    
 }

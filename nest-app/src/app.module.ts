@@ -30,10 +30,17 @@ import { dataEntity } from './entities/data.entity';
 import { AlchoEntity } from './entities/alcho.entity';
 import { FavoriteEntity } from './entities/favoritList.entity';
 import { ImgEntity } from './entities/img.entity';
+import { AlchoCommentEntity } from './entities/alchoComment.entity';
+import { CocktailController } from './cocktail/cocktail.controller';
+import { CocktailModule } from './cocktail/cocktail.module';
+import { CocktailEntity } from './entities/cocktail.entity';
+import { AlchoRecipeEntity } from './entities/alchoRecipe.entity';
+import { JuiceEntity } from './entities/juice.entity';
+import { JuiceRecipeEntity } from './entities/juiceRecipe.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
-  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule, AlcoholModule,
+  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule, AlcoholModule, CocktailModule,
 
     JwtModule.register({
       secret : process.env.secretOrKey,
@@ -50,12 +57,16 @@ import { ImgEntity } from './entities/img.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity,ImgEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity,
+                 dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,
+                 AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
+                 JuiceEntity,JuiceRecipeEntity,
+                ],
       synchronize: true,
       logging : true,
       
     }),
-    RecommandModule,
+   
     ], 
   controllers: [AppController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy],
