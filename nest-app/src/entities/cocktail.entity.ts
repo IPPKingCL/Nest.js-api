@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AlchoEntity } from "./alcho.entity";
 
 @Entity('cocktail')
 export class CocktailEntity{
@@ -16,4 +17,7 @@ export class CocktailEntity{
 
     @Column()
     likeOne : number;
+
+    @ManyToOne((type) => AlchoEntity,(alchoEntity)=>alchoEntity.cocktailEntitys)
+    alcho : AlchoEntity;
 }

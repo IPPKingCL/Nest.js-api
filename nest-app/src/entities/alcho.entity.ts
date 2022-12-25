@@ -1,6 +1,7 @@
 import { FavoriteEntity,  } from "src/entities/favoritList.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlchoCommentEntity } from "./alchoComment.entity";
+import { CocktailEntity } from "./cocktail.entity";
 
 @Entity('Alcho')
 export class AlchoEntity{
@@ -36,4 +37,7 @@ export class AlchoEntity{
 
     @OneToMany((type)=> AlchoCommentEntity,(alchoCommentEntity)=>alchoCommentEntity.alcho)
     alchoCommentEntitys : AlchoCommentEntity[];
+
+    @OneToMany((type)=>CocktailEntity,(cocktailEntity)=>cocktailEntity.alcho)
+    cocktailEntitys : CocktailEntity[];
 }
