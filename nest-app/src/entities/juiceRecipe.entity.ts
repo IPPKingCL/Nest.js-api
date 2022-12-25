@@ -12,4 +12,7 @@ export class JuiceRecipeEntity{
 
     @ManyToOne((type) => CocktailEntity, (cocktailEntity)=>cocktailEntity.juiceRecipeEntitys)
     cocktail : CocktailEntity;
+
+    @Column()
+    amount : number;
 }
