@@ -20,7 +20,7 @@ export class AlchoCommentEntity{
     @Column()
     isDeleted : Boolean;
 
-    @ManyToOne((type)=>UserEntity, (userEntity) =>userEntity.alchoCommentEntitys)
+    @ManyToOne((type)=>UserEntity, (userEntity) => userEntity.alchoCommentEntitys)
     user : UserEntity;
 
     @ManyToOne((type)=>AlchoEntity, (alchoEntity) => alchoEntity.alchoCommentEntitys)
