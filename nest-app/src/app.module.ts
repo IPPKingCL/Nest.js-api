@@ -34,6 +34,7 @@ import { AlchoCommentEntity } from './entities/alchoComment.entity';
 import { CocktailController } from './cocktail/cocktail.controller';
 import { CocktailModule } from './cocktail/cocktail.module';
 import { CocktailEntity } from './entities/cocktail.entity';
+import { AlchoRecipeEntity } from './entities/alchoRecipe.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -54,7 +55,7 @@ import { CocktailEntity } from './entities/cocktail.entity';
       username: process.env.RDS_USER,
       password: process.env.RDS_PSWORD,
       database: process.env.RDS_DATABASE,
-      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,AlchoCommentEntity, CocktailEntity],
+      entities: [testEntity,UserEntity, BoardEntity,CommentEntity, dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity],
       synchronize: true,
       logging : true,
       

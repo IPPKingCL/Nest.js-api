@@ -4,6 +4,9 @@ import { CocktailEntity } from "./cocktail.entity";
 
 @Entity('alchoRecipe')
 export class AlchoRecipeEntity{
+    @PrimaryGeneratedColumn("increment")
+    id : number;
+    
     @ManyToOne((type) => AlchoEntity, (alchoEntity)=>alchoEntity.alchoRecipeEntitys)
     alcho : AlchoEntity;
 
