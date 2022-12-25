@@ -18,6 +18,5 @@ export class CocktailEntity{
     @Column()
     likeOne : number;
 
-    @ManyToOne((type) => AlchoEntity,(alchoEntity)=>alchoEntity.cocktailEntitys)
-    alcho : AlchoEntity;
+
 }

@@ -38,6 +38,4 @@ export class AlchoEntity{
     @OneToMany((type)=> AlchoCommentEntity,(alchoCommentEntity)=>alchoCommentEntity.alcho)
     alchoCommentEntitys : AlchoCommentEntity[];
 
-    @OneToMany((type)=>CocktailEntity,(cocktailEntity)=>cocktailEntity.alcho)
-    cocktailEntitys : CocktailEntity[];
 }
