@@ -48,7 +48,7 @@ export class CocktailService {
             const resAlcho = await this.alchoRecipeRepository.query(
                 "select a.id, a.name, a.category, a.imgUrl, r.amount "
                 +"from Alcho a, alchoRecipe r "
-                +"where a.id=r.alchoId and r.cocktailId=1; "
+                +"where a.id=r.alchoId and r.cocktailId="+id+";"
             );
             console.log(resAlcho)
 
