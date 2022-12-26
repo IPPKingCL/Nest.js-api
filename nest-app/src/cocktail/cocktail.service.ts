@@ -13,21 +13,41 @@ export class CocktailService {
         private readonly alchoRecipeRepository : AlchoRecipteRepository,
         private readonly juiceRecipeRepository : JuiceRecipeRepository,
         private readonly juiceRepository : JuiceRepository,
-        private readonly alchoRepository : alchoRepository
+        private readonly alchoRepository : alchoRepository,
     ){}
     
 
     async getOne(id:number) {
         try{
-            const res = await this.cockRepository.query(
-                "select c.id,c.name,c.imgUrl,c.dosu,c.likeOne,j.juiceId,j.amount juiceamout, a.alchoId, a.amount alchoamout "
-               +"from juiceRecipe j,cocktail c, alchoRecipe a "
-                +"where j.cocktailId=c.id and c.id=a.cocktailId and c.id=1;"
-            )
+            // const res = await this.cockRepository.query(
+            //     "select c.id,c.name,c.imgUrl,c.dosu,c.likeOne,j.juiceId,j.amount juiceamout, a.alchoId, a.amount alchoamout "
+            //    +"from juiceRecipe j,cocktail c, alchoRecipe a "
+            //     +"where j.cocktailId=c.id and c.id=a.cocktailId and c.id=1;"
+            // )
 
-            /*const res = await this.cockRepository.createQueryBuilder('cocktail')
+            const resCock = await this.cockRepository.createQueryBuilder('cocktail')
                     .where("id=:id",{id:id})
-                    .getOne();*/
+                    .getOne();
+            
+            const resJuice = await this.juiceRecipeRepository.query(
+                "select j.id, j.name, j.type, r.amount, j.imgUrl "
+                +"from Juice j, juiceRecipe r "
+                +"where j.id=r.juiceId and r.cocktailId="+id+";"
+            );
+
+            const resAlcho = await this.alchoRecipeRepository.query(
+                "select a.id, a.name, a.category, a.imgUrl, r.amount "
+                +"from Alcho a, alchoRecipe r "
+                +"where a.id=r.alchoId and r.cocktailId=1; "
+            );
+            console.log(resAlcho)
+
+            const res = {
+                cocktail : resCock,
+                cockJuice : resJuice,
+                cockAlcho : resAlcho,
+            }
+            
             return res;
             
         }catch(err){

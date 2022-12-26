@@ -12,6 +12,9 @@ export class JuiceEntity{
     @Column()
     type : number;
 
+    @Column({length:500})
+    imgUrl : string;
+
     @OneToMany((type) => JuiceRecipeEntity, (juiceRecipeEntity)=>juiceRecipeEntity.juice)
     juiceRecipeEntitys : JuiceRecipeEntity[];
 }
