@@ -9,10 +9,12 @@ import { JwtStrategy } from 'src/user/jwt/jwt.strategy';
 import { CocktailRepository } from './repository/Cocktail.repository';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { JuiceRecipeRepository } from './repository/JuiceRecipe.repository';
+import { JuiceRepository } from './repository/Juice.repository';
+import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
 
 @Module({
   imports:[
-    TypeOrmExModule.forCustomRepository([CocktailRepository,AlchoRecipteRepository,JuiceRecipeRepository]),
+    TypeOrmExModule.forCustomRepository([CocktailRepository,AlchoRecipteRepository,JuiceRecipeRepository,JuiceRepository,alchoRepository]),
     // session을 사용하지 않을 예정이기 때문에 false
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     // jwt 생성할 때 사용할 시크릿 키와 만료일자 적어주기
