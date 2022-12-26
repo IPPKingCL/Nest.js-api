@@ -21,6 +21,9 @@ export class CocktailEntity{
     @Column()
     likeOne : number;
 
+    @Column()
+    only : boolean; //꼭 이 술을 써야하는지 같은 종류의 다른 술을 써도 되는지
+
     @OneToMany((type)=> AlchoRecipeEntity,(alchoRecipeEntity)=>alchoRecipeEntity.cocktail)
     alchoRecipeEntitys : AlchoRecipeEntity[];
 
