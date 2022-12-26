@@ -4,6 +4,7 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 import { userStatus } from '../user/enumType/userStatus';
 import { AlchoCommentEntity } from './alchoComment.entity';
 import { FavoriteEntity, } from './favoritList.entity';
+import { RatingEntity } from './rating.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -58,6 +59,9 @@ export class UserEntity {
 
     @OneToMany((type)=>AlchoCommentEntity,(alchoCommentEntity)=> alchoCommentEntity.user)
     alchoCommentEntitys : AlchoCommentEntity[];
+
+    @OneToMany((type)=>RatingEntity,(ratingEntity)=> ratingEntity.user)
+    ratingEntitys : RatingEntity[];
 
     
 }

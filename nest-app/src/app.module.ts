@@ -37,6 +37,7 @@ import { CocktailEntity } from './entities/cocktail.entity';
 import { AlchoRecipeEntity } from './entities/alchoRecipe.entity';
 import { JuiceEntity } from './entities/juice.entity';
 import { JuiceRecipeEntity } from './entities/juiceRecipe.entity';
+import { RatingEntity } from './entities/rating.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -60,7 +61,7 @@ import { JuiceRecipeEntity } from './entities/juiceRecipe.entity';
       entities: [testEntity,UserEntity, BoardEntity,CommentEntity,
                  dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,
                  AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
-                 JuiceEntity,JuiceRecipeEntity,
+                 JuiceEntity,JuiceRecipeEntity,RatingEntity
                 ],
       synchronize: true,
       logging : true,

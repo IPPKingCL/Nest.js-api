@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { AlchoEntity } from "./alcho.entity";
 import { AlchoRecipeEntity } from "./alchoRecipe.entity";
 import { JuiceRecipeEntity } from "./juiceRecipe.entity";
+import { RatingEntity } from "./rating.entity";
 
 @Entity('cocktail')
 export class CocktailEntity{
@@ -25,5 +26,8 @@ export class CocktailEntity{
 
     @OneToMany((type) => JuiceRecipeEntity,(juiceRecipeEntity)=>juiceRecipeEntity.cocktail)
     juiceRecipeEntitys : JuiceRecipeEntity[];
+
+    @OneToMany((type) => RatingEntity,(ratingEntity) => ratingEntity.cocktail)
+    ratingEntitys : RatingEntity[];
 
 }
