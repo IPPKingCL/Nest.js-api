@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
+import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
 import { JuiceRepository } from './repository/Juice.repository';
@@ -16,7 +17,16 @@ export class CocktailService {
         private readonly alchoRepository : alchoRepository,
     ){}
     
-
+    
+    async getAll() : Promise<CocktailEntity[]|object>{
+        try{
+            const res = await this.cockRepository.find();
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg : "전체 조회 중 에러발생"}
+        }
+    }
     async getOne(id:number) {
         try{
             // const res = await this.cockRepository.query(
@@ -47,7 +57,7 @@ export class CocktailService {
                 cockJuice : resJuice,
                 cockAlcho : resAlcho,
             }
-            
+
             return res;
             
         }catch(err){
