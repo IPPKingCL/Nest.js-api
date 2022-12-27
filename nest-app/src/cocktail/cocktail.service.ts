@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
+import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
@@ -66,17 +67,30 @@ export class CocktailService {
         }
     }
 
-    async alchoCock(id:number){
+    async alchoCock(id:number):Promise<AlchoRecipeEntity|object>{
         try{
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
                         .leftJoinAndSelect('alchoRecipe.cocktail',"cocktail.id")
                         .where("alchoId=:id",{id:id})
                         .getMany();
-
+            console.log(res);
             return res;
         }catch(err){
             this.logger.error(err);
             return {success:false}
+        }
+    }
+
+    async likeOne(id:number) : Promise<object>{ 
+        try{
+            await this.cockRepository.query(
+                'update cocktail set likeOne=likeOne+1 where id ='+id
+            );
+
+            return {success:true};
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
         }
     }
 }
