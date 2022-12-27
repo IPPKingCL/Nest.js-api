@@ -65,4 +65,19 @@ export class CocktailService {
             return {success:false}
         }
     }
+
+    async alchoCock(id:number){
+        try{
+            const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
+                        .leftJoinAndSelect('alchoRecipe.cocktail',"cocktail.id")
+                        .where("alchoId=:id",{id:id})
+                        .getMany();
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false}
+        }
+    }
 }
+

@@ -21,5 +21,10 @@ export class CocktailController {
         return this.cocktailService.getOne(id);
     }
 
+    @ApiOperation({summary: " 해당 술이 사용된 칵테일 조회"})
+    @Get('/alchoCock/:id')
+    alchoCock(@Param("id") id:number){
+        return this.cocktailService.alchoCock(id);
+    }
     //@Get('/juice/:id')
 }

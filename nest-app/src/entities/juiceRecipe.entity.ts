@@ -14,5 +14,5 @@ export class JuiceRecipeEntity{
     cocktail : CocktailEntity;
 
     @Column()
-    amount : number;
+    amount : number;  //1000이 넘어갈시 나누기 10000을 해줘야함
 }
