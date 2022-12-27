@@ -48,11 +48,7 @@ export class UserService {
         
         
         favorite.push(userData.favorite);
-        
-        console.log("favor = " + favorite[0][0]["id"]);
-        console.log("favor = " + userData.favorite);
-        console.log(user.userLoginType);
-              
+                      
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
             const res = await this.repository.save(user);
