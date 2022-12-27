@@ -10,7 +10,10 @@ export class JuiceEntity{
     name : string;
 
     @Column()
-    type : number;
+    type : number;  //1.탄산음료 2.칵테일용 탄산음료 3.즙 4.과일주스
+
+    @Column({length:500})
+    imgUrl : string;
 
     @OneToMany((type) => JuiceRecipeEntity, (juiceRecipeEntity)=>juiceRecipeEntity.juice)
     juiceRecipeEntitys : JuiceRecipeEntity[];
