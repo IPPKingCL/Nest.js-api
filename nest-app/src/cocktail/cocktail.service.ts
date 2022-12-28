@@ -78,7 +78,8 @@ export class CocktailService {
             if(res.length>0){
                 return res;
             }else{
-                return await this.categoryCock(alchoDto.category);
+                const resCock =  await this.categoryCock(alchoDto.category);
+                return {res:resCock, msg:"해당 술을 사용한 칵테일이 없어 "+alchoDto.category+'를 이용한 칵테일을 조회합니다'};
             }
             
         }catch(err){
@@ -100,7 +101,7 @@ export class CocktailService {
         }
     }
 
-    async categoryCock(category){
+    async categoryCock(category):Promise<AlchoRecipeEntity|object>{
         try{
             //서브 쿼리로 갈지 아님 디비를 두번 갈지 나중에 성능보고 결정
             const res = await this.cockRepository.query(
