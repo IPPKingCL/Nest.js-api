@@ -63,7 +63,7 @@ import { RatingEntity } from './entities/rating.entity';
                  AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
                  JuiceEntity,JuiceRecipeEntity,RatingEntity
                 ],
-      synchronize: true,
+      synchronize: false,
       logging : true,
       
     }),

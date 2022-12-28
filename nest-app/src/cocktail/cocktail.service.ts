@@ -93,5 +93,25 @@ export class CocktailService {
             return {success:false ,msg:"로그인 후 이용 가능합니다"};
         }
     }
+
+    async categoryCock(category){
+        try{
+            //서브 쿼리로 갈지 아님 디비를 두번 갈지 나중에 성능보고 결정
+            const res = await this.cockRepository.query(
+                "select * "+
+                'from cocktail c, '+
+                '(select r.cocktailId '+
+                'from alchoRecipe r '+
+                'left join Alcho a '+
+                'on a.id= r.alchoId '+
+                "where a.category='"+category+"') a "+
+                'where c.id = a.cocktailId'
+            )
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:true};
+        }
+    }
 }
 

@@ -30,6 +30,13 @@ export class CocktailController {
         return await this.cocktailService.alchoCock(id);
     }
 
+    @ApiOperation({summary: " 해당 카테고리 술이 사용된 칵테일 조회"})
+    @Get('/categoryCock/:category')
+    async categoryCock(@Param("category") category:string){
+        this.logger.log("---------------select all cocktail using category");
+        return await this.cocktailService.categoryCock(category);
+    }
+
     @ApiOperation({summary: " 칵테일 추천"})
     @UseGuards(JwtAuthGuard)
     @Get('/likeOne/:id')
