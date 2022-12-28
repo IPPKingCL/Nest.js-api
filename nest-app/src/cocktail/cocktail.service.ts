@@ -78,8 +78,7 @@ export class CocktailService {
             if(res.length>0){
                 return res;
             }else{
-                const resCock =  await this.categoryCock(alchoDto.category);
-                return {res:resCock, msg:"해당 술을 사용한 칵테일이 없어 "+alchoDto.category+'를 이용한 칵테일을 조회합니다'};
+                return {success:false, msg:"no", category : alchoDto.category};
             }
             
         }catch(err){
