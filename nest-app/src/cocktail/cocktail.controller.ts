@@ -1,7 +1,8 @@
-import { Controller, Get, Logger, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { CocktailService } from './cocktail.service';
+import { AlchoCockDto } from './Dto/alchoCock.Dto';
 
 @Controller('cocktail')
 export class CocktailController {
@@ -24,10 +25,10 @@ export class CocktailController {
     }
 
     @ApiOperation({summary: " 해당 술이 사용된 칵테일 조회"})
-    @Get('/alchoCock/:id')
-    async alchoCock(@Param("id") id:number){
+    @Post('/alchoCock')
+    async alchoCock(@Body() alchoDto:AlchoCockDto){
         this.logger.log("---------------select all cocktail using drink");
-        return await this.cocktailService.alchoCock(id);
+        return await this.cocktailService.alchoCock(alchoDto);
     }
 
     @ApiOperation({summary: " 해당 카테고리 술이 사용된 칵테일 조회"})
@@ -46,3 +47,7 @@ export class CocktailController {
     }
     //@Get('/juice/:id')
 }
+function body() {
+    throw new Error('Function not implemented.');
+}
+

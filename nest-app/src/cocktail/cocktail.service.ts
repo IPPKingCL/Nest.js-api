@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
 import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
+import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
 import { JuiceRepository } from './repository/Juice.repository';
@@ -67,14 +68,19 @@ export class CocktailService {
         }
     }
 
-    async alchoCock(id:number):Promise<AlchoRecipeEntity|object>{
+    async alchoCock(alchoDto:AlchoCockDto):Promise<AlchoRecipeEntity|object>{
         try{
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
                         .leftJoinAndSelect('alchoRecipe.cocktail',"cocktail.id")
-                        .where("alchoId=:id",{id:id})
+                        .where("alchoId=:id",{id:alchoDto.id})
                         .getMany();
             console.log(res);
-            return res;
+            if(res.length>0){
+                return res;
+            }else{
+                return await this.categoryCock(alchoDto.category);
+            }
+            
         }catch(err){
             this.logger.error(err);
             return {success:false}
@@ -106,7 +112,7 @@ export class CocktailService {
                 'on a.id= r.alchoId '+
                 "where a.category='"+category+"') a "+
                 'where c.id = a.cocktailId'
-            )
+            );
             return res;
         }catch(err){
             this.logger.error(err);
