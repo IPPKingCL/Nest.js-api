@@ -11,7 +11,7 @@ export class AlchoRecipeEntity{
     alcho : AlchoEntity;
 
     @ManyToOne((type) => CocktailEntity, (cocktailEntity)=>cocktailEntity.alchoRecipeEntitys)
-    cocktail : AlchoEntity;
+    cocktail : CocktailEntity;
 
     @Column()
     amount : number;

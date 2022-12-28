@@ -3,6 +3,7 @@ import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
 import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
+import { CockInfoDto } from './Dto/CockInfo.Dto';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
 import { JuiceRepository } from './repository/Juice.repository';
@@ -68,15 +69,29 @@ export class CocktailService {
         }
     }
 
-    async alchoCock(alchoDto:AlchoCockDto):Promise<AlchoRecipeEntity|object>{
+    async alchoCock(alchoDto:AlchoCockDto):Promise<CockInfoDto[]|object>{
         try{
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
                         .leftJoinAndSelect('alchoRecipe.cocktail',"cocktail.id")
                         .where("alchoId=:id",{id:alchoDto.id})
                         .getMany();
-            console.log(res);
+            console.log(res[0]);
+
             if(res.length>0){
-                return res;
+                const cockArr:Array<CockInfoDto>=[];
+                let i = 0;
+                for(i;i<res.length;i++){
+                    const cockInfoDto = new CockInfoDto();
+                    cockInfoDto.id = res[i]['cocktail'].id;
+                    cockInfoDto.name = res[i]['cocktail'].name;
+                    cockInfoDto.dosu = res[i]['cocktail'].dosu;
+                    cockInfoDto.likeOne = res[i]['cocktail'].likeOne;
+                    cockInfoDto.only = res[i]['cocktail'].only;
+                    cockInfoDto.imgUrl = res[i]['cocktail'].imgUrl;
+                    cockArr.push(cockInfoDto);
+                }
+                
+                return cockArr;
             }else{
                 return {success:false, msg:"no", category : alchoDto.category};
             }
@@ -113,10 +128,27 @@ export class CocktailService {
                 "where a.category='"+category+"') a "+
                 'where c.id = a.cocktailId'
             );
-            return res;
+            
+            console.log(res);
+
+            const cockArr:Array<CockInfoDto>=[];
+            let i = 0;
+            for(i;i<res.length;i++){
+                const cockInfoDto = new CockInfoDto();
+                cockInfoDto.id = res[i].id;
+                cockInfoDto.name = res[i].name;
+                cockInfoDto.dosu = res[i].dosu;
+                cockInfoDto.likeOne = res[i].likeOne;
+                cockInfoDto.only = res[i].only;
+                cockInfoDto.imgUrl = res[i].imgUrl;
+                cockArr.push(cockInfoDto);
+            }
+            
+            return cockArr;
+           
         }catch(err){
             this.logger.error(err);
-            return {success:true};
+            return {success:false};
         }
     }
 }
