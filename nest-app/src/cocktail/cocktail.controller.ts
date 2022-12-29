@@ -47,7 +47,4 @@ export class CocktailController {
     }
     //@Get('/juice/:id')
 }
-function body() {
-    throw new Error('Function not implemented.');
-}
 
