@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
 import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
@@ -8,16 +9,19 @@ import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
 import { JuiceRepository } from './repository/Juice.repository';
 import { JuiceRecipeRepository } from './repository/JuiceRecipe.repository';
+import { RatingRepository } from './repository/Rating.repository';
 
 @Injectable()
 export class CocktailService {
     private readonly logger = new Logger(CocktailService.name);
     constructor(
+        private jwtService: JwtService,
         private readonly cockRepository : CocktailRepository,
         private readonly alchoRecipeRepository : AlchoRecipteRepository,
         private readonly juiceRecipeRepository : JuiceRecipeRepository,
         private readonly juiceRepository : JuiceRepository,
         private readonly alchoRepository : alchoRepository,
+        private readonly ratingRepository : RatingRepository,
     ){}
     
     
@@ -153,7 +157,31 @@ export class CocktailService {
     }
 
     async rating(rating,header){
+        try{
+            const token = this.jwtService.decode(header);
 
+            const res = await this.checkRating(header['id'],rating.cocktailId);
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:'별점 등록 중 에러 발생'};
+        }
+    }
+
+    async checkRating(userId:number, cocktailId:number){
+        try{
+            const res = await this.ratingRepository.createQueryBuilder('Rating')
+                        .where('userId=:userId',{userId:userId})
+                        .andWhere('cocktailId=:cocktailId',{cocktailId:cocktailId})
+                        .getOne();
+            if(res){
+                console.log("있음")
+            }else{
+                console.log("없음");
+            }
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"별점 등록 확인 중 에러 발생"};
+        }
     }
 }
 
