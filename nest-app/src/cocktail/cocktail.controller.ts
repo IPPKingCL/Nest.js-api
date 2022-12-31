@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Logger, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, UseGuards, Headers } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
+import { getToken } from 'src/util/token';
 import { CocktailService } from './cocktail.service';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
+import { RatingDto } from './dto/rating.Dto';
 
 @Controller('cocktail')
 export class CocktailController {
@@ -44,6 +46,14 @@ export class CocktailController {
     async likeOne(@Param("id") id:number){
         this.logger.log("---------------like one cocktail ");
         return await this.cocktailService.likeOne(id);
+    }
+
+    @ApiOperation({summary: " 칵테일 별점"})
+    @UseGuards(JwtAuthGuard)
+    @Post('/rating')
+    async rating(@Body() rating:RatingDto,@Headers() header){
+        this.logger.log("---------------like one cocktail ");
+        return await this.cocktailService.rating(rating, getToken(header));
     }
     //@Get('/juice/:id')
 }

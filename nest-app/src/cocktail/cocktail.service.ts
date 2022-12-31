@@ -151,5 +151,9 @@ export class CocktailService {
             return {success:false};
         }
     }
+
+    async rating(rating,header){
+
+    }
 }
 
