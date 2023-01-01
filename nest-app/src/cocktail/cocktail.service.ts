@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
 import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
+import { RatingEntity } from 'src/entities/rating.entity';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { CockInfoDto } from './Dto/CockInfo.Dto';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
@@ -160,7 +161,22 @@ export class CocktailService {
         try{
             const token = this.jwtService.decode(header);
 
-            const res = await this.checkRating(header['id'],rating.cocktailId);
+            const res = await this.checkRating(token['id'],rating.cocktailId);
+            
+            const ratingEntity = new RatingEntity();
+
+
+            ratingEntity.cocktail = rating.cocktailId;
+            ratingEntity.user =token['id'];
+            ratingEntity.rating = rating.rating;
+
+            
+            if(!res.success){
+                await this.ratingRepository.save(ratingEntity);
+                return {success:true};
+            }else{
+                return {success:false, msg:'이미 평가하신 칵테일입니다'};
+            }
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:'별점 등록 중 에러 발생'};
@@ -174,9 +190,9 @@ export class CocktailService {
                         .andWhere('cocktailId=:cocktailId',{cocktailId:cocktailId})
                         .getOne();
             if(res){
-                console.log("있음")
+                return {success:true};
             }else{
-                console.log("없음");
+                return {sucess:false};
             }
         }catch(err){
             this.logger.error(err);
