@@ -81,9 +81,9 @@ export class BoardController {
     @ApiOperation({summary:' 게시글 추천'})
     @UseGuards(JwtAuthGuard)
     @Get('/recommendBoard/:boardId')
-    async recommend(@Param("boardId") id:number){
+    async recommend(@Param("boardId") id:number,@Headers() header){
         this.logger.log('---------------'+id +' 번 게시글 추천 ');
-        return await this.boardService.recommend(id);
+        return await this.boardService.recommend(id,getToken(header));
     }
 
     @ApiOperation({summary: " 게시글 추천 상위 조회"})
