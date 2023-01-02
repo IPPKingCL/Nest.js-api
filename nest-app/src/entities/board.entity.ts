@@ -1,5 +1,6 @@
 import { UserEntity } from 'src/entities/user.entity';
 import { Column, Entity,OneToMany, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BoardRecommandEntity } from './boardRecommand.entity';
 import { CommentEntity } from './comment.entity';
 enum STATUS{
     ALCOHOL = "A",
@@ -38,4 +39,7 @@ export class BoardEntity {
 
     @OneToMany((type)=>CommentEntity, (commentEntity)=>commentEntity.board)
     commentEntitys : CommentEntity[];
+
+    @OneToMany((type)=>BoardRecommandEntity,(boardRecommandEntity)=>boardRecommandEntity.board)
+    boardRecommandEntitys : BoardRecommandEntity[];
 }
