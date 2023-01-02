@@ -55,6 +55,12 @@ export class CocktailController {
         this.logger.log("---------------like one cocktail ");
         return await this.cocktailService.rating(rating, getToken(header));
     }
+
+    @ApiOperation({summary:"24시간 별점 조회"})
+    @Get('/rating/day')
+    async ratingDay(){
+        return await this.cocktailService.ratingDay();
+    }
     //@Get('/juice/:id')
 }
 

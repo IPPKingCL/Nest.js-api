@@ -10,6 +10,9 @@ export class RatingEntity{
     @Column()
     rating : number;
 
+    @Column()
+    date : Date;
+
     @ManyToOne((type)=>UserEntity, (userEntity) => userEntity.ratingEntitys)
     user : UserEntity;
 
