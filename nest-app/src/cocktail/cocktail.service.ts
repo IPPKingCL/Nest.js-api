@@ -169,7 +169,7 @@ export class CocktailService {
             ratingEntity.cocktail = rating.cocktailId;
             ratingEntity.user =token['id'];
             ratingEntity.rating = rating.rating;
-
+            ratingEntity.date = new Date();
             
             if(!res.success){
                 await this.ratingRepository.save(ratingEntity);
@@ -199,5 +199,24 @@ export class CocktailService {
             return {success:false, msg:"별점 등록 확인 중 에러 발생"};
         }
     }
+
+    async ratingDay(){
+        try{
+            const res = await this.ratingRepository.query(
+                'SELECT cocktailId,sum(rating) cnt '
+                +'FROM rating '
+                +'WHERE date '+
+                'BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW() '+
+                'group by cocktailId '+
+                'order by cnt desc limit 5'
+            )
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"24시간 이내 별점 조회 중 에러 발생"};
+        }
+    }
 }
 
+
+   

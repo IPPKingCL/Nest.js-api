@@ -10,54 +10,59 @@ import { CommentEntity } from '../entities/comment.entity';
 import { BoardRepository } from './repository/board.repository';
 import { CommentRepository } from './repository/comment.repository';
 import { ImgRepositoy } from './repository/img.repository';
+import { BoardRecommandRepository } from './repository/boardRecommand.repository';
+import { BoardRecommandEntity } from 'src/entities/boardRecommand.entity';
+import { DataSource } from 'typeorm';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
 export class BoardService {
     private readonly logger = new Logger(BoardService.name);
     constructor(
-        private readonly repository : BoardRepository,  //게시글 
-        private readonly coRepository : CommentRepository,
-        private readonly imgRepository : ImgRepositoy,
-        private jwtService: JwtService
-        ){}  //댓글
-    
-    getAll() : Promise<BoardEntity[]>{
-        try{
+        private readonly repository: BoardRepository,  //게시글 
+        private readonly coRepository: CommentRepository,
+        private readonly imgRepository: ImgRepositoy,
+        private readonly recommandRepository: BoardRecommandRepository,
+        private jwtService: JwtService,
+        private dataSource : DataSource
+    ) { }  //댓글
+
+    getAll(): Promise<BoardEntity[]> {
+        try {
             return this.repository.createQueryBuilder('board')
-                    .leftJoinAndSelect('board.user', 'user.id')
-                    .andWhere("isDeleted=false")
-                    .orderBy("dateTime","DESC")
-                    .getMany();
-        }catch(err){
+                .leftJoinAndSelect('board.user', 'user.id')
+                .andWhere("isDeleted=false")
+                .orderBy("dateTime", "DESC")
+                .getMany();
+        } catch (err) {
             this.logger.error("게시판 목록 조회 중 에러 발생")
         }
-        
+
     }
 
-    getTypeBoard(type:string): Promise<BoardEntity[] | object>{
-        try{
+    getTypeBoard(type: string): Promise<BoardEntity[] | object> {
+        try {
             return this.repository.createQueryBuilder('board')
-                    .leftJoinAndSelect('board.user', 'user.id')
-                    .where('boardType=:type',{type:type})
-                    .andWhere("isDeleted=false")
-                    .orderBy("dateTime","DESC")
-                    .getMany()
-        }catch(err){
+                .leftJoinAndSelect('board.user', 'user.id')
+                .where('boardType=:type', { type: type })
+                .andWhere("isDeleted=false")
+                .orderBy("dateTime", "DESC")
+                .getMany()
+        } catch (err) {
             this.logger.log(err)
             this.logger.error("게시글 조회 중 에러 발생")
             //return {success:false, msg : "게시글 조회 중 에러 발생"}
         }
     }
 
-    testAll() : Promise<CommentEntity[]>{
+    testAll(): Promise<CommentEntity[]> {
         return this.coRepository.find();
     }
 
-    async write(writeData , header) : Promise<object>{
-        
+    async write(writeData, header): Promise<object> {
+
         const token = this.jwtService.decode(header);
-        console.log('\n'+token["id"]+'\n');
+        console.log('\n' + token["id"] + '\n');
         const board = new BoardEntity();
         board.title = writeData.title;
         board.contents = writeData.contents;
@@ -66,88 +71,54 @@ export class BoardService {
         board.isModified = false;
         board.user = token["id"];
         board.boardType = writeData.boardType;
-        
+
         this.logger.log(board);
-        try{
+        try {
             const res = await this.repository.save(board);
             const imgRes = await this.writeImg(writeData.imgUrl, res.id);
-            if(imgRes['success']){
-                return {success:true};
-            }else{
-                return {success:false, msg: '이미지 등록 중 에러 발생'}
+            if (imgRes['success']) {
+                return { success: true };
+            } else {
+                return { success: false, msg: '이미지 등록 중 에러 발생' }
             }
-            
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg : "게시판 글 등록 중 에러발생"}
+            return { success: false, msg: "게시판 글 등록 중 에러발생" }
         }
-        
+
     }
 
-    async writeImg(url:string, id:number) : Promise<object>{
-        try{
+    async writeImg(url: string, id: number): Promise<object> {
+        try {
             const imgdto = new imgDto();
             imgdto.boardId = id;
             imgdto.boardType = 'b';
             imgdto.imgUrl = url;
             await this.imgRepository.save(imgdto);
-            
-            return {success:true};
-        }catch(err){
+
+            return { success: true };
+        } catch (err) {
             console.log(err);
-            return {success : false};
+            return { success: false };
         }
     }
 
-    async readOne(id:number) : Promise<readOneDto | object>{
-        try{
+    async readOne(id: number): Promise<readOneDto | object> {
+        try {
             const res = await this.repository.createQueryBuilder('board')
-            .leftJoinAndSelect('board.user', 'user.id')
-            .where('board.id=:id',{id : id})
-            .getOne();
+                .leftJoinAndSelect('board.user', 'user.id')
+                .where('board.id=:id', { id: id })
+                .getOne();
 
             const resImg = await this.imgRepository.createQueryBuilder('img')
-            .where('boardType=:type',{type:'b'})
-            .andWhere('boardId=:id',{id:res.id})
-            .getOne();
-            
+                .where('boardType=:type', { type: 'b' })
+                .andWhere('boardId=:id', { id: res.id })
+                .getOne();
+
             this.logger.debug(res);
             const readOne = new readOneDto();
-       
-            readOne.title = res.title; 
-            readOne.contents = res.contents;
-            readOne.dateTime = res.dateTime;
-            readOne.boardType = res.boardType;
-            readOne.isDeleted = res.isDeleted;
-            readOne.isModified = res.isModified;
-            readOne.userId = res.user.id;
-            readOne.nickname = res.user.nickname;
-            readOne.recommend = res.recommend;
-            if(resImg!==null){
-                readOne.imgUrl = resImg.imgUrl;
-            }
-            
-            this.logger.log(readOne);
 
-            return readOne;
-        }catch(err){
-            this.logger.error(err);
-            return {success:false, msg:"글 조회 중 에러 발생"};
-        }
-    }
-
-    async modiOne(modiOne:modiOneDto,header) : Promise<readOneDto | object>{
-        try{
-            
-            const token = this.jwtService.decode(header);
-
-            const res = await this.repository.createQueryBuilder('board')
-            .leftJoinAndSelect('board.user', 'user.id')
-            .where('board.id=:id',{id : modiOne.id})
-            .getOne();
-
-            const readOne = new readOneDto();
-       
             readOne.title = res.title;
             readOne.contents = res.contents;
             readOne.dateTime = res.dateTime;
@@ -157,24 +128,58 @@ export class BoardService {
             readOne.userId = res.user.id;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
-            
-            const tokenNumberId:number =parseInt(token["id"]);
-            console.log(tokenNumberId);
-            console.log(res.user.id)
-            if(tokenNumberId==res.user.id){
-                return readOne;
-            }else{
-                return {success:true, auth:false, msg:"권한이 없습니다"};
+            if (resImg !== null) {
+                readOne.imgUrl = resImg.imgUrl;
             }
 
-        }catch(err){
+            this.logger.log(readOne);
+
+            return readOne;
+        } catch (err) {
             this.logger.error(err);
-            return {success:true,msg:"에러 발생"};
+            return { success: false, msg: "글 조회 중 에러 발생" };
         }
     }
 
-    async modifyBoard(writeData, header) : Promise<object>{
-        
+    async modiOne(modiOne: modiOneDto, header): Promise<readOneDto | object> {
+        try {
+
+            const token = this.jwtService.decode(header);
+
+            const res = await this.repository.createQueryBuilder('board')
+                .leftJoinAndSelect('board.user', 'user.id')
+                .where('board.id=:id', { id: modiOne.id })
+                .getOne();
+
+            const readOne = new readOneDto();
+
+            readOne.title = res.title;
+            readOne.contents = res.contents;
+            readOne.dateTime = res.dateTime;
+            readOne.boardType = res.boardType;
+            readOne.isDeleted = res.isDeleted;
+            readOne.isModified = res.isModified;
+            readOne.userId = res.user.id;
+            readOne.nickname = res.user.nickname;
+            readOne.recommend = res.recommend;
+
+            const tokenNumberId: number = parseInt(token["id"]);
+            console.log(tokenNumberId);
+            console.log(res.user.id)
+            if (tokenNumberId == res.user.id) {
+                return readOne;
+            } else {
+                return { success: true, auth: false, msg: "권한이 없습니다" };
+            }
+
+        } catch (err) {
+            this.logger.error(err);
+            return { success: true, msg: "에러 발생" };
+        }
+    }
+
+    async modifyBoard(writeData, header): Promise<object> {
+
         const token = this.jwtService.decode(header);
         const board = new BoardEntity();
         board.id = writeData.id;
@@ -185,91 +190,176 @@ export class BoardService {
         board.isModified = false;
         board.user = writeData.userId;
         board.boardType = writeData.boardType;
-        
+
         this.logger.log(board);
-        try{
+        try {
             await this.repository.createQueryBuilder()
-                    .update('board')
-                    .set({title:board.title,
-                        contents:board.contents,
-                        dateTime:board.dateTime,
-                        isDeleted:board.isDeleted,
-                        isModified : true,
-                        user : board.user,     
-                        boardType : board.boardType
-                    })
-                    .where("id=:id",{id:board.id})
-                    .execute();
-            return {success:true};
-        }catch(err){
+                .update('board')
+                .set({
+                    title: board.title,
+                    contents: board.contents,
+                    dateTime: board.dateTime,
+                    isDeleted: board.isDeleted,
+                    isModified: true,
+                    user: board.user,
+                    boardType: board.boardType
+                })
+                .where("id=:id", { id: board.id })
+                .execute();
+            return { success: true };
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg : "게시판 글 등록 중 에러발생"}
+            return { success: false, msg: "게시판 글 등록 중 에러발생" }
         }
-        
+
     }
 
-    async deleteBoard(deleteOne:deleteDto, header) : Promise<object> {
-        try{
-            
+    async deleteBoard(deleteOne: deleteDto, header): Promise<object> {
+        try {
+
             const token = this.jwtService.decode(header);
             console.log(deleteOne.userId)
             console.log(token["id"])
-            if(deleteOne.userId==(token['id'])){
+            if (deleteOne.userId == (token['id'])) {
                 await this.repository.createQueryBuilder()
-                .update('board')
-                .set({isDeleted : true})
-                .where("id=:id",{id:deleteOne.id})
-                .execute();
-                return {success:true};
-            }else{
-                return {success:false, msg: '권한이 없습니다'};
+                    .update('board')
+                    .set({ isDeleted: true })
+                    .where("id=:id", { id: deleteOne.id })
+                    .execute();
+                return { success: true };
+            } else {
+                return { success: false, msg: '권한이 없습니다' };
             }
-            
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"게시글 삭제 실패"};
+            return { success: false, msg: "게시글 삭제 실패" };
         }
     }
 
-    async s3url(){
+    async s3url() {
         const url = await generateUploadURL();
-        return {data:url};
+        return { data: url };
     }
 
     //추천 orm update가 비효율적인거 같아 raw query로 작성
-    async recommend(id:number) :Promise<object>{
-        try{
-            await this.repository.query(
-                'update board set recommend=recommend+1 where id='+id
-            )
-            /*await this.repository.createQueryBuilder()
-                .update('id',{recommend:()=>'recommend+1'})
-                /*.set('recommend:recommend+1')
-                .where("id=:id",{id:id})*/
-                //.execute();
-            return {success:true};
-        }catch(err){
+    async recommend(id, header): Promise<object> {
+        // try{
+        //     await this.repository.query(
+        //         'update board set recommend=recommend+1 where id='+id
+        //     )
+        //     /*await this.repository.createQueryBuilder()
+        //         .update('id',{recommend:()=>'recommend+1'})
+        //         /*.set('recommend:recommend+1')
+        //         .where("id=:id",{id:id})*/
+        //         //.execute();
+        //     return {success:true};
+        // }catch(err){
+        //     this.logger.error(err);
+        //     return {success:false, msg:"게시글 추천 실패"};
+        // }
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+        try {
+            const token = this.jwtService.decode(header);
+            const res = await this.checkRecommand(id, token['id']);
+            if (res.success && !res.isDeleted) {
+                //추천 취소
+                await this.recommandRepository.createQueryBuilder()
+                    .update('boardRecommand')
+                    .set({ isDeleted: true })
+                    .where("boardId=:id", { id: id })
+                    .andWhere("userId=:userId", { userId: token['id'] })
+                    .execute();
+                await queryRunner.commitTransaction();
+                return { success: true, msg: '추천이 취소되었습니다' };
+
+            } else if (res.success && res.isDeleted) {
+                await this.recommandRepository.createQueryBuilder()
+                    .update('boardRecommand')
+                    .set({
+                        isDeleted: false,
+                        date: new Date()
+                    })
+                    .where("boardId=:id", { id: id })
+                    .andWhere("userId=:userId", { userId: token['id'] })
+                    .execute();
+                await queryRunner.commitTransaction();    
+                return { success: true, msg: '추천 완료' };
+
+            } else {
+                //추천
+                const boardRecommand = new BoardRecommandEntity();
+                boardRecommand.user = token['id'];
+                boardRecommand.board = id;
+                boardRecommand.date = new Date();
+                boardRecommand.isDeleted = false;
+
+                await this.recommandRepository.save(boardRecommand);
+                await queryRunner.commitTransaction();
+                return { success: true, msg: '추천 완료' }
+            }
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"게시글 추천 실패"};
+            await queryRunner.rollbackTransaction();
+            return { success: false, msg: "게시글 추천 실패" };
+        }finally{
+            await queryRunner.release();
         }
     }
 
-    async orderbyLimit(): Promise<BoardEntity[]|object>{
+    async checkRecommand(boardId: number, userId: number) {
+        try {
+            const res = await this.recommandRepository.createQueryBuilder('boardRecommand')
+                .where("userId=:userId", { userId: userId })
+                .andWhere("boardId=:boardId", { boardId: boardId })
+                .getOne();
+            console.log(res);
+            if (res !== null) {
+                return { success: true, isDeleted: res.isDeleted };
+            } else {
+                return { success: false };
+            }
+        } catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "게시글 추천 여부 체크 중 에러" }
+        }
+    }
+
+    async countRecommend(){
         try{
-            const response = await this.repository.createQueryBuilder('board')
-                .orderBy("recommend","DESC")
-                .limit(5)
-                .getMany();
-                                
-            return response;
+            const res = await this.recommandRepository.query(
+                'select count(*) cnt, boardId '+
+                'from alcohol.boardRecommand '+
+                'WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) '+
+                'AND NOW() and isDeleted=false '+
+                'group by boardId '+
+                'order by cnt desc limit 5;'
+            );
+            return res;
         }catch(err){
             this.logger.error(err);
-            return {success:false, msg:"게시글 상위 추천 조회 실패"};
+            return {success:false}
+        }
+       
+    }
+
+    async orderbyLimit(): Promise<BoardEntity[] | object> {
+        try {
+            const response = await this.repository.createQueryBuilder('board')
+                .orderBy("recommend", "DESC")
+                .limit(5)
+                .getMany();
+
+            return response;
+        } catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "게시글 상위 추천 조회 실패" };
         }
     }
     /*******************comment*******************/
-    async insertComment(commentData, header): Promise<object>{
-        
+    async insertComment(commentData, header): Promise<object> {
+
         const token = this.jwtService.decode(header);
         const comment = new CommentEntity();
         comment.contents = commentData.contents;
@@ -280,55 +370,55 @@ export class BoardService {
         comment.board = commentData.boardId;
         comment.user = token['id'];
 
-        try{
+        try {
             await this.coRepository.save(comment);
-            return {success:true};
-        }catch(err){
+            return { success: true };
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg: "게시판 댓글 등록 중 에러 발생"}
+            return { success: false, msg: "게시판 댓글 등록 중 에러 발생" }
         }
     }
 
-    async commentAll(id:number): Promise<CommentEntity[] | object>{
-        try{
+    async commentAll(id: number): Promise<CommentEntity[] | object> {
+        try {
             return await this.coRepository.createQueryBuilder('comment')
-                    .leftJoinAndSelect('comment.user','user.id')
-                    .where("boardId=:id",{id:id})
-                    .andWhere("isDeleted=false")
-                    .getMany();
-        }catch(err){
+                .leftJoinAndSelect('comment.user', 'user.id')
+                .where("boardId=:id", { id: id })
+                .andWhere("isDeleted=false")
+                .getMany();
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg: "게시판 댓글 조회 중 에러 발생"}
+            return { success: false, msg: "게시판 댓글 조회 중 에러 발생" }
         }
     }
 
-    async deleteComment(deleteComment, header:string) : Promise<object> {
-        try{
-            
+    async deleteComment(deleteComment, header: string): Promise<object> {
+        try {
+
             const token = this.jwtService.decode(header);
-            if(deleteComment.userId==(token['id'])){
+            if (deleteComment.userId == (token['id'])) {
                 await this.coRepository.createQueryBuilder()
                     .update('comment')
-                    .set({isDeleted : true})
-                    .where("id=:id",{id:deleteComment.id})
+                    .set({ isDeleted: true })
+                    .where("id=:id", { id: deleteComment.id })
                     .execute();
-                return {success:true};
-            }else{
-                return {success:false, msg: 'fail'};
+                return { success: true };
+            } else {
+                return { success: false, msg: 'fail' };
             }
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"댓글 삭제 실패"};
+            return { success: false, msg: "댓글 삭제 실패" };
         }
     }
 
 
-/* raw 쿼리 이용하는 법
-    async increaseViewCount(id: number): Promise<void> {
-        await this.query(
-            `UPDATE article SET view_count = view_count + 1 WHERE id=${id}`,
-        );
-    }*/
+    /* raw 쿼리 이용하는 법
+        async increaseViewCount(id: number): Promise<void> {
+            await this.query(
+                `UPDATE article SET view_count = view_count + 1 WHERE id=${id}`,
+            );
+        }*/
 
-    
+
 }

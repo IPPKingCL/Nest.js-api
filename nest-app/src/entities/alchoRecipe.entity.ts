@@ -15,4 +15,7 @@ export class AlchoRecipeEntity{
 
     @Column()
     amount : number;
+
+    @Column()
+    only : boolean;
 }

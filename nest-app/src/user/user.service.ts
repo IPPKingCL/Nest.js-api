@@ -10,6 +10,7 @@ import { FavoriteRepository } from './repository/favorite.repository';
 import { getToken } from 'src/util/token';
 import { UserModifyDto } from './dto/usermodify.dto';
 import { UserEmailDto } from './dto/userEmail.dto';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,10 @@ export class UserService {
     constructor(
         private readonly repository : UserRepository,
         private jwtService: JwtService,
-        private fRepository : FavoriteRepository) {}
+        private fRepository : FavoriteRepository,
+        private dataSource:DataSource)
+         {}
+    
     private readonly logger = new Logger(UserService.name);
 
     getAll() : Promise<UserEntity[]>{
@@ -48,7 +52,10 @@ export class UserService {
         
         
         favorite.push(userData.favorite);
-                      
+            
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+
         try{
             this.logger.debug("save console log" + (await this.repository.save(user)).name);
             const res = await this.repository.save(user);
@@ -59,13 +66,16 @@ export class UserService {
             if(fres['success']){
                 const payload = { id:res.id, email: user.email, name: user.name, nickname : user.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload); 
-    
+                await queryRunner.commitTransaction();
                 return {success:true,token:loginToken}
             }
             
         }catch(err){
-            this.logger.error(err)
+            this.logger.error(err);
+            await queryRunner.rollbackTransaction();
             return {success:false, msg : "회원 가입 중 에러발생"}
+        }finally{
+            await queryRunner.release();
         }
     }
 
@@ -199,6 +209,9 @@ export class UserService {
 
         console.log("body : "+body.img)
 
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+
         try{
             const user = new UserEntity();
             user.birth = new Date(body.birth);
@@ -222,6 +235,7 @@ export class UserService {
             if(dres['success']){
                 fres = await this.modifyFavorite(token['id'],favorite);
             }else{
+                await queryRunner.rollbackTransaction();
                 return {success:false, msg : "술 삭제 중 에러발생"}
             }
 
@@ -231,16 +245,21 @@ export class UserService {
                 const loginToken = this.jwtService.sign(payload);
 
                 console.log(payload);
+                await queryRunner.commitTransaction();
                 return {success:true, token : loginToken};
                 
             }else{
+                await queryRunner.rollbackTransaction();
                 return {success:false, msg : "술 수정 중 에러발생"}
             }
             
-
+            
         }catch(err){
             this.logger.error(err);
+            await queryRunner.rollbackTransaction();
             return {success:false, msg : "수정 실패"};
+        }finally{
+            await queryRunner.release();
         }
     }
 

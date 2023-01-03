@@ -3,6 +3,7 @@ import { CommentEntity } from 'src/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { userStatus } from '../user/enumType/userStatus';
 import { AlchoCommentEntity } from './alchoComment.entity';
+import { BoardRecommandEntity } from './boardRecommand.entity';
 import { FavoriteEntity, } from './favoritList.entity';
 import { RatingEntity } from './rating.entity';
 
@@ -63,5 +64,8 @@ export class UserEntity {
     @OneToMany((type)=>RatingEntity,(ratingEntity)=> ratingEntity.user)
     ratingEntitys : RatingEntity[];
 
-    
+    @OneToMany((type) => BoardRecommandEntity,(boardRecommandEntity) => boardRecommandEntity.user)
+    boardRecommandEntitys : BoardRecommandEntity[];
+
+       
 }
