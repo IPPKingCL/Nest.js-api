@@ -12,6 +12,7 @@ import { CommentRepository } from './repository/comment.repository';
 import { ImgRepositoy } from './repository/img.repository';
 import { BoardRecommandRepository } from './repository/boardRecommand.repository';
 import { BoardRecommandEntity } from 'src/entities/boardRecommand.entity';
+import { DataSource } from 'typeorm';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -22,7 +23,8 @@ export class BoardService {
         private readonly coRepository: CommentRepository,
         private readonly imgRepository: ImgRepositoy,
         private readonly recommandRepository: BoardRecommandRepository,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private dataSource : DataSource
     ) { }  //댓글
 
     getAll(): Promise<BoardEntity[]> {
@@ -256,7 +258,8 @@ export class BoardService {
         //     this.logger.error(err);
         //     return {success:false, msg:"게시글 추천 실패"};
         // }
-
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
         try {
             const token = this.jwtService.decode(header);
             const res = await this.checkRecommand(id, token['id']);
@@ -268,6 +271,7 @@ export class BoardService {
                     .where("boardId=:id", { id: id })
                     .andWhere("userId=:userId", { userId: token['id'] })
                     .execute();
+                await queryRunner.commitTransaction();
                 return { success: true, msg: '추천이 취소되었습니다' };
 
             } else if (res.success && res.isDeleted) {
@@ -280,6 +284,7 @@ export class BoardService {
                     .where("boardId=:id", { id: id })
                     .andWhere("userId=:userId", { userId: token['id'] })
                     .execute();
+                await queryRunner.commitTransaction();    
                 return { success: true, msg: '추천 완료' };
 
             } else {
@@ -291,12 +296,15 @@ export class BoardService {
                 boardRecommand.isDeleted = false;
 
                 await this.recommandRepository.save(boardRecommand);
-
+                await queryRunner.commitTransaction();
                 return { success: true, msg: '추천 완료' }
             }
         } catch (err) {
             this.logger.error(err);
+            await queryRunner.rollbackTransaction();
             return { success: false, msg: "게시글 추천 실패" };
+        }finally{
+            await queryRunner.release();
         }
     }
 
