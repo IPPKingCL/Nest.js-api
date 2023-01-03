@@ -74,6 +74,8 @@ export class UserService {
             this.logger.error(err);
             await queryRunner.rollbackTransaction();
             return {success:false, msg : "회원 가입 중 에러발생"}
+        }finally{
+            await queryRunner.release();
         }
     }
 
@@ -207,6 +209,9 @@ export class UserService {
 
         console.log("body : "+body.img)
 
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+
         try{
             const user = new UserEntity();
             user.birth = new Date(body.birth);
@@ -230,6 +235,7 @@ export class UserService {
             if(dres['success']){
                 fres = await this.modifyFavorite(token['id'],favorite);
             }else{
+                await queryRunner.rollbackTransaction();
                 return {success:false, msg : "술 삭제 중 에러발생"}
             }
 
@@ -239,16 +245,21 @@ export class UserService {
                 const loginToken = this.jwtService.sign(payload);
 
                 console.log(payload);
+                await queryRunner.commitTransaction();
                 return {success:true, token : loginToken};
                 
             }else{
+                await queryRunner.rollbackTransaction();
                 return {success:false, msg : "술 수정 중 에러발생"}
             }
             
-
+            
         }catch(err){
             this.logger.error(err);
+            await queryRunner.rollbackTransaction();
             return {success:false, msg : "수정 실패"};
+        }finally{
+            await queryRunner.release();
         }
     }
 
