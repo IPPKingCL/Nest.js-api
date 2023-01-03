@@ -203,7 +203,12 @@ export class CocktailService {
     async ratingDay(){
         try{
             const res = await this.ratingRepository.query(
-                'SELECT * FROM rating WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW();'
+                'SELECT cocktailId,sum(rating) cnt '
+                +'FROM rating '
+                +'WHERE date '+
+                'BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW() '+
+                'group by cocktailId '+
+                'order by cnt desc limit 5'
             )
             return res;
         }catch(err){
