@@ -86,6 +86,12 @@ export class BoardController {
         return await this.boardService.recommend(id,getToken(header));
     }
 
+    @ApiOperation({summary:' 게시글 추천 순위 조회'})
+    @Get('recommend/count')
+    async countRecommned(){
+        return await this.boardService.countRecommend();
+    }
+
     @ApiOperation({summary: " 게시글 추천 상위 조회"})
     @Get('/orderbyLimit')
     async orderbyLimit(){

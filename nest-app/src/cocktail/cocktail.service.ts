@@ -203,7 +203,7 @@ export class CocktailService {
     async ratingDay(){
         try{
             const res = await this.ratingRepository.query(
-                'SELECT * FROM rating WHERE date > DATE_ADD(now(), INTERVAL -1 HOUR)'
+                'SELECT * FROM rating WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW();'
             )
             return res;
         }catch(err){

@@ -318,6 +318,19 @@ export class BoardService {
         }
     }
 
+    async countRecommend(){
+        try{
+            const res = await this.recommandRepository.query(
+                'SELECT * FROM boardRecommand WHERE date > DATE_ADD(now(), INTERVAL -1 hour)'
+            );
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false}
+        }
+       
+    }
+
     async orderbyLimit(): Promise<BoardEntity[] | object> {
         try {
             const response = await this.repository.createQueryBuilder('board')
