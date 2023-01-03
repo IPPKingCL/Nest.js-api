@@ -321,7 +321,12 @@ export class BoardService {
     async countRecommend(){
         try{
             const res = await this.recommandRepository.query(
-                'SELECT * FROM boardRecommand WHERE date > DATE_ADD(now(), INTERVAL -1 hour)'
+                'select count(*) cnt, boardId '+
+                'from alcohol.boardRecommand '+
+                'WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) '+
+                'AND NOW() and isDeleted=false '+
+                'group by boardId '+
+                'order by cnt desc limit 5;'
             );
             return res;
         }catch(err){

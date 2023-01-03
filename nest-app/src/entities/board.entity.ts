@@ -42,4 +42,7 @@ export class BoardEntity {
 
     @OneToMany((type)=>BoardRecommandEntity,(boardRecommandEntity)=>boardRecommandEntity.board)
     boardRecommandEntitys : BoardRecommandEntity[];
+
+  
+
 }
