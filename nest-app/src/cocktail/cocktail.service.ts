@@ -219,7 +219,8 @@ export class CocktailService {
 
     async ratingCount(){
         try{
-
+            //const res = await this.ratingRepository.createQueryBuilder('rating')
+                      
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:"별점 수 조회 중 에러 발생"};

@@ -18,4 +18,7 @@ export class AlchoRecipeEntity{
 
     @Column()
     only : boolean;
+
+    @Column()
+    unit : string;
 }
