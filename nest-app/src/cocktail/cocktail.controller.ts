@@ -59,7 +59,13 @@ export class CocktailController {
     @ApiOperation({summary:"24시간 별점 조회"})
     @Get('/rating/day')
     async ratingDay(){
+        console.log("AFasdfsadfasd");
         return await this.cocktailService.ratingDay();
+    }
+
+    @Get('/rating/count')
+    async ratingCount(){
+        return await this.cocktailService.ratingCount();
     }
     //@Get('/juice/:id')
 }
