@@ -42,7 +42,8 @@ import { BoardRecommandEntity } from './entities/boardRecommand.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
-  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, RecommandModule, AlcoholModule, CocktailModule,
+  imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, 
+    RecommandModule, AlcoholModule, CocktailModule,
 
     JwtModule.register({
       secret : process.env.secretOrKey,

@@ -216,6 +216,15 @@ export class CocktailService {
             return {success:false, msg:"24시간 이내 별점 조회 중 에러 발생"};
         }
     }
+
+    async ratingCount(){
+        try{
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"별점 수 조회 중 에러 발생"};
+        }
+    }
 }
 
 
