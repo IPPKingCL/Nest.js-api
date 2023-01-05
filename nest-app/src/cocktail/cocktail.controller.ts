@@ -78,6 +78,12 @@ export class CocktailController {
         this.logger.log("---------------insert cocktail comment ");
         return await this.cocktailService.commentInsert(commentDto, getToken(header));
     }
+
+    @ApiOperation({summary: " 댓글 조회"})
+    @Get('comment/all/:id')
+    async commentAll(@Param("id") id:number){
+        return await this.cocktailService.commentAll(id);
+    }
     //@Get('/juice/:id')
 }
 

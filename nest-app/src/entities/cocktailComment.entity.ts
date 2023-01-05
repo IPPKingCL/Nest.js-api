@@ -23,5 +23,5 @@ export class CocktailCommentEntity{
     cocktail : CocktailEntity;
 
     @ManyToOne((type)=>UserEntity, (userEntity)=>userEntity.cocktailCommentEntitys)
-    user : UserEntity;
+    user: UserEntity;
 }

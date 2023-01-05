@@ -237,7 +237,7 @@ export class CocktailService {
     }
 
     /***********************칵테일 댓글***********************/
-    async commentInsert(commentDto, header){
+    async commentInsert(commentDto, header):Promise<object>{
         try{
             const token = this.jwtService.decode(header);
             const cocktailCommentEntity = new CocktailCommentEntity();
@@ -255,6 +255,21 @@ export class CocktailService {
         }catch(err){
             this.logger.error(err);
             return {success : false, msg : "댓글 삽입 중 에러 발생"};
+        }
+    }
+
+    async commentAll(id:number){
+        try{
+            console.log(id);
+            const res = await this.cocktailCommentRepository.createQueryBuilder('cocktailComment')
+                        .leftJoinAndSelect('cocktailComment.user','user.id')
+                        .where("cocktailId=:cocktailId",{cocktailId:id})
+                        .andWhere("isDeleted=false")
+                        .getMany();
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false, msg : "댓글 조회 중 에러 발생"};
         }
     }
 }
