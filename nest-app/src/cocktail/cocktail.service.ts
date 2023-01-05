@@ -1,13 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
+import { commentDto } from 'src/board/dto/comment.Dto';
 import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
+import { CocktailCommentEntity } from 'src/entities/cocktailComment.entity';
 import { RatingEntity } from 'src/entities/rating.entity';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { CockInfoDto } from './Dto/CockInfo.Dto';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
 import { CocktailRepository } from './repository/Cocktail.repository';
+import { CocktailCommentRepository } from './repository/CocktailComment.repository';
 import { JuiceRepository } from './repository/Juice.repository';
 import { JuiceRecipeRepository } from './repository/JuiceRecipe.repository';
 import { RatingRepository } from './repository/Rating.repository';
@@ -23,6 +26,7 @@ export class CocktailService {
         private readonly juiceRepository : JuiceRepository,
         private readonly alchoRepository : alchoRepository,
         private readonly ratingRepository : RatingRepository,
+        private readonly cocktailCommentRepository : CocktailCommentRepository
     ){}
     
     
@@ -229,6 +233,28 @@ export class CocktailService {
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:"별점 수 조회 중 에러 발생"};
+        }
+    }
+
+    /***********************칵테일 댓글***********************/
+    async commentInsert(commentDto, header){
+        try{
+            const token = this.jwtService.decode(header);
+            const cocktailCommentEntity = new CocktailCommentEntity();
+
+            cocktailCommentEntity.contents = commentDto.contents;
+            cocktailCommentEntity.dateTime = new Date();
+            cocktailCommentEntity.nickname = token['nickname'];
+            cocktailCommentEntity.isDeleted = false;
+            cocktailCommentEntity.cocktail = commentDto.boardId;
+            cocktailCommentEntity.user = token['id'];
+
+            await this.cocktailCommentRepository.save(cocktailCommentEntity);
+
+            return {success: true};
+        }catch(err){
+            this.logger.error(err);
+            return {success : false, msg : "댓글 삽입 중 에러 발생"};
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Logger, Param, Post, UseGuards, Headers } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { commentDto } from 'src/board/dto/comment.Dto';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { CocktailService } from './cocktail.service';
@@ -59,13 +60,23 @@ export class CocktailController {
     @ApiOperation({summary:"24시간 별점 조회"})
     @Get('/rating/day')
     async ratingDay(){
-        console.log("AFasdfsadfasd");
+        this.logger.log("---------------select rating 1 day ");
         return await this.cocktailService.ratingDay();
     }
 
+    @ApiOperation({summary:"별점 수 카운트"})
     @Get('/rating/count')
     async ratingCount(){
+        this.logger.log("---------------count rating ");
         return await this.cocktailService.ratingCount();
+    }
+
+    @ApiOperation({summary: "칵테일 댓글 인서트"})
+    @UseGuards(JwtAuthGuard)
+    @Post('comment/insert')
+    async commentInsert(@Body() commentDto:commentDto, @Headers() header){
+        this.logger.log("---------------insert cocktail comment ");
+        return await this.cocktailService.commentInsert(commentDto, getToken(header));
     }
     //@Get('/juice/:id')
 }
