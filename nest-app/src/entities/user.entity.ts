@@ -4,6 +4,7 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 import { userStatus } from '../user/enumType/userStatus';
 import { AlchoCommentEntity } from './alchoComment.entity';
 import { BoardRecommandEntity } from './boardRecommand.entity';
+import { CocktailCommentEntity } from './cocktailComment.entity';
 import { FavoriteEntity, } from './favoritList.entity';
 import { RatingEntity } from './rating.entity';
 
@@ -67,5 +68,7 @@ export class UserEntity {
     @OneToMany((type) => BoardRecommandEntity,(boardRecommandEntity) => boardRecommandEntity.user)
     boardRecommandEntitys : BoardRecommandEntity[];
 
+    @OneToMany((type)=>CocktailCommentEntity, (cocktailCommentEntity)=>cocktailCommentEntity.user)
+    cocktailCommentEntitys : CocktailCommentEntity[];
        
 }
