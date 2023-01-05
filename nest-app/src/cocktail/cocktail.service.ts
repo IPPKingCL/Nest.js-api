@@ -260,7 +260,6 @@ export class CocktailService {
 
     async commentAll(id:number){
         try{
-            console.log(id);
             const res = await this.cocktailCommentRepository.createQueryBuilder('cocktailComment')
                         .leftJoinAndSelect('cocktailComment.user','user.id')
                         .where("cocktailId=:cocktailId",{cocktailId:id})
@@ -272,7 +271,27 @@ export class CocktailService {
             return {success : false, msg : "댓글 조회 중 에러 발생"};
         }
     }
-}
 
+    async deleteComment(deleteComment, header: string): Promise<object> {
+        try {
+
+            const token = this.jwtService.decode(header);
+            if (deleteComment.userId == (token['id'])) {
+                await this.cocktailCommentRepository.createQueryBuilder()
+                    .update('cocktailComment')
+                    .set({ isDeleted: true })
+                    .where("id=:id", { id: deleteComment.id })
+                    .execute();
+                return { success: true };
+            } else {
+                return { success: false, msg: 'fail' };
+            }
+        } catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "댓글 삭제 실패" };
+        }
+    }
+
+}
 
    
