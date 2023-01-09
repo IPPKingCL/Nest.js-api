@@ -3,5 +3,6 @@ export enum userStatus{
     google="g",
     naver="n",
     kakao="k",
-    normal="nor"
+    normal="nor",
+    admin="a"
 }
