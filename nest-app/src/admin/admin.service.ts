@@ -19,5 +19,7 @@ export class AdminService {
 
     ){}
 
-    
+    async newCocktail(){
+        
+    }
 }

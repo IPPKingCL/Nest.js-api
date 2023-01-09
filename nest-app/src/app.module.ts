@@ -44,6 +44,7 @@ import { AlchoCategoryEntity } from './entities/alchoCategory.entity';
 import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
 import { AdminModule } from './admin/admin.module';
+import { UnitEntity } from './entities/unit.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -69,7 +70,7 @@ import { AdminModule } from './admin/admin.module';
                  dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,
                  AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
                  JuiceEntity,JuiceRecipeEntity,RatingEntity,BoardRecommandEntity,
-                 CocktailCommentEntity,AlchoCategoryEntity
+                 CocktailCommentEntity,AlchoCategoryEntity,UnitEntity
                 ],
       synchronize: false,
       logging : true,
