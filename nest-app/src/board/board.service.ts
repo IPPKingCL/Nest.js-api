@@ -329,12 +329,18 @@ export class BoardService {
     async countRecommend(){
         try{
             const res = await this.recommandRepository.query(
-                'select count(*) cnt, boardId '+
-                'from alcohol.boardRecommand '+
-                'WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) '+
-                'AND NOW() and isDeleted=false '+
-                'group by boardId '+
-                'order by cnt desc limit 5;'
+                'select b.id, b.title, b.contents, u.nickname ' + 
+                'from alcohol.user u, alcohol.board b ' +
+                'where u.id = b.userId ' +
+                'and b.id in ( ' +
+                'select boardId ' +
+                'from (select rt.boardId from alcohol.boardRecommand rt '+
+                'WHERE date BETWEEN DATE_ADD(NOW(), INTERVAL -10 DAY ) ' +
+                'AND NOW() and isDeleted=false ' +
+                'group by boardId ' +
+                'order by count(boardId) desc limit 5 ' +
+                ') temp ' +
+                ')'
             );
             return res;
         }catch(err){
