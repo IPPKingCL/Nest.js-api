@@ -10,7 +10,7 @@ export class JuiceEntity{
     name : string;
 
     @Column()
-    type : number;  //1.탄산음료 2.칵테일용 탄산음료 3.즙 4.과일주스  5.시럽  6.소스 7. 첨가물
+    type : number;  //1.탄산음료 2.칵테일용 탄산음료 3.즙 4.과일주스  5.시럽  6.소스 7. 첨가물  8.가니쉬 및 잎;;
 
     @Column({length:500})
     imgUrl : string;

@@ -1,5 +1,6 @@
 import { FavoriteEntity,  } from "src/entities/favoritList.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AlchoCategoryEntity } from "./alchoCategory.entity";
 import { AlchoCommentEntity } from "./alchoComment.entity";
 import { AlchoRecipeEntity } from "./alchoRecipe.entity";
 import { CocktailEntity } from "./cocktail.entity";
@@ -41,4 +42,7 @@ export class AlchoEntity{
 
     @OneToMany((type) => AlchoRecipeEntity,(alchoRecipeEntity)=>alchoRecipeEntity.alcho)
     alchoRecipeEntitys : AlchoRecipeEntity[];
+
+    @ManyToOne((type) => AlchoCategoryEntity,(alchoCategoryEntity)=>alchoCategoryEntity.alcho)
+    alchoCategory : AlchoCategoryEntity;
 }
