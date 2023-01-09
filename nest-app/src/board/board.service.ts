@@ -329,7 +329,7 @@ export class BoardService {
     async countRecommend(){
         try{
             const res = await this.recommandRepository.query(
-                'select b.id, b.title, b.contents, u.nickname ' + 
+                'select b.id, b.title, b.contents, u.nickname, count(boardId) ' + 
                 'from alcohol.user u, alcohol.board b ' +
                 'where u.id = b.userId ' +
                 'and b.id in ( ' +
@@ -340,7 +340,8 @@ export class BoardService {
                 'group by boardId ' +
                 'order by count(boardId) desc limit 5 ' +
                 ') temp ' +
-                ')'
+                ') ' + 
+                'group by boardId'
             );
             return res;
         }catch(err){
