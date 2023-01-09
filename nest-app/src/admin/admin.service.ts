@@ -5,7 +5,10 @@ import { AlchoRecipteRepository } from 'src/cocktail/repository/AlchoRecipe.repo
 import { CocktailRepository } from 'src/cocktail/repository/Cocktail.repository';
 import { JuiceRepository } from 'src/cocktail/repository/Juice.repository';
 import { JuiceRecipeRepository } from 'src/cocktail/repository/JuiceRecipe.repository';
+import { AlchoEntity } from 'src/entities/alcho.entity';
 import { AlchoCategoryEntity } from 'src/entities/alchoCategory.entity';
+import { JuiceEntity } from 'src/entities/juice.entity';
+import { UnitEntity } from 'src/entities/unit.entity';
 import { AlchoCategoryRepository } from './repository/alchoCategory.repository';
 import { UnitRepository } from './repository/unit.repository';
 
@@ -24,12 +27,27 @@ export class AdminService {
     ){}
 
     async newCocktail(){
+        try{
+            const alchoCategory = await this.alchoCategory();
+            const unitCategory = await this.unitCategory();
+            const juiceCategory = await this.juiceCategory();
 
+            const res = {
+                alchoCategory,
+                unitCategory,
+                juiceCategory,
+            }
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"칵테일 입력 페이지 로딩 실패"};
+        }
     }
 
-    async alchoCategory():Promise<AlchoCategoryEntity[]|object>{
+    async alchoCategory():Promise<AlchoEntity[]|object>{
         try{
-            const res = await this.alchoCategoryRepository.find();
+            const res = await this.alchoRepository.find();
             return res; 
         }catch(err){
             this.logger.error(err);
@@ -37,7 +55,7 @@ export class AdminService {
         }
     }
 
-    async unitCategory(){
+    async unitCategory():Promise<UnitEntity[]|object>{
         try{
             const res = await this.unitRepository.find();
             return res;
@@ -47,7 +65,7 @@ export class AdminService {
         }
     }
 
-    async juiceCategory(){
+    async juiceCategory():Promise<JuiceEntity[]|object>{
         try{
             const res = await this.juiceRepository.find();
             return res;

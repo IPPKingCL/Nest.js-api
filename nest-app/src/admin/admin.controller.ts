@@ -10,6 +10,6 @@ export class AdminController {
     @ApiOperation({summary: '새로운 칵테일 페이지 추가 시 필요 작업'})
     @Get('/newCocktail')
     async newCocktail(){
-
+        return await this.adminService.newCocktail();
     }
 }
