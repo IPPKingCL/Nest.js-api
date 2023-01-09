@@ -329,7 +329,7 @@ export class BoardService {
     async countRecommend(){
         try{
             const res = await this.recommandRepository.query(
-                'select b.id, b.title, b.contents, u.nickname, count(boardId) ' + 
+                'select b.id, b.title, b.contents, u.nickname, count(boardId) recommend' + 
                 'from alcohol.user u, alcohol.board b ' +
                 'where u.id = b.userId ' +
                 'and b.id in ( ' +
