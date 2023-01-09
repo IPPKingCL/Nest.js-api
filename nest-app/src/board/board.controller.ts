@@ -87,7 +87,7 @@ export class BoardController {
     }
 
     @ApiOperation({summary:' 게시글 추천 순위 조회'})
-    @Get('recommend/count')
+    @Get('/recommend/count')
     async countRecommned(){
         return await this.boardService.countRecommend();
     }
