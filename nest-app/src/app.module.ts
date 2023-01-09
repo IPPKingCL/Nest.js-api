@@ -41,6 +41,9 @@ import { RatingEntity } from './entities/rating.entity';
 import { BoardRecommandEntity } from './entities/boardRecommand.entity';
 import { CocktailCommentEntity } from './entities/cocktailComment.entity';
 import { AlchoCategoryEntity } from './entities/alchoCategory.entity';
+import { AdminController } from './admin/admin.controller';
+import { AdminService } from './admin/admin.service';
+import { AdminModule } from './admin/admin.module';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -72,10 +75,11 @@ import { AlchoCategoryEntity } from './entities/alchoCategory.entity';
       logging : true,
       
     }),
+    AdminModule,
    
     ], 
-  controllers: [AppController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
-  providers: [JwtStrategy],
+  controllers: [AppController, AdminController], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  providers: [JwtStrategy, AdminService],
 }) 
 export class AppModule {}   
 
