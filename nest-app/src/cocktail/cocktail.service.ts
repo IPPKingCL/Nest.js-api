@@ -124,6 +124,19 @@ export class CocktailService {
         }
     }
 
+    async getCategoryCock(category:string){
+        try{
+            const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
+                        .leftJoinAndSelect('alchoRecipe.alcho','alcho.id')
+                        .where("category=:category",{category:category})
+                        .getMany();
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"술 종류 별 조회 중 에러 발생"};
+        }
+    }
+
     async categoryCock(category):Promise<AlchoRecipeEntity|object>{
         try{
             //서브 쿼리로 갈지 아님 디비를 두번 갈지 나중에 성능보고 결정
@@ -207,10 +220,11 @@ export class CocktailService {
     async ratingDay(){
         try{
             const res = await this.ratingRepository.query(
-                'SELECT cocktailId,sum(rating) cnt '
-                +'FROM rating '
+                'SELECT cocktailId,sum(rating) cnt , imgUrl, c.name '
+                +'FROM rating, cocktail c '
                 +'WHERE date '+
                 'BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW() '+
+                'and cocktailId=c.id '+
                 'group by cocktailId '+
                 'order by cnt desc limit 5'
             )
