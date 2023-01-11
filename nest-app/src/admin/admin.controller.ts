@@ -1,7 +1,8 @@
-import { Controller, Get, Logger ,Headers } from '@nestjs/common';
+import { Controller, Get, Logger ,Headers, Body, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { getToken } from 'src/util/token';
 import { AdminService } from './admin.service';
+import { InsertCocktailDto } from './dto/insertCocktail.Dto';
 
 @Controller('admin')
 export class AdminController {
@@ -12,5 +13,11 @@ export class AdminController {
     @Get('/newCocktail')
     async newCocktail(@Headers() header){
         return await this.adminService.newCocktail(getToken(header));
+    }
+
+    @ApiOperation({summary : "새로운 칵테일 입력"})
+    @Post('/insert')
+    async insert(@Body() insertDto:InsertCocktailDto, @Headers() header){
+        
     }
 }

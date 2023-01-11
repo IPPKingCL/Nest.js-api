@@ -7,7 +7,7 @@ export class UnitEntity{
     id : number;
 
     @Column({length:50})
-    unit : string;
+    name : string;
 
     @OneToMany((type) => JuiceRecipeEntity,(juiceRecipeEntity) => juiceRecipeEntity.unitNum)
     juiceRecipeEntitys : JuiceRecipeEntity[];
