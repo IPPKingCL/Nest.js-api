@@ -182,12 +182,12 @@ export class AdminService {
     }
 
     async insertAlchoRecipe(id,insertDto){
-        console.log("cocktail id : "+id);
+        console.log("cocktail id : "+insertDto);
         
         try{
             await this.alchoRecipeRepository.query(
                 'insert into alchoRecipe(amount, only, cocktailId, unitNumId, alchoId) '
-                +'values ('+insertDto.amount+','+insertDto.only+','+id+','+insertDto.unit+','+insertDto.id+')'
+                +'values ('+insertDto[0].amount+','+insertDto[0].only+','+id+','+insertDto[0].unit+','+insertDto[0].name+')'
             );
             
             return {success:true};
@@ -200,10 +200,12 @@ export class AdminService {
     }
 
     async insertJuiceRecipe(id, insertDto){
-        console.log("cocktail id : "+id);
        
         try{
             const juiceRecipe = new JuiceRecipeEntity();
+
+            console.log(insertDto[0]);
+            console.log(insertDto[0].id);
 
             juiceRecipe.cocktail = id;
             juiceRecipe.amount = insertDto.amount;
@@ -212,7 +214,7 @@ export class AdminService {
             
             await this.juiceRecipeRepository.query(
                 'insert into juiceRecipe(amount, juiceId, cocktailId, unitNumId) '
-                +'values ('+insertDto.amount+','+insertDto.id+','+id+','+insertDto.unit+')'
+                +'values ('+insertDto[0].amount+','+insertDto[0].name+','+id+','+insertDto[0].unit+')'
             );
             
             return {success:true};
