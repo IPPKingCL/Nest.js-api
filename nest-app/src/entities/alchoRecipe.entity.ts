@@ -18,7 +18,7 @@ export class AlchoRecipeEntity{
     amount : number;
 
     @Column()
-    only : boolean;
+    only : boolean; //꼭 이 술을 써야하는지 1 같은 종류의 다른 술을 써도 되는지 0
 
     @Column()
     unit : string;
