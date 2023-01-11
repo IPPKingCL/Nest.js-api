@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AlchoEntity } from "./alcho.entity";
 import { CocktailEntity } from "./cocktail.entity";
+import { UnitEntity } from "./unit.entity";
 
 @Entity('alchoRecipe')
 export class AlchoRecipeEntity{
@@ -21,4 +22,7 @@ export class AlchoRecipeEntity{
 
     @Column()
     unit : string;
+
+    @ManyToOne((type)=>UnitEntity,(unitEntity)=>unitEntity.alchoRecipeEntitys)
+    unitNum : UnitEntity;
 }
