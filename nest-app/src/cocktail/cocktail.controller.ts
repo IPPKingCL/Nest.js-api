@@ -28,6 +28,13 @@ export class CocktailController {
         return await this.cocktailService.getOne(id);
     }
 
+    @ApiOperation({summary: '칵테일 검색'})
+    @Get('/search/:text')
+    async search(@Param("text") text:string){
+        this.logger.log("---------------search cocktail ");
+        return await this.cocktailService.search(text);
+    }
+
     @ApiOperation({summary: " 해당 술이 사용된 칵테일 조회"})
     @Post('/alchoCock')
     async alchoCock(@Body() alchoDto:AlchoCockDto){

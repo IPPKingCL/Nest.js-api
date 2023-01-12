@@ -78,6 +78,20 @@ export class CocktailService {
         }
     }
 
+    async search(text:string){
+        try{
+            const res = await this.cockRepository.createQueryBuilder('cocktail')
+                        .where('name=:text',{text:text})
+                        .getMany();
+            
+            return res;
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:err};
+        }
+    }
+
     async alchoCock(alchoDto:AlchoCockDto):Promise<CockInfoDto[]|object>{
         try{
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
