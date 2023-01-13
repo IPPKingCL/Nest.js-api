@@ -1,9 +1,7 @@
 import { IsBoolean, IsNumber } from "class-validator";
 
 export class InsertAlchoDto{
-    @IsNumber()
-    id:number;
-
+ 
     @IsNumber()
     name: number;
 

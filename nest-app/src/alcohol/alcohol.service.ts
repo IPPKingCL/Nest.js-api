@@ -7,12 +7,15 @@ import { AlchoCommentDto } from './dto/alchoComment.Dto';
 import { AlchoCommentEntity } from 'src/entities/alchoComment.entity';
 import { JwtService } from '@nestjs/jwt';
 
+import { alchoCategoryRepository } from './repository/alchoCategory.repository';
+
 @Injectable()
 export class AlcoholService {
     private readonly logger = new Logger(AlcoholService.name)
     constructor(
         private readonly alchoRepository : alchoRepository,
         private readonly alchoCommentRepository : alchoCommentRepository,
+        private readonly alchoCategoryRepository : alchoCategoryRepository,
         private jwtService: JwtService
     ){}
 
@@ -35,12 +38,21 @@ export class AlcoholService {
         }
     }
 
-    async getCategory(category:string) : Promise<readAlchoDto[] | object>{
+    async getCategory(category:number) : Promise<readAlchoDto[] | object>{
         try{
-            const res = await this.alchoRepository.createQueryBuilder('alcho')
-                        .where('category=:category',{category:category})
-                        .getMany();
-            return res;
+            if(category==0){
+                const res = await this.alchoRepository.find();
+
+                return res;
+            }else{
+                const res = await this.alchoRepository.createQueryBuilder('alcho')
+                .where('alchoCategoryId=:category',{category:category})
+                .getMany();
+
+                return res;
+            }
+            
+            
         }catch(err){
             this.logger.error(err);
             return {success:false, msg:"목록 조회 중 에러 발생"};
@@ -49,9 +61,7 @@ export class AlcoholService {
 
     async getAllCategory() : Promise<object[]|object>{
         try{
-            const res = await this.alchoRepository.query(
-                'select id, category from Alcho group by category'
-            )
+            const res = await this.alchoCategoryRepository.find();
             return res;
         }catch(err){
             this.logger.error(err);

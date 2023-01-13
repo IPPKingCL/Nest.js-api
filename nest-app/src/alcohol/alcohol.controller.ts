@@ -28,7 +28,7 @@ export class AlcoholController {
 
     @ApiOperation({summary:' 술 정보 카테고리 별 조회'})
     @Get('/category/:category')
-    async getCategory(@Param('category') category:string){
+    async getCategory(@Param('category') category:number){
         this.logger.log("---------------select alcohol category : "+category);
         return await this.alchoService.getCategory(category);
     }

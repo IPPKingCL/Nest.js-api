@@ -18,6 +18,6 @@ export class AdminController {
     @ApiOperation({summary : "새로운 칵테일 입력"})
     @Post('/insert')
     async insert(@Body() insertDto:InsertCocktailDto, @Headers() header){
-        
+        return await this.adminService.insert(insertDto,getToken(header));
     }
 }

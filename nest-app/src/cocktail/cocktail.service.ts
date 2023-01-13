@@ -58,7 +58,7 @@ export class CocktailService {
             );
 
             const resAlcho = await this.alchoRecipeRepository.query(
-                "select a.id, a.name, a.category, a.imgUrl, r.amount "
+                "select a.id, a.name, a.category, a.imgUrl, r.amount , r.only "
                 +"from Alcho a, alchoRecipe r "
                 +"where a.id=r.alchoId and r.cocktailId="+id+";"
             );
@@ -75,6 +75,30 @@ export class CocktailService {
         }catch(err){
             this.logger.error(err);
             return {success:false}
+        }
+    }
+
+    async search(text:number){
+        try{
+            if(text==0){
+                const res = await this.getAll();
+                return res;
+            }
+            const res = await this.cockRepository.query(
+                'select * '
+                +'from alcohol.cocktail c '
+                +'inner join '
+                +'(select cocktailId '
+                +'from alcohol.alchoRecipe r, alcohol.Alcho a '
+                +'where a.alchoCategoryId='+text+' and r.alchoId=a.id) k '
+                +'on c.id=k.cocktailId;'
+            )
+            
+            return res;
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:err};
         }
     }
 

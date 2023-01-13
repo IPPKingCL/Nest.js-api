@@ -1,4 +1,4 @@
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsNumber, IsString } from "class-validator";
 import { InsertAlchoDto } from "./insertAlcho.Dto";
 
 export class InsertCocktailDto{
@@ -7,6 +7,9 @@ export class InsertCocktailDto{
 
     @IsString()
     imgUrl:string;
+
+    @IsNumber()
+    dosu : number;
 
     @IsArray()
     alcho :  InsertAlchoDto[];

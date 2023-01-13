@@ -16,7 +16,7 @@ export class CocktailEntity{
     @Column()
     dosu : number;
 
-    @Column({length:500})
+    @Column({length:1000})
     imgUrl : string;
 
     @Column()
