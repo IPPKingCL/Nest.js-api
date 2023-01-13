@@ -330,6 +330,18 @@ export class CocktailService {
         }
     }
 
+    async CFR (header: string): Promise<object> {
+
+        try {
+            const token = this.jwtService.decode(header);
+
+        }catch (err) {
+            
+        }
+
+        return;
+    }
+
 }
 
    
