@@ -364,18 +364,23 @@ export class CocktailService {
             if(favorite.length>0){
                 const list = await this.cocktailList(favorite,lastPrice);
                 console.log(list);
-                return list;
+                const arr = await this.makeArray(list);
+
+                const res = new Array();
+                let i = 0;
+                
+                while(i<3){
+                    const randomValue = arr[Math.floor(Math.random() * arr.length)];
+                    res.push(randomValue);
+                    i++;//중복처리는 나중에 처리 예정
+                }
+                
+                return res;
             }else{
                 //랜덤
             }
 
-           
-
-            
-
-
-
-            
+         
         }catch (err) {
             this.logger.error(err);
             return { success: false, msg: "칵테일 추천 실패" };
@@ -444,6 +449,17 @@ export class CocktailService {
             this.logger.error(err);
             return {success:false, msg:"칵테일 리스트 조회 실패"}
         }
+    }
+
+    async makeArray(list){
+        const arr = new Array();
+        for(let i = 0; i<list.length; i++){
+            for(let j = 0 ; j<list[i].length;j++){
+                arr.push(list[i][j]);
+            }
+        }
+
+        return arr;
     }
 }
 
