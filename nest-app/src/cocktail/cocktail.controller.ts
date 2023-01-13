@@ -32,6 +32,7 @@ export class CocktailController {
     @Get('/search/:text')
     async search(@Param("text") text:string){
         this.logger.log("---------------search cocktail ");
+        console.log(text);
         return await this.cocktailService.search(text);
     }
 

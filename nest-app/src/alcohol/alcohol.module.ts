@@ -8,9 +8,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService,ConfigModule } from '@nestjs/config';
 import { alchoCommentRepository } from './repository/alchoComment.repository';
+import { alchoCategoryRepository } from './repository/alchoCategory.repository';
 @Module(
     {imports:[
-    TypeOrmExModule.forCustomRepository([alchoRepository,alchoCommentRepository]),
+    TypeOrmExModule.forCustomRepository([alchoRepository,alchoCommentRepository,alchoCategoryRepository]),
     // session을 사용하지 않을 예정이기 때문에 false
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     // jwt 생성할 때 사용할 시크릿 키와 만료일자 적어주기
