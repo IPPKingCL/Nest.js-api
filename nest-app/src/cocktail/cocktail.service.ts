@@ -78,11 +78,17 @@ export class CocktailService {
         }
     }
 
-    async search(text:string){
+    async search(text:number){
         try{
-            const res = await this.cockRepository.createQueryBuilder('cocktail')
-                        .where('name=:text',{text:text})
-                        .getMany();
+            const res = await this.cockRepository.query(
+                'select * '
+                +'from alcohol.cocktail c '
+                +'inner join '
+                +'(select cocktailId '
+                +'from alcohol.alchoRecipe r, alcohol.Alcho a '
+                +'where a.alchoCategoryId='+text+' and r.alchoId=a.id) k '
+                +'on c.id=k.cocktailId;'
+            )
             
             return res;
 

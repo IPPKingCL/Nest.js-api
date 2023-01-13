@@ -30,7 +30,7 @@ export class CocktailController {
 
     @ApiOperation({summary: '칵테일 검색'})
     @Get('/search/:text')
-    async search(@Param("text") text:string){
+    async search(@Param("text") text:number){
         this.logger.log("---------------search cocktail ");
         console.log(text);
         return await this.cocktailService.search(text);
