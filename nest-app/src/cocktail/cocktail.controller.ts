@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post, UseGuards, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, UseGuards, Headers, Head } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { commentDto } from 'src/board/dto/comment.Dto';
 import { delCommentDto } from 'src/board/dto/delComment.Dto';
@@ -8,7 +8,7 @@ import { CocktailService } from './cocktail.service';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { RatingDto } from './dto/rating.Dto';
 
-@Controller('cocktail')
+@Controller('/cocktail')
 export class CocktailController {
 
     constructor(private readonly cocktailService : CocktailService){}
@@ -95,5 +95,13 @@ export class CocktailController {
         return await this.cocktailService.deleteComment(delComment,getToken(header));
     }
     //@Get('/juice/:id')
+
+    @ApiOperation({summary : "컨텐츠 기반 필터링 추천"})
+    @UseGuards(JwtAuthGuard)
+    @Get('/recommend/contentFiltering')
+    async contentFilteringRecommend(@Headers() header) {
+        this.logger.log("---------------contents filtering recommend ");
+        return await this.cocktailService.CFR(getToken(header));
+    }
 }
 

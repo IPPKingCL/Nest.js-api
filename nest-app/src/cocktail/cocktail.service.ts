@@ -223,7 +223,7 @@ export class CocktailService {
                 'SELECT cocktailId,sum(rating) cnt , imgUrl, c.name '
                 +'FROM rating, cocktail c '
                 +'WHERE date '+
-                'BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW() '+
+                'BETWEEN DATE_ADD(NOW(), INTERVAL -15 DAY ) AND NOW() '+
                 'and cocktailId=c.id '+
                 'group by cocktailId '+
                 'order by cnt desc limit 5'
