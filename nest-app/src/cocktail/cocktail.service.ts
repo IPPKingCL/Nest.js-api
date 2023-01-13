@@ -80,6 +80,10 @@ export class CocktailService {
 
     async search(text:number){
         try{
+            if(text==0){
+                const res = await this.getAll();
+                return res;
+            }
             const res = await this.cockRepository.query(
                 'select * '
                 +'from alcohol.cocktail c '
