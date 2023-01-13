@@ -6,6 +6,8 @@ import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { CocktailCommentEntity } from 'src/entities/cocktailComment.entity';
 import { RatingEntity } from 'src/entities/rating.entity';
+import { FavoriteRepository } from 'src/user/repository/favorite.repository';
+
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { CockInfoDto } from './Dto/CockInfo.Dto';
 import { AlchoRecipteRepository } from './repository/AlchoRecipe.repository';
@@ -14,6 +16,7 @@ import { CocktailCommentRepository } from './repository/CocktailComment.reposito
 import { JuiceRepository } from './repository/Juice.repository';
 import { JuiceRecipeRepository } from './repository/JuiceRecipe.repository';
 import { RatingRepository } from './repository/Rating.repository';
+import { UserRepository } from './repository/User.repository';
 
 @Injectable()
 export class CocktailService {
@@ -26,7 +29,9 @@ export class CocktailService {
         private readonly juiceRepository : JuiceRepository,
         private readonly alchoRepository : alchoRepository,
         private readonly ratingRepository : RatingRepository,
-        private readonly cocktailCommentRepository : CocktailCommentRepository
+        private readonly cocktailCommentRepository : CocktailCommentRepository,
+        private readonly userRepository : UserRepository,
+        private readonly favoriteRepository : FavoriteRepository
     ){}
     
     
@@ -330,18 +335,116 @@ export class CocktailService {
         }
     }
 
-    async CFR (header: string): Promise<object> {
+    async CFR (header): Promise<object> {
 
         try {
             const token = this.jwtService.decode(header);
 
-        }catch (err) {
-            
-        }
+            const user = await this.userInfo(token['id']); //유저 테이블 정보
+            const favorite = await this.userFavorite(token['id']); //유저 선호 테이블 정보
 
-        return;
+            console.log(user);
+            //가져온 정보 변수에 담기
+            const price = parseInt(user[0].price);
+            console.log(price)
+            const age = user[0]['age'];
+
+            const able = await this.ablePrice(age);
+
+            let lastPrice:number = 0; //디비 조회 할 때 기준 금액
+            
+            console.log(able);
+            console.log('프라이스 :'+price);
+            if(able>price){
+                lastPrice = (price+able)/2   
+            }else{
+                lastPrice = price;
+            }
+
+            if(favorite.length>0){
+                const list = await this.cocktailList(favorite,lastPrice);
+                console.log(list);
+                return list;
+            }else{
+                //랜덤
+            }
+
+           
+
+            
+
+
+
+            
+        }catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "칵테일 추천 실패" };
+        }
+ 
     }
 
+    async userInfo(id:number){
+        try{
+            const res = await this.userRepository.query(
+                'select * from user where id='+id
+            );
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return { success: false, msg: "유저 정보 조회 실패" };
+        }
+    }
+
+    async userFavorite(id:number){
+        try{
+            const res = await this.favoriteRepository.query(
+                'select alchoId from favorite where userId='+id
+            )
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false, msg: "유저 좋아하는 리스트 조회 실패"};
+        }
+    }
+
+    async ablePrice(age:number){
+        console.log('age : '+age)
+        if(20<=age&&age<23){
+            return 30000;
+        }else if(23<=age && age<28){
+            return 50000;
+        }else if(28<=age && age<32){
+            return 100000;
+        }else if(32<=age){
+            return 150000;
+        }else{
+            return 200000;
+        }
+    }
+
+    async cocktailList(favorite,lastPrice){
+        try{
+            let array = new Array<object>();
+            for(let i = 0 ; i<favorite.length; i++){
+                const res = await this.cockRepository.query(
+                    'select * '+
+                    'from cocktail c '+
+                    'inner join '+
+                    '(select cocktailId, price ' +
+                    'from alchoRecipe r, Alcho a '+
+                    'where a.alchoCategoryId='+favorite[i].alchoId +' and r.alchoId=a.id and price<'+ lastPrice+ ') k '+
+                    'on c.id=k.cocktailId; '
+                    
+                )
+                array.push(res);
+            }
+            return array;
+            
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:"칵테일 리스트 조회 실패"}
+        }
+    }
 }
 
    

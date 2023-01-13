@@ -111,5 +111,11 @@ export class CocktailController {
         this.logger.log("---------------contents filtering recommend ");
         return await this.cocktailService.CFR(getToken(header));
     }
+
+    @Get('/fucking/test')
+    async test(@Headers() header){
+        this.logger.log("---------------fucking ");
+        return await this.cocktailService.userInfo(37)
+    }
 }
 
