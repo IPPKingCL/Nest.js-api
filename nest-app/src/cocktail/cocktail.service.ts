@@ -23,29 +23,29 @@ export class CocktailService {
     private readonly logger = new Logger(CocktailService.name);
     constructor(
         private jwtService: JwtService,
-        private readonly cockRepository : CocktailRepository,
-        private readonly alchoRecipeRepository : AlchoRecipteRepository,
-        private readonly juiceRecipeRepository : JuiceRecipeRepository,
-        private readonly juiceRepository : JuiceRepository,
-        private readonly alchoRepository : alchoRepository,
-        private readonly ratingRepository : RatingRepository,
-        private readonly cocktailCommentRepository : CocktailCommentRepository,
-        private readonly userRepository : UserRepository,
-        private readonly favoriteRepository : FavoriteRepository
-    ){}
-    
-    
-    async getAll() : Promise<CocktailEntity[]|object>{
-        try{
+        private readonly cockRepository: CocktailRepository,
+        private readonly alchoRecipeRepository: AlchoRecipteRepository,
+        private readonly juiceRecipeRepository: JuiceRecipeRepository,
+        private readonly juiceRepository: JuiceRepository,
+        private readonly alchoRepository: alchoRepository,
+        private readonly ratingRepository: RatingRepository,
+        private readonly cocktailCommentRepository: CocktailCommentRepository,
+        private readonly userRepository: UserRepository,
+        private readonly favoriteRepository: FavoriteRepository
+    ) { }
+
+
+    async getAll(): Promise<CocktailEntity[] | object> {
+        try {
             const res = await this.cockRepository.find();
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg : "전체 조회 중 에러발생"}
+            return { success: false, msg: "전체 조회 중 에러발생" }
         }
     }
-    async getOne(id:number) {
-        try{
+    async getOne(id: number) {
+        try {
             // const res = await this.cockRepository.query(
             //     "select c.id,c.name,c.imgUrl,c.dosu,c.likeOne,j.juiceId,j.amount juiceamout, a.alchoId, a.amount alchoamout "
             //    +"from juiceRecipe j,cocktail c, alchoRecipe a "
@@ -53,72 +53,72 @@ export class CocktailService {
             // )
 
             const resCock = await this.cockRepository.createQueryBuilder('cocktail')
-                    .where("id=:id",{id:id})
-                    .getOne();
-            
+                .where("id=:id", { id: id })
+                .getOne();
+
             const resJuice = await this.juiceRecipeRepository.query(
                 "select j.id, j.name, j.type, r.amount, j.imgUrl "
-                +"from Juice j, juiceRecipe r "
-                +"where j.id=r.juiceId and r.cocktailId="+id+";"
+                + "from Juice j, juiceRecipe r "
+                + "where j.id=r.juiceId and r.cocktailId=" + id + ";"
             );
 
             const resAlcho = await this.alchoRecipeRepository.query(
                 "select a.id, a.name, a.category, a.imgUrl, r.amount , r.only "
-                +"from Alcho a, alchoRecipe r "
-                +"where a.id=r.alchoId and r.cocktailId="+id+";"
+                + "from Alcho a, alchoRecipe r "
+                + "where a.id=r.alchoId and r.cocktailId=" + id + ";"
             );
             console.log(resAlcho)
 
             const res = {
-                cocktail : resCock,
-                cockJuice : resJuice,
-                cockAlcho : resAlcho,
+                cocktail: resCock,
+                cockJuice: resJuice,
+                cockAlcho: resAlcho,
             }
 
             return res;
-            
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false}
+            return { success: false }
         }
     }
 
-    async search(text:number){
-        try{
-            if(text==0){
+    async search(text: number) {
+        try {
+            if (text == 0) {
                 const res = await this.getAll();
                 return res;
             }
             const res = await this.cockRepository.query(
                 'select * '
-                +'from alcohol.cocktail c '
-                +'inner join '
-                +'(select cocktailId '
-                +'from alcohol.alchoRecipe r, alcohol.Alcho a '
-                +'where a.alchoCategoryId='+text+' and r.alchoId=a.id) k '
-                +'on c.id=k.cocktailId;'
+                + 'from alcohol.cocktail c '
+                + 'inner join '
+                + '(select cocktailId '
+                + 'from alcohol.alchoRecipe r, alcohol.Alcho a '
+                + 'where a.alchoCategoryId=' + text + ' and r.alchoId=a.id) k '
+                + 'on c.id=k.cocktailId;'
             )
-            
+
             return res;
 
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:err};
+            return { success: false, msg: err };
         }
     }
 
-    async alchoCock(alchoDto:AlchoCockDto):Promise<CockInfoDto[]|object>{
-        try{
+    async alchoCock(alchoDto: AlchoCockDto): Promise<CockInfoDto[] | object> {
+        try {
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
-                        .leftJoinAndSelect('alchoRecipe.cocktail',"cocktail.id")
-                        .where("alchoId=:id",{id:alchoDto.id})
-                        .getMany();
+                .leftJoinAndSelect('alchoRecipe.cocktail', "cocktail.id")
+                .where("alchoId=:id", { id: alchoDto.id })
+                .getMany();
             console.log(res[0]);
 
-            if(res.length>0){
-                const cockArr:Array<CockInfoDto>=[];
+            if (res.length > 0) {
+                const cockArr: Array<CockInfoDto> = [];
                 let i = 0;
-                for(i;i<res.length;i++){
+                for (i; i < res.length; i++) {
                     const cockInfoDto = new CockInfoDto();
                     cockInfoDto.id = res[i]['cocktail'].id;
                     cockInfoDto.name = res[i]['cocktail'].name;
@@ -128,63 +128,63 @@ export class CocktailService {
                     cockInfoDto.imgUrl = res[i]['cocktail'].imgUrl;
                     cockArr.push(cockInfoDto);
                 }
-                
+
                 return cockArr;
-            }else{
-                return {success:false, msg:"no", category : alchoDto.category};
+            } else {
+                return { success: false, msg: "no", category: alchoDto.category };
             }
-            
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false}
+            return { success: false }
         }
     }
 
-    async likeOne(id:number) : Promise<object>{ 
-        try{
+    async likeOne(id: number): Promise<object> {
+        try {
             await this.cockRepository.query(
-                'update cocktail set likeOne=likeOne+1 where id ='+id
+                'update cocktail set likeOne=likeOne+1 where id =' + id
             );
 
-            return {success:true};
-        }catch(err){
+            return { success: true };
+        } catch (err) {
             this.logger.error(err);
-            return {success:false ,msg:"로그인 후 이용 가능합니다"};
+            return { success: false, msg: "로그인 후 이용 가능합니다" };
         }
     }
 
-    async getCategoryCock(category:string){
-        try{
+    async getCategoryCock(category: string) {
+        try {
             const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
-                        .leftJoinAndSelect('alchoRecipe.alcho','alcho.id')
-                        .where("category=:category",{category:category})
-                        .getMany();
+                .leftJoinAndSelect('alchoRecipe.alcho', 'alcho.id')
+                .where("category=:category", { category: category })
+                .getMany();
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"술 종류 별 조회 중 에러 발생"};
+            return { success: false, msg: "술 종류 별 조회 중 에러 발생" };
         }
     }
 
-    async categoryCock(category):Promise<AlchoRecipeEntity|object>{
-        try{
+    async categoryCock(category): Promise<AlchoRecipeEntity | object> {
+        try {
             //서브 쿼리로 갈지 아님 디비를 두번 갈지 나중에 성능보고 결정
             const res = await this.cockRepository.query(
-                "select * "+
-                'from cocktail c, '+
-                '(select r.cocktailId '+
-                'from alchoRecipe r '+
-                'left join Alcho a '+
-                'on a.id= r.alchoId '+
-                "where a.category='"+category+"') a "+
+                "select * " +
+                'from cocktail c, ' +
+                '(select r.cocktailId ' +
+                'from alchoRecipe r ' +
+                'left join Alcho a ' +
+                'on a.id= r.alchoId ' +
+                "where a.category='" + category + "') a " +
                 'where c.id = a.cocktailId'
             );
-            
+
             console.log(res);
 
-            const cockArr:Array<CockInfoDto>=[];
+            const cockArr: Array<CockInfoDto> = [];
             let i = 0;
-            for(i;i<res.length;i++){
+            for (i; i < res.length; i++) {
                 const cockInfoDto = new CockInfoDto();
                 cockInfoDto.id = res[i].id;
                 cockInfoDto.name = res[i].name;
@@ -194,94 +194,94 @@ export class CocktailService {
                 cockInfoDto.imgUrl = res[i].imgUrl;
                 cockArr.push(cockInfoDto);
             }
-            
+
             return cockArr;
-           
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false};
+            return { success: false };
         }
     }
 
-    async rating(rating,header){
-        try{
+    async rating(rating, header) {
+        try {
             const token = this.jwtService.decode(header);
 
-            const res = await this.checkRating(token['id'],rating.cocktailId);
-            
+            const res = await this.checkRating(token['id'], rating.cocktailId);
+
             const ratingEntity = new RatingEntity();
 
 
             ratingEntity.cocktail = rating.cocktailId;
-            ratingEntity.user =token['id'];
+            ratingEntity.user = token['id'];
             ratingEntity.rating = rating.rating;
             ratingEntity.date = new Date();
-            
-            if(!res.success){
+
+            if (!res.success) {
                 await this.ratingRepository.save(ratingEntity);
-                return {success:true};
-            }else{
-                return {success:false, msg:'이미 평가하신 칵테일입니다'};
+                return { success: true };
+            } else {
+                return { success: false, msg: '이미 평가하신 칵테일입니다' };
             }
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:'별점 등록 중 에러 발생'};
+            return { success: false, msg: '별점 등록 중 에러 발생' };
         }
     }
 
-    async checkRating(userId:number, cocktailId:number){
-        try{
+    async checkRating(userId: number, cocktailId: number) {
+        try {
             const res = await this.ratingRepository.createQueryBuilder('Rating')
-                        .where('userId=:userId',{userId:userId})
-                        .andWhere('cocktailId=:cocktailId',{cocktailId:cocktailId})
-                        .getOne();
-            if(res){
-                return {success:true};
-            }else{
-                return {sucess:false};
+                .where('userId=:userId', { userId: userId })
+                .andWhere('cocktailId=:cocktailId', { cocktailId: cocktailId })
+                .getOne();
+            if (res) {
+                return { success: true };
+            } else {
+                return { sucess: false };
             }
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"별점 등록 확인 중 에러 발생"};
+            return { success: false, msg: "별점 등록 확인 중 에러 발생" };
         }
     }
 
-    async ratingDay(){
-        try{
+    async ratingDay() {
+        try {
             const res = await this.ratingRepository.query(
                 'SELECT cocktailId,sum(rating) cnt , imgUrl, c.name '
-                +'FROM rating, cocktail c '
-                +'WHERE date '+
-                'BETWEEN DATE_ADD(NOW(), INTERVAL -15 DAY ) AND NOW() '+
-                'and cocktailId=c.id '+
-                'group by cocktailId '+
+                + 'FROM rating, cocktail c '
+                + 'WHERE date ' +
+                'BETWEEN DATE_ADD(NOW(), INTERVAL -15 DAY ) AND NOW() ' +
+                'and cocktailId=c.id ' +
+                'group by cocktailId ' +
                 'order by cnt desc limit 5'
             )
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"24시간 이내 별점 조회 중 에러 발생"};
+            return { success: false, msg: "24시간 이내 별점 조회 중 에러 발생" };
         }
     }
 
-    async ratingCount(){
-        try{
+    async ratingCount() {
+        try {
             const res = await this.ratingRepository.query(
                 'select cocktailId,count(*) as count '
-                +'from rating '
-                +'group by cocktailId'
+                + 'from rating '
+                + 'group by cocktailId'
             );
-                  
-            return res;          
-        }catch(err){
+
+            return res;
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"별점 수 조회 중 에러 발생"};
+            return { success: false, msg: "별점 수 조회 중 에러 발생" };
         }
     }
 
     /***********************칵테일 댓글***********************/
-    async commentInsert(commentDto, header):Promise<object>{
-        try{
+    async commentInsert(commentDto, header): Promise<object> {
+        try {
             const token = this.jwtService.decode(header);
             const cocktailCommentEntity = new CocktailCommentEntity();
 
@@ -294,24 +294,24 @@ export class CocktailService {
 
             await this.cocktailCommentRepository.save(cocktailCommentEntity);
 
-            return {success: true};
-        }catch(err){
+            return { success: true };
+        } catch (err) {
             this.logger.error(err);
-            return {success : false, msg : "댓글 삽입 중 에러 발생"};
+            return { success: false, msg: "댓글 삽입 중 에러 발생" };
         }
     }
 
-    async commentAll(id:number){
-        try{
+    async commentAll(id: number) {
+        try {
             const res = await this.cocktailCommentRepository.createQueryBuilder('cocktailComment')
-                        .leftJoinAndSelect('cocktailComment.user','user.id')
-                        .where("cocktailId=:cocktailId",{cocktailId:id})
-                        .andWhere("isDeleted=false")
-                        .getMany();
+                .leftJoinAndSelect('cocktailComment.user', 'user.id')
+                .where("cocktailId=:cocktailId", { cocktailId: id })
+                .andWhere("isDeleted=false")
+                .getMany();
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success : false, msg : "댓글 조회 중 에러 발생"};
+            return { success: false, msg: "댓글 조회 중 에러 발생" };
         }
     }
 
@@ -335,7 +335,7 @@ export class CocktailService {
         }
     }
 
-    async CFR (header): Promise<object> {
+    async CFR(header): Promise<object> {
 
         try {
             const token = this.jwtService.decode(header);
@@ -351,116 +351,146 @@ export class CocktailService {
 
             const able = await this.ablePrice(age);
 
-            let lastPrice:number = 0; //디비 조회 할 때 기준 금액
-            
+            let lastPrice: number = 0; //디비 조회 할 때 기준 금액
+
             console.log(able);
-            console.log('프라이스 :'+price);
-            if(able>price){
-                lastPrice = (price+able)/2   
-            }else{
+            console.log('프라이스 :' + price);
+            if (able > price) {
+                lastPrice = (price + able) / 2
+            } else {
                 lastPrice = price;
             }
 
-            if(favorite.length>0){
-                const list = await this.cocktailList(favorite,lastPrice);
-                console.log(list);
+            if (favorite.length > 0) {
+                const list = await this.cocktailList(favorite, lastPrice);
                 const arr = await this.makeArray(list);
 
-                const res = new Array();
-                let i = 0;
-                
-                while(i<3){
-                    const randomValue = arr[Math.floor(Math.random() * arr.length)];
-                    res.push(randomValue);
-                    i++;//중복처리는 나중에 처리 예정
-                }
-                
+                const res = await this.returnArray(arr);
+
                 return res;
-            }else{
-                //랜덤
+            } else {
+                const list = await this.randomList(lastPrice);
+                const res = await this.returnArray(list);
+
+                return res;
             }
 
-         
-        }catch (err) {
+
+        } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "칵테일 추천 실패" };
         }
- 
+
     }
 
-    async userInfo(id:number){
-        try{
+    async userInfo(id: number) {
+        try {
             const res = await this.userRepository.query(
-                'select * from user where id='+id
+                'select * from user where id=' + id
             );
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "유저 정보 조회 실패" };
         }
     }
 
-    async userFavorite(id:number){
-        try{
+    async userFavorite(id: number) {
+        try {
             const res = await this.favoriteRepository.query(
-                'select alchoId from favorite where userId='+id
+                'select alchoId from favorite where userId=' + id
             )
             return res;
-        }catch(err){
+        } catch (err) {
             this.logger.error(err);
-            return {success : false, msg: "유저 좋아하는 리스트 조회 실패"};
+            return { success: false, msg: "유저 좋아하는 리스트 조회 실패" };
         }
     }
 
-    async ablePrice(age:number){
-        console.log('age : '+age)
-        if(20<=age&&age<23){
+    async ablePrice(age: number) {
+        console.log('age : ' + age)
+        if (20 <= age && age < 23) {
             return 30000;
-        }else if(23<=age && age<28){
+        } else if (23 <= age && age < 28) {
             return 50000;
-        }else if(28<=age && age<32){
+        } else if (28 <= age && age < 32) {
             return 100000;
-        }else if(32<=age){
+        } else if (32 <= age) {
             return 150000;
-        }else{
+        } else {
             return 200000;
         }
     }
 
-    async cocktailList(favorite,lastPrice){
-        try{
+    async cocktailList(favorite, lastPrice) {
+        try {
             let array = new Array<object>();
-            for(let i = 0 ; i<favorite.length; i++){
+            for (let i = 0; i < favorite.length; i++) {
                 const res = await this.cockRepository.query(
-                    'select * '+
-                    'from cocktail c '+
-                    'inner join '+
+                    'select * ' +
+                    'from cocktail c ' +
+                    'inner join ' +
                     '(select cocktailId, price ' +
-                    'from alchoRecipe r, Alcho a '+
-                    'where a.alchoCategoryId='+favorite[i].alchoId +' and r.alchoId=a.id and price<'+ lastPrice+ ') k '+
+                    'from alchoRecipe r, Alcho a ' +
+                    'where a.alchoCategoryId=' + favorite[i].alchoId + ' and r.alchoId=a.id and price<' + lastPrice + ') k ' +
                     'on c.id=k.cocktailId; '
-                    
+
                 )
                 array.push(res);
             }
             return array;
-            
-        }catch(err){
+
+        } catch (err) {
             this.logger.error(err);
-            return {success:false, msg:"칵테일 리스트 조회 실패"}
+            return { success: false, msg: "칵테일 리스트 조회 실패" }
         }
     }
 
-    async makeArray(list){
+    async makeArray(list) {
         const arr = new Array();
-        for(let i = 0; i<list.length; i++){
-            for(let j = 0 ; j<list[i].length;j++){
+        for (let i = 0; i < list.length; i++) {
+            for (let j = 0; j < list[i].length; j++) {
                 arr.push(list[i][j]);
             }
         }
 
         return arr;
     }
+
+    async randomList(lastPrice: number) {
+        try {
+            const res = await this.cockRepository.query(
+                'select * ' +
+                'from cocktail c ' +
+                'inner join ' +
+                '(select cocktailId, price ' +
+                'from alchoRecipe r, Alcho a ' +
+                'where r.alchoId=a.id and price<' + lastPrice + ' and sugar*r.amount>80) k ' +
+                'on c.id=k.cocktailId; '
+            )
+
+            return res;
+        } catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "칵테일 랜덤리스트 조회 실패" }
+        }
+    }
+
+    async returnArray(arr) {
+        
+        
+        const res = new Array();
+        let i = 0;
+        
+        while (i < 3) {
+            const randomValue = await arr[Math.floor(Math.random() * arr.length)];
+            console.log(randomValue);
+            res.push(randomValue);
+            i++;//중복처리는 나중에 처리 예정
+        }
+
+        console.log(res)
+        return res;
+    }
 }
 
-   

@@ -115,7 +115,7 @@ export class CocktailController {
     @Get('/fucking/test')
     async test(@Headers() header){
         this.logger.log("---------------fucking ");
-        return await this.cocktailService.userInfo(37)
+        return await this.cocktailService.randomList(30000);
     }
 }
 
