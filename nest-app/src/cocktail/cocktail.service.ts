@@ -335,6 +335,7 @@ export class CocktailService {
         }
     }
 
+    /**콘텐츠 기반 필터링 추천 */
     async CFR(header): Promise<object> {
 
         try {
@@ -383,6 +384,7 @@ export class CocktailService {
 
     }
 
+    /**칵테일 추천을 위한 해당 유저의 정보 조회 */
     async userInfo(id: number) {
         try {
             const res = await this.userRepository.query(
@@ -395,6 +397,7 @@ export class CocktailService {
         }
     }
 
+    /**유저가 좋아한다고 한 favorite list 조회 */
     async userFavorite(id: number) {
         try {
             const res = await this.favoriteRepository.query(
@@ -407,7 +410,8 @@ export class CocktailService {
         }
     }
 
-    async ablePrice(age: number) {  //가능한 금액 산정
+    /**가능 금액 산정 */
+    async ablePrice(age: number) {  
         console.log('age : ' + age)
         if (20 <= age && age < 23) {
             return 30000;
@@ -422,6 +426,7 @@ export class CocktailService {
         }
     }
 
+    /**추천 칵테일 리스트 조회 */
     async cocktailList(favorite, lastPrice) {
         try {
             let array = new Array<object>();
@@ -446,7 +451,7 @@ export class CocktailService {
         }
     }
 
-    async makeArray(list) {
+    async makeArray(list) {  //배열로 만들기
         const arr = new Array();
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < list[i].length; j++) {
@@ -457,7 +462,8 @@ export class CocktailService {
         return arr;
     }
 
-    async randomList(lastPrice: number) {
+    /*랜덤 리스트 뽑아내기*/
+    async randomList(lastPrice: number) {  
         try {
             const res = await this.cockRepository.query(
                 'select * ' +
