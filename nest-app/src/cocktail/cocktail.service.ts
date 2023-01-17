@@ -489,8 +489,12 @@ export class CocktailService {
         while (i < 3) {
             const randomValue = await arr[Math.floor(Math.random() * arr.length)];
             console.log(randomValue);
-            res.push(randomValue);
-            i++;//중복처리는 나중에 처리 예정
+
+            if(res.indexOf(randomValue) === -1){
+                res.push(randomValue);
+                i++;
+            }
+            
         }
 
         return res;
