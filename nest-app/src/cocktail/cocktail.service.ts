@@ -462,7 +462,7 @@ export class CocktailService {
         return arr;
     }
 
-    /*랜덤 리스트 뽑아내기*/
+    /*favorite 없을 때 리스트 뽑아내기*/
     async randomList(lastPrice: number) {  
         try {
             const res = await this.cockRepository.query(
@@ -482,6 +482,7 @@ export class CocktailService {
         }
     }
 
+    /**리스트에서 랜덤으로 3개 추천 */
     async returnArray(arr) {
         const res = new Array();
         let i = 0;
