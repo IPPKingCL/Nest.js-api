@@ -13,6 +13,8 @@ import { ImgRepositoy } from './repository/img.repository';
 import { BoardRecommandRepository } from './repository/boardRecommand.repository';
 import { BoardRecommandEntity } from 'src/entities/boardRecommand.entity';
 import { DataSource } from 'typeorm';
+import { CommentRecommendRepository } from './repository/commentRecommend.repository';
+import { CommentRecommendEntity } from 'src/entities/commentRecommend.entity';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -24,7 +26,8 @@ export class BoardService {
         private readonly imgRepository: ImgRepositoy,
         private readonly recommandRepository: BoardRecommandRepository,
         private jwtService: JwtService,
-        private dataSource : DataSource
+        private dataSource : DataSource,
+        private readonly commentRecommendRepository : CommentRecommendRepository
     ) { }  //댓글
 
     getAll(): Promise<BoardEntity[]> {
@@ -418,6 +421,22 @@ export class BoardService {
         } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "댓글 삭제 실패" };
+        }
+    }
+
+    async recommendComment(recommend, header) : Promise<object>{
+        try{
+            const token = this.jwtService.decode(header);
+
+            const commentRecommendEntity = new CommentRecommendEntity();
+            commentRecommendEntity.user = token['id'];
+            commentRecommendEntity.comment = recommend.id;
+            await this.commentRecommendRepository.save(commentRecommendEntity);
+
+            return {success:true};
+        }catch(err){
+            this.logger.error(err);
+            return {success :false , msg : '댓글 추천 중 에러발생'}
         }
     }
 

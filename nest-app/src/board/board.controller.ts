@@ -137,7 +137,8 @@ export class BoardController {
     @UseGuards(JwtAuthGuard)
     @Post('/recommendComment')
     async recommendComment(@Body() recommend:delCommentDto , @Headers() header){
-
+        this.logger.log('---------------'+recommend.id +' 번 댓글 추천 ');
+        return await this.boardService.recommendComment(recommend,getToken(header));
     }
 
     
