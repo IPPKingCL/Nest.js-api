@@ -428,12 +428,35 @@ export class BoardService {
         try{
             const token = this.jwtService.decode(header);
 
-            const commentRecommendEntity = new CommentRecommendEntity();
-            commentRecommendEntity.user = token['id'];
-            commentRecommendEntity.comment = recommend.id;
-            await this.commentRecommendRepository.save(commentRecommendEntity);
-
-            return {success:true};
+            const check = await this.commentRecommendRepository.createQueryBuilder()
+                        .where("userId=:userId",{userId:token['id']})
+                        .andWhere("commentId=:commentId",{commentId:recommend.id})
+                        .getOne();
+            console.log(check);
+            if(check==null){
+                const commentRecommendEntity = new CommentRecommendEntity();
+                commentRecommendEntity.user = token['id'];
+                commentRecommendEntity.comment = recommend.id;
+                await this.commentRecommendRepository.save(commentRecommendEntity);
+    
+                return {success:true};
+            }else{
+                if(check['isDeleted']){
+                    await this.commentRecommendRepository.createQueryBuilder()
+                            .update('commentRecommend')
+                            .set({isDeleted:false})
+                            .where("userId=:userId",{userId:token['id']})
+                            .execute();
+                }else{
+                    await this.commentRecommendRepository.createQueryBuilder()
+                            .update('commentRecommend')
+                            .set({isDeleted:true})
+                            .where("userId=:userId",{userId:token['id']})
+                            .execute();
+                }
+                return {success:true};
+            }
+            
         }catch(err){
             this.logger.error(err);
             return {success :false , msg : '댓글 추천 중 에러발생'}

@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CommentEntity } from "./comment.entity";
 import { UserEntity } from "./user.entity";
 
@@ -6,6 +6,9 @@ import { UserEntity } from "./user.entity";
 export class CommentRecommendEntity{
     @PrimaryGeneratedColumn('increment')
     id : number;
+
+    @Column()
+    isDeleted : boolean;
 
     @ManyToOne((type)=>CommentEntity, (commentEntity)=>commentEntity.commentRecommendEntitys)
     comment : CommentEntity;
