@@ -147,11 +147,14 @@ export class AdminService {
             const res = await this.cockRepository.query(
                 "insert into cocktail(name, dosu, imgUrl) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"')"
             );
+
+            console.log(res);
             
             const find = await this.cockRepository.createQueryBuilder()
             .where('name=:name',{name:cocktail.name})
             .getOne();
 
+            console.log(find);
             const id = find.id;
             
 
@@ -212,10 +215,13 @@ export class AdminService {
             juiceRecipe.juice = insertDto.id;
             juiceRecipe.unitNum = insertDto.unit;
             
-            await this.juiceRecipeRepository.query(
-                'insert into juiceRecipe(amount, juiceId, cocktailId, unitNumId) '
-                +'values ('+insertDto[0].amount+','+insertDto[0].name+','+id+','+insertDto[0].unit+')'
-            );
+            for(let i = 0; i<insertDto.length;i++){
+                await this.juiceRecipeRepository.query(
+                    'insert into juiceRecipe(amount, juiceId, cocktailId, unitNumId) '
+                    +'values ('+insertDto[i].amount+','+insertDto[i].name+','+id+','+insertDto[i].unit+')'
+                );
+            }
+            
             
             return {success:true};
         }catch(err){
