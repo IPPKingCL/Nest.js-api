@@ -18,9 +18,10 @@ export class BoardController {
     private readonly logger = new Logger(BoardController.name);
 
     @ApiOperation({summary:' 게시판 전체 조회'})
+    @UseGuards(JwtAuthGuard)
     @Get('/')
-    async getTest(){
-        return await this.boardService.getAll();
+    async getTest(@Headers() header){
+        return await this.boardService.getAll(getToken(header));
     }
 
     @ApiOperation({summary:' 토큰 여부 체크'})

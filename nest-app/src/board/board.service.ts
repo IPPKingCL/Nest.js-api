@@ -30,13 +30,18 @@ export class BoardService {
         private readonly commentRecommendRepository : CommentRecommendRepository
     ) { }  //댓글
 
-    getAll(): Promise<BoardEntity[]> {
+    async getAll(header): Promise<BoardEntity[]> {
         try {
-            return this.repository.createQueryBuilder('board')
-                .leftJoinAndSelect('board.user', 'user.id')
-                .andWhere("isDeleted=false")
-                .orderBy("dateTime", "DESC")
-                .getMany();
+            const token = await this.jwtService.decode(header);
+            return this.repository.query(
+                "select b.id, b.title, b.contents, b.dateTime, b.boardType, r.userId  "+
+                "from alcohol.board b "+
+                "left join alcohol.boardRecommand r "+
+                "on b.id = r.boardId and r.userId="+token['id'] +
+                " where b.isDeleted=false "+
+                "order by dateTime desc;"
+            )
+                
         } catch (err) {
             this.logger.error("게시판 목록 조회 중 에러 발생")
         }
@@ -432,7 +437,8 @@ export class BoardService {
                         .where("userId=:userId",{userId:token['id']})
                         .andWhere("commentId=:commentId",{commentId:recommend.id})
                         .getOne();
-            console.log(check);
+            
+
             if(check==null){
                 const commentRecommendEntity = new CommentRecommendEntity();
                 commentRecommendEntity.user = token['id'];
