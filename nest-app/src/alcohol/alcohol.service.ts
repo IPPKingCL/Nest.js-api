@@ -20,6 +20,7 @@ export class AlcoholService {
     ){}
 
     getAll() : Promise<AlchoEntity[]>{
+        console.log("????????????")
         return this.alchoRepository.find();
     }
 

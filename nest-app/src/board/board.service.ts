@@ -37,8 +37,8 @@ export class BoardService {
                 "select b.id, b.title, b.contents, b.dateTime, b.boardType, r.userId  "+
                 "from alcohol.board b "+
                 "left join alcohol.boardRecommand r "+
-                "on b.id = r.boardId and r.userId="+token['id'] +
-                " where b.isDeleted=false "+
+                "on b.id = r.boardId and r.userId="+token['id'] +" "+
+                "where b.isDeleted=false "+
                 "order by dateTime desc;"
             )
                 

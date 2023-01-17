@@ -5,18 +5,32 @@ import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { AlcoholService } from './alcohol.service';
 import { AlchoCommentDto } from './dto/alchoComment.Dto';
+import * as NodeCache from 'node-cache';
+import { AlchoEntity } from 'src/entities/alcho.entity';
 
 @Controller('alcohol')
 export class AlcoholController {
-    
-    constructor(private readonly alchoService : AlcoholService){}
+    cache:NodeCache;
+    constructor(private readonly alchoService : AlcoholService){
+        this.cache = new NodeCache();
+    }
     private readonly logger = new Logger(AlcoholController.name);
     
     @ApiOperation({summary:' 술 정보 리스트 조회'})
     @Get('/')
     async getTest(){
         this.logger.log("---------------select alcohol ");
-        return await this.alchoService.getAll();
+        const cacheKey = 1;
+        let value = this.cache.get<AlchoEntity[]>(cacheKey);
+
+        
+        if(!value){
+            const result =  await this.alchoService.getAll();
+            value = result;
+            this.cache.set(cacheKey, result,60*60);
+        }
+
+        return value;
     }
 
     @ApiOperation({summary:' 술 정보 디테일 조회'})
