@@ -34,7 +34,7 @@ export class BoardService {
         try {
             const token = await this.jwtService.decode(header);
             return this.repository.query(
-                "select b.id, b.title, b.contents, b.dateTime, b.boardType, r.userId  "+
+                "select b.id, b.title, b.contents, b.isModified, b.dateTime, b.boardType, r.userId  "+
                 "from alcohol.board b "+
                 "left join alcohol.boardRecommand r "+
                 "on b.id = r.boardId and r.userId="+token['id'] +" "+
