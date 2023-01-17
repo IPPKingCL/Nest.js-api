@@ -133,6 +133,13 @@ export class BoardController {
         return await this.boardService.deleteComment(delComment, getToken(header));
     }
 
+    @ApiOperation({summary:' 게시글 댓글 추천'})
+    @UseGuards(JwtAuthGuard)
+    @Post('/recommendComment')
+    async recommendComment(@Body() recommend:delCommentDto , @Headers() header){
+
+    }
+
     
 }
 

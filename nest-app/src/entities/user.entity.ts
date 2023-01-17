@@ -5,6 +5,7 @@ import { userStatus } from '../user/enumType/userStatus';
 import { AlchoCommentEntity } from './alchoComment.entity';
 import { BoardRecommandEntity } from './boardRecommand.entity';
 import { CocktailCommentEntity } from './cocktailComment.entity';
+import { CommentRecommendEntity } from './commentRecommend.entity';
 import { FavoriteEntity, } from './favoritList.entity';
 import { RatingEntity } from './rating.entity';
 
@@ -70,5 +71,8 @@ export class UserEntity {
 
     @OneToMany((type)=>CocktailCommentEntity, (cocktailCommentEntity)=>cocktailCommentEntity.user)
     cocktailCommentEntitys : CocktailCommentEntity[];
+
+    @OneToMany((type) => CommentRecommendEntity,(commentRecommendEntity)=>commentRecommendEntity.user)
+    commentRecommendEntitys : CommentRecommendEntity[];
        
 }

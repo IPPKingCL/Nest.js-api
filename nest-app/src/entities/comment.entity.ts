@@ -1,7 +1,8 @@
 import { UserEntity } from "src/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { BoardEntity } from "./board.entity";
+import { CommentRecommendEntity } from "./commentRecommend.entity";
 
 @Entity('comment')
 export class CommentEntity{
@@ -29,4 +30,7 @@ export class CommentEntity{
 
     @ManyToOne((type)=>UserEntity, (userEntitiy)=>userEntitiy.commentEntitiys)
     user : UserEntity;
+
+    @OneToMany((type)=>CommentRecommendEntity, (commentRecommendEntity)=>commentRecommendEntity.user)
+    commentRecommendEntitys : CommentRecommendEntity[];
 }
