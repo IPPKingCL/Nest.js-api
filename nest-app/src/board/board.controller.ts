@@ -19,7 +19,7 @@ export class BoardController {
 
     @ApiOperation({summary:' 게시판 전체 조회'})
     @UseGuards(JwtAuthGuard)
-    @Get('/')
+    @Post('/')
     async getTest(@Headers() header){
         return await this.boardService.getAll(getToken(header));
     }
