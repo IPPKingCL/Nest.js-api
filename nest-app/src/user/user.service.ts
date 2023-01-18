@@ -295,21 +295,27 @@ export class UserService {
 
     async emailLogin(emailLoginDto : UserEmailDto) {
         try{
-            const res = await this.repository.createQueryBuilder("user")
-            .where('email = :email',{email:emailLoginDto.email})
-            .andWhere('password = :password',{password:emailLoginDto.password})
-            .getOne();
+            // const res = await this.repository.createQueryBuilder("user")
+            // .where('email = :email',{email:emailLoginDto.email})
+            // .andWhere('password = :password',{password:emailLoginDto.password})
+            // .getOne();
 
+            const res = await this.repository.query(
+                'select * from user ' +
+                'where email = ' + emailLoginDto.email + ' ' +
+                'and password = ' + emailLoginDto.password
+            )
+            console.log(res);
            
             if(res==null){
-                return {success:true};
+                return {success:false};
             }else{
                 const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload);
 
                 console.log(loginToken);
                 console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
-                return {success:false, msg:'존재하는 사용자',token : loginToken};
+                return {success:true, msg:'존재하는 사용자',token : loginToken};
             }
         }catch(err){
             this.logger.error(err);
