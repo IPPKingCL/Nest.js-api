@@ -142,6 +142,11 @@ export class BoardController {
         return await this.boardService.recommendComment(recommend,getToken(header));
     }
 
+    @ApiOperation({summary: ' 게시글 추천 상위 댓글 조회'})
+    @Get('/select/comment/:id')
+    async commentLimit(@Param("id") boardId:number){
+        return await this.boardService.commentLimit(boardId);
+    }
     
 }
 
