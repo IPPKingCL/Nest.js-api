@@ -36,7 +36,7 @@ export class BoardService {
             return this.repository.query(
                 "select a.id, a.title, a.contents, a.isModified, a.dateTime, a.boardType, r.userId, a.img ,a.nickname "+
                 "from ("+
-                "select b.id, b.title, b.contents, b.isModified, b.dateTime, b.boardType, b.isDeleted, u.img, u.nickname"+
+                "select b.id, b.title, b.contents, b.isModified, b.dateTime, b.boardType, b.isDeleted, u.img, u.nickname "+
                 "from alcohol.board b , alcohol.user u "+
                 "where b.userId=u.id) a "+
                 "left join alcohol.boardRecommand r "+
