@@ -472,6 +472,26 @@ export class BoardService {
         }
     }
 
+    async commentLimit(boardId:number){
+        try{
+            const res = await this.coRepository.query(
+                "select * "+
+                "from alcohol.comment c "+
+                "left join "+
+                "(select id,count(*) as count,commentId "+
+                "from alcohol.commentRecommend) r "+
+                "on c.id = r.commentId "+
+                "where boardId = "+boardId+" "+
+                "order by count desc "+
+                "limit 2;"
+            )
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false,msg:"상위 추천 댓글 조회 실패"};
+        }
+    }
+
 
     /* raw 쿼리 이용하는 법
         async increaseViewCount(id: number): Promise<void> {
