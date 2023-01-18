@@ -7,18 +7,30 @@ import { getToken } from 'src/util/token';
 import { CocktailService } from './cocktail.service';
 import { AlchoCockDto } from './Dto/alchoCock.Dto';
 import { RatingDto } from './dto/rating.Dto';
+import * as NodeCache from 'node-cache';
+import { CocktailEntity } from 'src/entities/cocktail.entity';
 
 @Controller('/cocktail')
 export class CocktailController {
-
-    constructor(private readonly cocktailService : CocktailService){}
+    cache:NodeCache;
+    constructor(private readonly cocktailService : CocktailService){
+        this.cache = new NodeCache();
+    }
     private readonly logger = new Logger(CocktailController.name);
 
     @ApiOperation({summary: ' 전체 조회'})
     @Get('/')
     async getAll(){
         this.logger.log("---------------select all cocktail ");
-        return await this.cocktailService.getAll();
+        const cacheKey = 'cocktail';
+        let value = this.cache.get<CocktailEntity[]|object>(cacheKey);
+
+        if(!value){
+            const result = await this.cocktailService.getAll();
+            value = result;
+            this.cache.set(cacheKey,result,60*60);
+        }
+        return value;
     }
 
     @ApiOperation({summary:' 칵테일 조회(기주 + 음료 까지)'})

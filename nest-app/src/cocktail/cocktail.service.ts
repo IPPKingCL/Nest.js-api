@@ -37,6 +37,7 @@ export class CocktailService {
 
     async getAll(): Promise<CocktailEntity[] | object> {
         try {
+            this.logger.debug("cache test");
             const res = await this.cockRepository.find();
             return res;
         } catch (err) {

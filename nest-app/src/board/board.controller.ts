@@ -145,6 +145,7 @@ export class BoardController {
     @ApiOperation({summary: ' 게시글 추천 상위 댓글 조회'})
     @Get('/select/comment/:id')
     async commentLimit(@Param("id") boardId:number){
+        this.logger.log('---------------'+boardId +' 번 댓글 상위 조회 ');
         return await this.boardService.commentLimit(boardId);
     }
     

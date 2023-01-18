@@ -20,7 +20,7 @@ export class AlcoholController {
     @Get('/')
     async getTest(){
         this.logger.log("---------------select alcohol ");
-        const cacheKey = 1;
+        const cacheKey = 'alcohol';
         let value = this.cache.get<AlchoEntity[]>(cacheKey);
 
         
