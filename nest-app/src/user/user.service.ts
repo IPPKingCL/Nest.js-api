@@ -295,17 +295,16 @@ export class UserService {
 
     async emailLogin(emailLoginDto : UserEmailDto) {
         try{
-            // const res = await this.repository.createQueryBuilder("user")
-            // .where('email = :email',{email:emailLoginDto.email})
-            // .andWhere('password = :password',{password:emailLoginDto.password})
-            // .getOne();
+            const res = await this.repository.createQueryBuilder("user")
+            .where('email = :email',{email:emailLoginDto.email})
+            .andWhere('password = :password',{password:emailLoginDto.password})
+            .getOne();
 
-            const res = await this.repository.query(
-                'select * from user ' +
-                'where email = ' + emailLoginDto.email + ' ' +
-                'and password = ' + emailLoginDto.password
-            )
-            console.log(res);
+            // const res = await this.repository.query(
+            //     "select * from alcohol.user " +
+            //     "where email = " + `"${emailLoginDto.email}"` + " " +
+            //     "and password = " + `${emailLoginDto.password}` + ";"
+            // )
            
             if(res==null){
                 return {success:false};
