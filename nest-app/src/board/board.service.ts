@@ -482,6 +482,7 @@ export class BoardService {
                 "from alcohol.commentRecommend) r "+
                 "on c.id = r.commentId "+
                 "where boardId = "+boardId+" "+
+                "and c.isDeleted=false "+
                 "order by count desc "+
                 "limit 2;"
             )
