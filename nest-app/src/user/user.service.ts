@@ -11,6 +11,7 @@ import { getToken } from 'src/util/token';
 import { UserModifyDto } from './dto/usermodify.dto';
 import { UserEmailDto } from './dto/userEmail.dto';
 import { DataSource } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
