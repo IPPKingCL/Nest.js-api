@@ -61,7 +61,15 @@ export class AlcoholController {
     @Get('/category')
     async getAllCategory(){
         this.logger.log("---------------select just category ");
-        return await this.alchoService.getAllCategory();
+        const cacheKey = 'category';
+        let value = this.cache.get<object[]|object>(cacheKey);
+
+        if(!value){
+            const result = await this.alchoService.getAllCategory();
+            value = result;
+            this.cache.set(cacheKey,result,60*60);
+        }
+        return value;
     }
 
     @ApiOperation({summary: "술 추천하기"})
