@@ -45,8 +45,15 @@ export class CocktailController {
     @Get('/search/:text')
     async search(@Param("text") text:number){
         this.logger.log("---------------search cocktail ");
-        console.log(text);
-        return await this.cocktailService.search(text);
+        const cachekey ="search/"+text;
+        let value = this.cache.get<CocktailEntity[]|object>(cachekey);
+
+        if(!value){
+            const result = await this.cocktailService.search(text);
+            value = result;
+            this.cache.set(cachekey,result,60*60);
+        }
+        return value; 
     }
 
     @ApiOperation({summary: " 해당 술이 사용된 칵테일 조회"})

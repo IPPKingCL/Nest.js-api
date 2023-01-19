@@ -85,6 +85,7 @@ export class CocktailService {
     }
 
     async search(text: number) {
+        console.log("!!!!!!!!!!!!!!!!!!!");
         try {
             if (text == 0) {
                 const res = await this.getAll();
