@@ -51,14 +51,22 @@ export class BoardService {
 
     }
 
-    getTypeBoard(type: string): Promise<BoardEntity[] | object> {
+    async getTypeBoard(type: string,header): Promise<BoardEntity[] | object> {
         try {
-            return this.repository.createQueryBuilder('board')
-                .leftJoinAndSelect('board.user', 'user.id')
-                .where('boardType=:type', { type: type })
-                .andWhere("isDeleted=false")
-                .orderBy("dateTime", "DESC")
-                .getMany()
+            const token = await this.jwtService.decode(header);
+
+            return await this.repository.query(
+                "select a.id, a.title, a.contents, a.isModified, a.dateTime, a.boardType, r.userId, a.img ,a.nickname "+
+                "from ("+
+                "select b.id, b.title, b.contents, b.isModified, b.dateTime, b.boardType, b.isDeleted, u.img, u.nickname "+
+                "from alcohol.board b , alcohol.user u "+
+                "where b.userId=u.id) a "+
+                "left join alcohol.boardRecommand r "+
+                "on a.id = r.boardId and r.userId="+token['id'] +" "+
+                "where a.isDeleted=false "+
+                "and a.boardType='"+type+"' "+ 
+                "order by dateTime desc;"
+            );
         } catch (err) {
             this.logger.log(err)
             this.logger.error("게시글 조회 중 에러 발생")

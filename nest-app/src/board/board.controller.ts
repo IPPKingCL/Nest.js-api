@@ -33,9 +33,9 @@ export class BoardController {
 
     @ApiOperation({summary:' 게시판 타입 별 조회'})
     @Post('/')
-    async getTypeBoard(@Body() type){
+    async getTypeBoard(@Body() type, @Headers() header){
         this.logger.log("---------------게시글 타입 별 조회")
-        return await this.boardService.getTypeBoard(type.boardType);
+        return await this.boardService.getTypeBoard(type.boardType,getToken(header));
     }
 
     @ApiOperation({summary:' 게시판 글작성'})
