@@ -7,6 +7,7 @@ import { AlcoholService } from './alcohol.service';
 import { AlchoCommentDto } from './dto/alchoComment.Dto';
 import * as NodeCache from 'node-cache';
 import { AlchoEntity } from 'src/entities/alcho.entity';
+import { readAlchoDto } from './dto/readAlcho.Dto';
 
 @Controller('alcohol')
 export class AlcoholController {
@@ -44,7 +45,16 @@ export class AlcoholController {
     @Get('/category/:category')
     async getCategory(@Param('category') category:number){
         this.logger.log("---------------select alcohol category : "+category);
-        return await this.alchoService.getCategory(category);
+        const cacheKey = 'category/'+category;
+        let value = this.cache.get<readAlchoDto[]|object>(cacheKey);
+
+        if(!value){
+            const result = await this.alchoService.getCategory(category);
+            value = result;
+            this.cache.set(cacheKey,result,60*60);
+        }
+
+        return value;
     }
 
     @ApiOperation({summary:' 카테고리 종류 조회'})
