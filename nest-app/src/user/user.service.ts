@@ -31,6 +31,9 @@ export class UserService {
     }
 
     async insertUser(userData:UserCreateDto) :Promise<object> {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(userData.password, salt);
+
         /*Dto를 entitiy에 저장*/
         let user = new UserEntity();
         user.name = userData.name;
@@ -39,7 +42,7 @@ export class UserService {
         user.sex = userData.sex;
         user.nickname = userData.nickname;
         user.userId = userData.userId;
-        user.password = userData.password;
+        user.password = hashedPassword;
         user.price = userData.price;
         user.email = userData.email;
         user.job = userData.job;
@@ -296,6 +299,7 @@ export class UserService {
 
     async emailLogin(emailLoginDto : UserEmailDto) {
         try{
+            
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:emailLoginDto.email})
             .andWhere('password = :password',{password:emailLoginDto.password})
