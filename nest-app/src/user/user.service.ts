@@ -299,13 +299,10 @@ export class UserService {
 
     async emailLogin(emailLoginDto : UserEmailDto) {
         try{
-            const salt = await bcrypt.genSalt();
-            const hashedPassword = await bcrypt.hash(emailLoginDto.password, salt);
-
+            
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:emailLoginDto.email})
-            .andWhere('password = :password',{password:hashedPassword})
-            .getOne();
+            .getOne();  //이 부분 쿼리 수정했는데 이메일 말고 아이디로 해야할듯?
 
             // const res = await this.repository.query(
             //     "select * from alcohol.user " +
@@ -316,14 +313,16 @@ export class UserService {
             if(res==null){
                 return {success:false};
             }else{
-                       
-                const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
-                const loginToken = this.jwtService.sign(payload);
+                if(await bcrypt.compare(emailLoginDto.password, res.password)){
+                    const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
+                    const loginToken = this.jwtService.sign(payload);
     
-                console.log(loginToken);
-                console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
-                return {success:true, msg:'존재하는 사용자',token : loginToken};
-                
+                    console.log(loginToken);
+                    console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
+                    return {success:true, msg:'존재하는 사용자',token : loginToken};
+                }else{
+                    return {success:false};
+                }
             }
         }catch(err){
             this.logger.error(err);
