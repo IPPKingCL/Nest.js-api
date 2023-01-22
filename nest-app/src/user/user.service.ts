@@ -299,10 +299,12 @@ export class UserService {
 
     async emailLogin(emailLoginDto : UserEmailDto) {
         try{
-            
+            const salt = await bcrypt.genSalt();
+            const hashedPassword = await bcrypt.hash(emailLoginDto.password, salt);
+
             const res = await this.repository.createQueryBuilder("user")
             .where('email = :email',{email:emailLoginDto.email})
-            .andWhere('password = :password',{password:emailLoginDto.password})
+            .andWhere('password = :password',{password:hashedPassword})
             .getOne();
 
             // const res = await this.repository.query(
@@ -314,12 +316,14 @@ export class UserService {
             if(res==null){
                 return {success:false};
             }else{
+                       
                 const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload);
-
+    
                 console.log(loginToken);
                 console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
                 return {success:true, msg:'존재하는 사용자',token : loginToken};
+                
             }
         }catch(err){
             this.logger.error(err);

@@ -33,7 +33,7 @@ export class UserEntity {
     @Column({length :30})
     userId : string;
 
-    @Column({length:30})
+    @Column({length:100})
     password : string;
 
     @Column({length:40})
