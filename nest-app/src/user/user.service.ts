@@ -85,19 +85,18 @@ export class UserService {
 
     async insertFavorite(res, arr) : Promise<object>{
         const data = new FavoriteEntity();
-        console.log("arr = " + arr);
+        this.logger.log("arr = " + arr);
         //console.log(id)
         try{
             let i = 0;
             for(i;i<arr[0].length;i++){
-                console.log(arr[0][i].id);
                 await this.fRepository.query(
                     `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i].id+`)`,
                 );
             }
             return {success:true};
         }catch(err){
-            console.log(err)
+            this.logger.error(err)
 
             return {success:false}
         }
@@ -141,8 +140,8 @@ export class UserService {
                 const payload = {id:res.id, email: email, name: res.name, nickname : res.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload);
 
-                console.log(loginToken);
-                console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
+                //console.log(loginToken);
+                //console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
                 return {success:false, msg:'존재하는 사용자',token : loginToken};
             }
         }catch(err){
@@ -184,6 +183,7 @@ export class UserService {
                         .getOne();
             return res;
         }catch(err){
+            this.logger.error(err);
             return {success:false}
         }
     }
@@ -211,7 +211,7 @@ export class UserService {
         
         favorite.push(body.favorite);
 
-        console.log("body : "+body.img)
+        this.logger.log("body : "+body.img)
 
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.startTransaction();
@@ -219,7 +219,7 @@ export class UserService {
         try{
             const user = new UserEntity();
             user.birth = new Date(body.birth);
-            console.log(user.birth);
+            this.logger.log(user.birth);
             if(body.img!==''){
                 await this.repository.query(
                     'update user set age='+parseInt(body.age)+',birth=\''+user.birth+'\',nickname=\''+body.nickname+
@@ -248,7 +248,7 @@ export class UserService {
                 const payload = {id:token["id"], email: token['email'], name: token['name'], nickname : body.nickname , sub: '0' };
                 const loginToken = this.jwtService.sign(payload);
 
-                console.log(payload);
+                this.logger.log(payload);
                 await queryRunner.commitTransaction();
                 return {success:true, token : loginToken};
                 
@@ -291,7 +291,7 @@ export class UserService {
             }
             return {success:true};
         }catch(err){
-            console.log(err)
+            this.logger.error(err)
 
             return {success:false}
         }
