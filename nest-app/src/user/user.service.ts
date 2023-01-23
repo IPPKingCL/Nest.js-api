@@ -152,8 +152,6 @@ export class UserService {
 
 
     async checkNickName(nickname : string) : Promise<object>{
-         
-        //console.log("res : "+res.);
         try{
             this.logger.log(nickname);
             const res = await this.repository.createQueryBuilder('user')
