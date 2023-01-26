@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, UseGuards, Headers, Req, Res,  } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { getToken } from 'src/util/token';
 import { Query } from 'typeorm/driver/Query';
@@ -82,6 +82,12 @@ export class UserController {
         this.logger.log("---------------Email Login");
         console.log(emailData);
         return await this.userService.emailLogin(emailData);
+    }
+
+    @ApiOperation({summary:"로그아웃"})
+    @Post('/logOut')
+    async logOut(@Req() req : Request, @Res() res : Response){
+        
     }
 
    

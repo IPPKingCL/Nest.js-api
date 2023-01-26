@@ -315,8 +315,7 @@ export class UserService {
                     const payload = {id:res.id, email: emailLoginDto.email, name: res.name, nickname : res.nickname , sub: '0' };
                     const loginToken = this.jwtService.sign(payload);
     
-                    console.log(loginToken);
-                    console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
+                    //console.log(this.jwtService.decode(loginToken))// 토큰 디코딩하는 방법
                     return {success:true, msg:'존재하는 사용자',token : loginToken};
                 }else{
                     return {success:false};
