@@ -80,16 +80,10 @@ export class UserController {
     @Post('/EmailLogin')
     async emailLogin(@Body() emailData:UserEmailDto) {
         this.logger.log("---------------Email Login");
-        console.log(emailData);
         return await this.userService.emailLogin(emailData);
     }
 
-    @ApiOperation({summary:"로그아웃"})
-    @Post('/logOut')
-    async logOut(@Req() req : Request, @Res() res : Response){
-        
-    }
-
+ 
    
 
 }
