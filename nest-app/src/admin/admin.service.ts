@@ -22,6 +22,7 @@ import { JuiceRecipeEntity } from 'src/entities/juiceRecipe.entity';
 export class AdminService {
     private readonly logger = new Logger(AdminService.name);
     constructor(
+        private dataSource : DataSource,
         private jwtService :JwtService,
         private readonly cockRepository : CocktailRepository,
         private readonly alchoRepository : alchoRepository,
@@ -31,7 +32,7 @@ export class AdminService {
         private readonly unitRepository : UnitRepository,
         private readonly alchoCategoryRepository : AlchoCategoryRepository,
         private readonly userRepository :UserRepository,
-        private dataSource : DataSource
+        
     ){}
 
     async newCocktail(header){
@@ -135,9 +136,9 @@ export class AdminService {
     }
 
     async insertCocktail(insertDto){
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+        const queryRunner = this.dataSource.createQueryRunner(); //queryRunner 생성
+        await queryRunner.connect();  //queryRunner 연결
+        await queryRunner.startTransaction(); //트랜잭션 시작
 
         try{
             const cocktail = new CocktailEntity();
@@ -154,7 +155,8 @@ export class AdminService {
             
             const find = await queryRunner.query(
                 "select * from cocktail where name='"+cocktail.name+"';"
-            )
+            ); //같은 queryRunner로 묶어야 롤백이나 select가 됨
+
             // const find = await this.cockRepository.createQueryBuilder()
             // .where('name=:name',{name:cocktail.name})
             // .getOne();
