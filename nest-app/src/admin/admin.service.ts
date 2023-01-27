@@ -136,6 +136,7 @@ export class AdminService {
 
     async insertCocktail(insertDto){
         const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try{
@@ -144,22 +145,26 @@ export class AdminService {
             cocktail.imgUrl = insertDto.imgUrl;
             cocktail.dosu = insertDto.dosu;
 
-            const res = await this.cockRepository.query(
+            const res = await queryRunner.query(
                 "insert into cocktail(name, dosu, imgUrl) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"')"
             );
 
+            console.log("res : ");
             console.log(res);
             
-            const find = await this.cockRepository.createQueryBuilder()
-            .where('name=:name',{name:cocktail.name})
-            .getOne();
+            const find = await queryRunner.query(
+                "select * from cocktail where name='"+cocktail.name+"';"
+            )
+            // const find = await this.cockRepository.createQueryBuilder()
+            // .where('name=:name',{name:cocktail.name})
+            // .getOne();
 
             console.log(find);
-            const id = find.id;
+            const id = find[0].id;
             
 
-            const resAlcho = await this.insertAlchoRecipe(id, insertDto.alcho);
-            const resJuice = await this.insertJuiceRecipe(id, insertDto.juice);
+            const resAlcho = await this.insertAlchoRecipe(id, insertDto.alcho, queryRunner);
+            const resJuice = await this.insertJuiceRecipe(id, insertDto.juice, queryRunner);
             
             console.log(resAlcho);
             console.log(resJuice);
@@ -184,11 +189,12 @@ export class AdminService {
         }
     }
 
-    async insertAlchoRecipe(id,insertDto){
+    async insertAlchoRecipe(id,insertDto,queryRunner){
         console.log("cocktail id : "+insertDto);
+        console.log("id : "+id);
         
         try{
-            await this.alchoRecipeRepository.query(
+            await queryRunner.query(
                 'insert into alchoRecipe(amount, only, cocktailId, unitNumId, alchoId) '
                 +'values ('+insertDto[0].amount+','+insertDto[0].only+','+id+','+insertDto[0].unit+','+insertDto[0].name+')'
             );
@@ -197,12 +203,12 @@ export class AdminService {
 
         }catch(err){
           
-            //this.logger.error(err);
+            this.logger.error(err);
             return {success:false, msg:err};
         }
     }
 
-    async insertJuiceRecipe(id, insertDto){
+    async insertJuiceRecipe(id, insertDto,queryRunner){
        
         try{
             const juiceRecipe = new JuiceRecipeEntity();
@@ -216,7 +222,7 @@ export class AdminService {
             juiceRecipe.unitNum = insertDto.unit;
             
             for(let i = 0; i<insertDto.length;i++){
-                await this.juiceRecipeRepository.query(
+                await queryRunner.query(
                     'insert into juiceRecipe(amount, juiceId, cocktailId, unitNumId) '
                     +'values ('+insertDto[i].amount+','+insertDto[i].name+','+id+','+insertDto[i].unit+')'
                 );
