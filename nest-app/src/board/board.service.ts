@@ -81,7 +81,7 @@ export class BoardService {
     async write(writeData, header): Promise<object> {
 
         const token = this.jwtService.decode(header);
-        console.log('\n' + token["id"] + '\n');
+        this.logger.log('\n' + token["id"] + '\n');
         const board = new BoardEntity();
         board.title = writeData.title;
         board.contents = writeData.contents;
@@ -114,11 +114,11 @@ export class BoardService {
             imgdto.boardId = id;
             imgdto.boardType = 'b';
             imgdto.imgUrl = url;
-            await this.imgRepository.save(imgdto);
+            await this.imgRepository.insert(imgdto);
 
             return { success: true };
         } catch (err) {
-            console.log(err);
+            this.logger.error(err);
             return { success: false };
         }
     }
@@ -183,8 +183,8 @@ export class BoardService {
             readOne.recommend = res.recommend;
 
             const tokenNumberId: number = parseInt(token["id"]);
-            console.log(tokenNumberId);
-            console.log(res.user.id)
+            this.logger.log(tokenNumberId);
+            this.logger.log(res.user.id)
             if (tokenNumberId == res.user.id) {
                 return readOne;
             } else {
@@ -237,8 +237,8 @@ export class BoardService {
         try {
 
             const token = this.jwtService.decode(header);
-            console.log(deleteOne.userId)
-            console.log(token["id"])
+            this.logger.log(deleteOne.userId);
+            this.logger.log(token["id"]);
             if (deleteOne.userId == (token['id'])) {
                 await this.repository.createQueryBuilder()
                     .update('board')
@@ -399,7 +399,7 @@ export class BoardService {
         comment.user = token['id'];
 
         try {
-            await this.coRepository.save(comment);
+            await this.coRepository.insert(comment);
             return { success: true };
         } catch (err) {
             this.logger.error(err);

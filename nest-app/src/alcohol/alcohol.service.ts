@@ -110,7 +110,7 @@ export class AlcoholService {
             alchoCommentEntity.alcho= commentDto.alchoId;
             alchoCommentEntity.nickname = token["nickname"];
 
-            await this.alchoCommentRepository.save(alchoCommentEntity);
+            await this.alchoCommentRepository.insert(alchoCommentEntity);
             
             return {success:true}
 

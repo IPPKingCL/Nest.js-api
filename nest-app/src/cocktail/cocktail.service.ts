@@ -68,7 +68,7 @@ export class CocktailService {
                 + "from Alcho a, alchoRecipe r "
                 + "where a.id=r.alchoId and r.cocktailId=" + id + ";"
             );
-            console.log(resAlcho)
+            this.logger.log(resAlcho)
 
             const res = {
                 cocktail: resCock,
@@ -85,7 +85,7 @@ export class CocktailService {
     }
 
     async search(text: number) {
-        console.log("!!!!!!!!!!!!!!!!!!!");
+        
         try {
             if (text == 0) {
                 const res = await this.getAll();
@@ -115,8 +115,7 @@ export class CocktailService {
                 .leftJoinAndSelect('alchoRecipe.cocktail', "cocktail.id")
                 .where("alchoId=:id", { id: alchoDto.id })
                 .getMany();
-            console.log(res[0]);
-
+           
             if (res.length > 0) {
                 const cockArr: Array<CockInfoDto> = [];
                 let i = 0;
@@ -220,7 +219,7 @@ export class CocktailService {
             ratingEntity.date = new Date();
 
             if (!res.success) {
-                await this.ratingRepository.save(ratingEntity);
+                await this.ratingRepository.insert(ratingEntity);
                 return { success: true };
             } else {
                 return { success: false, msg: '이미 평가하신 칵테일입니다' };
@@ -294,7 +293,7 @@ export class CocktailService {
             cocktailCommentEntity.cocktail = commentDto.boardId;
             cocktailCommentEntity.user = token['id'];
 
-            await this.cocktailCommentRepository.save(cocktailCommentEntity);
+            await this.cocktailCommentRepository.insert(cocktailCommentEntity);
 
             return { success: true };
         } catch (err) {

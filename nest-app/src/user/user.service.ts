@@ -30,6 +30,7 @@ export class UserService {
         return this.repository.find();
     }
 
+    //트랜잭션 수정 예정
     async insertUser(userData:UserCreateDto) :Promise<object> {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(userData.password, salt);
@@ -203,6 +204,7 @@ export class UserService {
         
     }
 
+    //트랜잭션 수정 예정
     async modify(header, body:UserModifyDto) {
         const token = this.jwtService.decode(header);
         let favorite = new Array();
