@@ -26,8 +26,8 @@ export class UserService {
     
     private readonly logger = new Logger(UserService.name);
 
-    getAll() : Promise<UserEntity[]>{
-        return this.repository.find();
+    async getAll() : Promise<UserEntity[]>{
+        return await this.repository.find();
     }
 
     //트랜잭션 수정 예정
@@ -214,6 +214,7 @@ export class UserService {
         this.logger.log("body : "+body.img)
 
         const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try{

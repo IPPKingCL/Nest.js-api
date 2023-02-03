@@ -19,9 +19,8 @@ export class AlcoholService {
         private jwtService: JwtService
     ){}
 
-    getAll() : Promise<AlchoEntity[]>{
-        console.log("????????????")
-        return this.alchoRepository.find();
+    async getAll() : Promise<AlchoEntity[]>{
+        return await this.alchoRepository.find();
     }
 
     async getOne(id:number) : Promise<readAlchoDto | object>{
