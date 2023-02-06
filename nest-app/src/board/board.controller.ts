@@ -44,7 +44,7 @@ export class BoardController {
     @Post('/write')
     async write(@Body() boardData:writeDataDto, @Headers() header){
         //console.log(header.authorization);
-        this.logger.log("---------------게시글 등록")
+        this.logger.log("---------------게시글 등록");
         return await this.boardService.write(boardData, getToken(header));
     }
 

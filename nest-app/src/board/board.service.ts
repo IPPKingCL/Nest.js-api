@@ -17,6 +17,7 @@ import { CommentRecommendRepository } from './repository/commentRecommend.reposi
 import { CommentRecommendEntity } from 'src/entities/commentRecommend.entity';
 import { BoardVideoEntity } from 'src/entities/boardVideo.entity';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
+import { VideoDto } from './dto/Video.Dto';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -123,6 +124,22 @@ export class BoardService {
         } catch (err) {
             this.logger.error(err);
             return { success: false };
+        }
+    }
+
+    async writeVideo(url:string, id) : Promise<object>{
+        try{
+            const videoDto = new BoardVideoEntity();
+            videoDto.id = id;
+            videoDto.videoUrl = url;
+
+            await this.boardVideoRepository.insert(videoDto);
+
+            return {success : true};
+            
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
         }
     }
 
