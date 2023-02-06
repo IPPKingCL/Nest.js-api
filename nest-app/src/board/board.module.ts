@@ -11,11 +11,12 @@ import { TypeOrmExModule } from '../typeorm-ex.module';
 import { ImgRepositoy } from './repository/img.repository';
 import { BoardRecommandRepository } from './repository/boardRecommand.repository';
 import { CommentRecommendRepository } from './repository/commentRecommend.repository';
+import { BoardVideoRepository } from './repository/boardVideo.repository';
 @Module({
     imports:[
         TypeOrmExModule.forCustomRepository([BoardRepository,CommentRepository,
                                             ImgRepositoy,BoardRecommandRepository,
-                                            CommentRecommendRepository
+                                            CommentRecommendRepository,BoardVideoRepository
                                           ]),
            // session을 사용하지 않을 예정이기 때문에 false
         PassportModule.register({ defaultStrategy: 'jwt', session: false }),

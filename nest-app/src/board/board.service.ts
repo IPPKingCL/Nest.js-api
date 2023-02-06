@@ -15,6 +15,8 @@ import { BoardRecommandEntity } from 'src/entities/boardRecommand.entity';
 import { DataSource } from 'typeorm';
 import { CommentRecommendRepository } from './repository/commentRecommend.repository';
 import { CommentRecommendEntity } from 'src/entities/commentRecommend.entity';
+import { BoardVideoEntity } from 'src/entities/boardVideo.entity';
+import { BoardVideoRepository } from './repository/boardVideo.repository';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -27,7 +29,8 @@ export class BoardService {
         private readonly recommandRepository: BoardRecommandRepository,
         private jwtService: JwtService,
         private dataSource : DataSource,
-        private readonly commentRecommendRepository : CommentRecommendRepository
+        private readonly commentRecommendRepository : CommentRecommendRepository,
+        private readonly boardVideoRepository : BoardVideoRepository
     ) { }  //댓글
 
     async getAll(header): Promise<BoardEntity[]> {
