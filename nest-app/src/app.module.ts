@@ -46,6 +46,7 @@ import { AdminService } from './admin/admin.service';
 import { AdminModule } from './admin/admin.module';
 import { UnitEntity } from './entities/unit.entity';
 import { CommentRecommendEntity } from './entities/commentRecommend.entity';
+import { BoardVideoEntity } from './entities/boardVideo.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -71,7 +72,8 @@ import { CommentRecommendEntity } from './entities/commentRecommend.entity';
                  dataEntity, AlchoEntity,FavoriteEntity,ImgEntity,
                  AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
                  JuiceEntity,JuiceRecipeEntity,RatingEntity,BoardRecommandEntity,
-                 CocktailCommentEntity,AlchoCategoryEntity,UnitEntity,CommentRecommendEntity
+                 CocktailCommentEntity,AlchoCategoryEntity,UnitEntity,CommentRecommendEntity,
+                 BoardVideoEntity,
                 ],
       synchronize: false,
       logging : true,
