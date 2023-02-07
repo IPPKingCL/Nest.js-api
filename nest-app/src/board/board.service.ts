@@ -18,6 +18,7 @@ import { CommentRecommendEntity } from 'src/entities/commentRecommend.entity';
 import { BoardVideoEntity } from 'src/entities/boardVideo.entity';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
 import { VideoDto } from './dto/Video.Dto';
+import { ImgEntity } from 'src/entities/img.entity';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -184,10 +185,8 @@ export class BoardService {
                 .where('board.id=:id', { id: id })
                 .getOne();
 
-            const resImg = await this.imgRepository.createQueryBuilder('img')
-                .where('boardType=:type', { type: 'b' })
-                .andWhere('boardId=:id', { id: res.id })
-                .getOne();
+            const resImg = await this.readImg(id);  //이미지 조회
+            const resVideo = await this.readVideo(id);   //비디오 조회
 
             this.logger.debug(res);
             const readOne = new readOneDto();
@@ -202,7 +201,11 @@ export class BoardService {
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
             if (resImg !== null) {
-                readOne.imgUrl = resImg.imgUrl;
+                readOne.imgUrl = resImg['imgUrl'];
+            }
+
+            if (resVideo !== null){
+                readOne.videoUrl = resVideo['videoUrl'];
             }
 
             this.logger.log(readOne);
@@ -211,6 +214,33 @@ export class BoardService {
         } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "글 조회 중 에러 발생" };
+        }
+    }
+
+    async readImg(id:number) : Promise<ImgEntity|object>{
+        try{
+            const res = await this.imgRepository.createQueryBuilder('img')
+                        .where('boardType=:type', { type: 'b' })
+                        .andWhere('boardId=:id', { id: id })
+                        .getOne();
+            
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success :false, msg:"이미지 조회 중 에러 발생"};
+        }
+    }
+
+    async readVideo(id:number) : Promise<BoardVideoEntity|object>{
+        try{
+            const res = await this.boardVideoRepository.createQueryBuilder("boardVideo")
+                        .where('boardId=:id',{id:id})
+                        .getOne();
+            
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false, msg:"비디오 조회 중 에러 발생"};
         }
     }
 

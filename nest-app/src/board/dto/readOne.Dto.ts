@@ -32,4 +32,6 @@ export class readOneDto{
 
     
     imgUrl:string|null;
+
+    videoUrl : string|null;
 }
