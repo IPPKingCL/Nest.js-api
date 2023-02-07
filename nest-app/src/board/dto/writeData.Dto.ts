@@ -4,10 +4,10 @@ export class writeDataDto{
     readonly id:number;
 
     @IsString()
-    readonly title:string;
+    readonly title : string;
 
     @IsString()
-    readonly contents:string;
+    readonly contents : string;
 
     /*@IsDate()
     readonly dateTime:Date;
@@ -19,9 +19,12 @@ export class writeDataDto{
     readonly isModified:boolean;
 */
     @IsString()
-    readonly boardType:string;
+    readonly boardType : string;
 
     @IsString()
-    readonly imgUrl:string
+    readonly imgUrl : string;
+
+    @IsString()
+    readonly videoUrl : string;
    
 }

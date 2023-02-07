@@ -96,29 +96,57 @@ export class BoardService {
         board.boardType = writeData.boardType;
 
         this.logger.log(board);
+
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        console.log("type of "+ typeof(queryRunner));
         try {
-            const res = await this.repository.save(board);
-            const imgRes = await this.writeImg(writeData.imgUrl, res.id);
-            if (imgRes['success']) {
+            const res = await queryRunner.query(
+                "insert into board(title,contents,dateTime,isDeleted,isModified,userId,boardType) "
+                +"values ('"+board.title+"','"+board.contents+"',CURRENT_TIMESTAMP,'"+board.isDeleted+"','"
+                +board.isModified+"','"+board.user+"','"+board.boardType+"')"
+            );
+
+            console.log(res['insertId'])
+            
+            console.log(writeData.videoUrl)
+
+            const imgRes = await this.writeImg(writeData.imgUrl, res['insertId'], queryRunner);
+            const videoRes = await this.writeVideo(writeData.videoUrl,res['insertId'], queryRunner);
+
+            if (imgRes['success']&&videoRes['success']) {
+                await queryRunner.commitTransaction();
                 return { success: true };
             } else {
+                await queryRunner.rollbackTransaction();
                 return { success: false, msg: '이미지 등록 중 에러 발생' }
             }
 
         } catch (err) {
             this.logger.error(err);
+            await queryRunner.rollbackTransaction();
             return { success: false, msg: "게시판 글 등록 중 에러발생" }
+        } finally{
+            await queryRunner.release();
         }
 
     }
 
-    async writeImg(url: string, id: number): Promise<object> {
+    async writeImg(url: string, id: number, queryRunner): Promise<object> {
         try {
             const imgdto = new imgDto();
             imgdto.boardId = id;
             imgdto.boardType = 'b';
             imgdto.imgUrl = url;
-            await this.imgRepository.insert(imgdto);
+
+            if(url===''){
+                return {success:true};
+            }
+            await queryRunner.query(
+                'insert into img(boardType,boardId,imgUrl) '
+                +"values ('"+imgdto.boardType+"','"+imgdto.boardId+"','"+imgdto.imgUrl+"')"
+            );
 
             return { success: true };
         } catch (err) {
@@ -127,13 +155,19 @@ export class BoardService {
         }
     }
 
-    async writeVideo(url:string, id) : Promise<object>{
+    async writeVideo(url:string, id, queryRunner) : Promise<object>{
         try{
             const videoDto = new BoardVideoEntity();
             videoDto.id = id;
             videoDto.videoUrl = url;
 
-            await this.boardVideoRepository.insert(videoDto);
+            if(url===''){
+                return {success:true};
+            }
+
+            await queryRunner.query(
+                "insert into boardVideo values ('"+url+"','"+id+"')"
+            );
 
             return {success : true};
             
