@@ -166,7 +166,7 @@ export class BoardService {
             }
 
             await queryRunner.query(
-                "insert into boardVideo values ('"+url+"','"+id+"')"
+                "insert into boardVideo(videoUrl,boardId) values ('"+url+"','"+id+"')"
             );
 
             return {success : true};
