@@ -50,6 +50,9 @@ import { BoardVideoEntity } from './entities/boardVideo.entity';
 import { SelfCocktailEntity } from './entities/selfCocktail.entity';
 import { SelfAlchoRecipeEntity } from './entities/selfAlchoRecipe.Entity';
 import { SelfJuiceRecipeEntity } from './entities/selfJuiceRecipe.entity';
+import { SelfcocktailController } from './selfcocktail/selfcocktail.controller';
+import { SelfcocktailService } from './selfcocktail/selfcocktail.service';
+import { SelfcocktailModule } from './selfcocktail/selfcocktail.module';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -82,11 +85,12 @@ import { SelfJuiceRecipeEntity } from './entities/selfJuiceRecipe.entity';
       logging : true,
       
     }),
+    SelfcocktailModule,
     
    
     ], 
-  controllers: [AppController,], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
-  providers: [JwtStrategy, ],
+  controllers: [AppController, SelfcocktailController,], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  providers: [JwtStrategy, SelfcocktailService, ],
 }) 
 export class AppModule {}   
 
