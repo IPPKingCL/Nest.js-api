@@ -49,6 +49,7 @@ import { CommentRecommendEntity } from './entities/commentRecommend.entity';
 import { BoardVideoEntity } from './entities/boardVideo.entity';
 import { SelfCocktailEntity } from './entities/selfCocktail.entity';
 import { SelfAlchoRecipeEntity } from './entities/selfAlchoRecipe.Entity';
+import { SelfJuiceRecipeEntity } from './entities/selfJuiceRecipe.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -75,9 +76,9 @@ import { SelfAlchoRecipeEntity } from './entities/selfAlchoRecipe.Entity';
                  AlchoCommentEntity, CocktailEntity, AlchoRecipeEntity,
                  JuiceEntity,JuiceRecipeEntity,RatingEntity,BoardRecommandEntity,
                  CocktailCommentEntity,AlchoCategoryEntity,UnitEntity,CommentRecommendEntity,
-                 BoardVideoEntity,SelfCocktailEntity,SelfAlchoRecipeEntity
+                 BoardVideoEntity,SelfCocktailEntity,SelfAlchoRecipeEntity,SelfJuiceRecipeEntity
                 ],
-      synchronize: true,
+      synchronize: false,
       logging : true,
       
     }),

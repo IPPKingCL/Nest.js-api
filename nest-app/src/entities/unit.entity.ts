@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlchoRecipeEntity } from "./alchoRecipe.entity";
 import { JuiceRecipeEntity } from "./juiceRecipe.entity";
 import { SelfAlchoRecipeEntity } from "./selfAlchoRecipe.Entity";
+import { SelfJuiceRecipeEntity } from "./selfJuiceRecipe.entity";
 
 @Entity('unit')
 export class UnitEntity{
@@ -18,6 +19,9 @@ export class UnitEntity{
     alchoRecipeEntitys : AlchoRecipeEntity[];
 
     @OneToMany((type) => SelfAlchoRecipeEntity,(selfAlchoRecipeEntity) => selfAlchoRecipeEntity.unitNum)
-    selfAlchoRecipeEntitys : AlchoRecipeEntity[];
+    selfAlchoRecipeEntitys : SelfAlchoRecipeEntity[];
+
+    @OneToMany((type) => SelfJuiceRecipeEntity, selfJuiceRecipeEntity=>selfJuiceRecipeEntity.unitNum)
+    selfJuiceRecipeEntitys : SelfJuiceRecipeEntity[];
 
 }

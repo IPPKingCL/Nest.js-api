@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { JuiceRecipeEntity } from "./juiceRecipe.entity";
+import { SelfJuiceRecipeEntity } from "./selfJuiceRecipe.entity";
 
 @Entity('Juice')
 export class JuiceEntity{
@@ -17,4 +18,7 @@ export class JuiceEntity{
 
     @OneToMany((type) => JuiceRecipeEntity, (juiceRecipeEntity)=>juiceRecipeEntity.juice)
     juiceRecipeEntitys : JuiceRecipeEntity[];
+
+    @OneToMany((type) => SelfJuiceRecipeEntity,(selfJuiceRecipeEntity) => selfJuiceRecipeEntity.juice)
+    selfJuiceRecipeEntitys : SelfJuiceRecipeEntity[];
 }
