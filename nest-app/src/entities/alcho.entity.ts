@@ -4,6 +4,7 @@ import { AlchoCategoryEntity } from "./alchoCategory.entity";
 import { AlchoCommentEntity } from "./alchoComment.entity";
 import { AlchoRecipeEntity } from "./alchoRecipe.entity";
 import { CocktailEntity } from "./cocktail.entity";
+import { SelfAlchoRecipeEntity } from "./selfAlchoRecipe.Entity";
 
 @Entity('Alcho')
 export class AlchoEntity{
@@ -45,4 +46,7 @@ export class AlchoEntity{
 
     @ManyToOne((type) => AlchoCategoryEntity,(alchoCategoryEntity)=>alchoCategoryEntity.alcho)
     alchoCategory : AlchoCategoryEntity;
+
+    @OneToMany((type)=> SelfAlchoRecipeEntity,(selfAlchoRecipeEntity)=>selfAlchoRecipeEntity.alcho)
+    selfAlchoRecipeEntitys : SelfAlchoRecipeEntity[];
 }

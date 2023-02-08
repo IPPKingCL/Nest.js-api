@@ -6,7 +6,7 @@ export class BoardVideoEntity{
     @PrimaryGeneratedColumn('increment')
     id : number;
 
-    @Column({length:200})
+    @Column({length:500})
     videoUrl : string;
 
     @ManyToOne((type)=> BoardEntity,(boardEntity)=>boardEntity.boardVideoEntitys)
