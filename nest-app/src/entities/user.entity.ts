@@ -8,6 +8,7 @@ import { CocktailCommentEntity } from './cocktailComment.entity';
 import { CommentRecommendEntity } from './commentRecommend.entity';
 import { FavoriteEntity, } from './favoritList.entity';
 import { RatingEntity } from './rating.entity';
+import { SelfCocktailEntity } from './selfCocktail.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -74,5 +75,8 @@ export class UserEntity {
 
     @OneToMany((type) => CommentRecommendEntity,(commentRecommendEntity)=>commentRecommendEntity.user)
     commentRecommendEntitys : CommentRecommendEntity[];
+
+    @OneToMany((type) => SelfCocktailEntity,(selfCocktailEntity) => selfCocktailEntity.user)
+    selfCocktailEntitys : SelfCocktailEntity[];
        
 }

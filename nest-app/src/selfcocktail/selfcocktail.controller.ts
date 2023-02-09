@@ -12,6 +12,7 @@ export class SelfcocktailController {
     @ApiOperation({summary:'자작 레시피 공개'})
     @Get('/')
     async findAll(){
+        this.logger.log("---------------select all self cocktail ");
         return await this.selfcocktailService.findAll();
     }
 
