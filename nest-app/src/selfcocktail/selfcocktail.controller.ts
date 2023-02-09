@@ -1,6 +1,7 @@
-import { Controller, Get, Logger, Post , Headers, Body} from '@nestjs/common';
+import { Controller, Get, Logger, Post , Headers, Body, UseGuards} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { InsertCocktailDto } from 'src/admin/dto/insertCocktail.Dto';
+import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { SelfcocktailService } from './selfcocktail.service';
 
@@ -20,5 +21,12 @@ export class SelfcocktailController {
     @Post('/insert')
     async insert(@Body() insertDto:InsertCocktailDto, @Headers() header){
         return await this.selfcocktailService.insert(insertDto,getToken(header));
+    }
+
+    @ApiOperation({summary : "카테고리 리스트 조회"})
+    @UseGuards(JwtAuthGuard)
+    @Get('/category')
+    async getCategory(){
+        return await this.selfcocktailService.getCategory();
     }
 }

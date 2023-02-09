@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AdminService } from 'src/admin/admin.service';
 import { InsertCocktailDto } from 'src/admin/dto/insertCocktail.Dto';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { JuiceRecipeEntity } from 'src/entities/juiceRecipe.entity';
@@ -17,6 +18,7 @@ export class SelfcocktailService {
         private readonly selfCocktailRepository : SelfCocktailRepository,
         private readonly selfAlchoRecipeRepository : SelfAlchoRecipeRepository,
         private readonly selfJuiceRecipeRepository : SelfJuiceRepository,  
+        private readonly adminService : AdminService
     ){}
 
     async findAll(){
@@ -26,7 +28,6 @@ export class SelfcocktailService {
     async insert(insertDto:InsertCocktailDto, header){
         try{
             const token = this.jwtService.decode(header);
-
 
             const res = await this.insertSelfCocktail(insertDto,token['id']);
          
@@ -119,6 +120,25 @@ export class SelfcocktailService {
         }catch(err){
             this.logger.error(err);
             return {success:false,msg:err};
+        }
+    }
+
+    async getCategory(){
+        try{
+            const alchoCategory = await this.adminService.alchoCategory();
+            const unitCategory = await this.adminService.unitCategory();
+            const juiceCategory = await this.adminService.juiceCategory();
+
+            const res = {
+                alchoCategory,
+                unitCategory,
+                juiceCategory,
+            }
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
         }
     }
 }
