@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { SelfcocktailController } from './selfcocktail.controller';
 import { JwtStrategy } from 'src/user/jwt/jwt.strategy';
+import { SelfcocktailService } from './selfcocktail.service';
 
 @Module({
     imports:[ TypeOrmExModule.forCustomRepository([SelfCocktailRepository,SelfAlchoRecipeRepository,SelfJuiceRepository]),
@@ -26,7 +27,7 @@ import { JwtStrategy } from 'src/user/jwt/jwt.strategy';
           signOptions: { expiresIn: '1y' },
       }),*/],
       controllers : [SelfcocktailController],
-      providers : [SelfcocktailController, JwtStrategy]
+      providers : [SelfcocktailService, JwtStrategy]
 })
 export class SelfcocktailModule {
 
