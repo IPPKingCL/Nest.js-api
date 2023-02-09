@@ -27,7 +27,8 @@ export class SelfcocktailService {
         try{
             const token = this.jwtService.decode(header);
 
-            const res = await this.insertSelfCocktail(insertDto);
+
+            const res = await this.insertSelfCocktail(insertDto,token['id']);
          
             if(res.success){
                 return {success:true};
@@ -40,7 +41,7 @@ export class SelfcocktailService {
         }
     }
 
-    async insertSelfCocktail(insertDto:InsertCocktailDto){
+    async insertSelfCocktail(insertDto:InsertCocktailDto,userId){
         const queryRunner = this.dataSource.createQueryRunner(); //queryRunner 생성
         await queryRunner.connect();  //queryRunner 연결
         await queryRunner.startTransaction(); //트랜잭션 시작
@@ -52,7 +53,7 @@ export class SelfcocktailService {
             cocktail.dosu = insertDto.dosu;
 
             const res = await queryRunner.query(
-                "insert into selfCocktail(name, dosu, imgUrl) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"')"
+                "insert into selfCocktail(name, dosu, imgUrl,userId) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"'"+ userId+")"
             );
 
             console.log(res['insertId']);
