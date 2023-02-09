@@ -61,6 +61,27 @@ export class AdminService {
             return {success:false, msg:"칵테일 입력 페이지 로딩 실패"};
         }
     }
+   
+    /*유저 권한 체크*/
+    async checkUser(id:number):Promise<object>{
+        
+        try{
+            const res = await this.userRepository.createQueryBuilder('user')
+                        .where("id=:id",{id:id})
+                        .getOne();
+            console.log(res);
+            console.log(userStatus)
+            if(res['userLoginType']===userStatus['admin']){
+                return {success:true};
+            }else{
+                return {success:false};
+            }
+        }catch(err){
+            this.logger.error(err);
+            return {success:false ,msg:err};
+        }
+    }
+    
 
     async alchoCategory():Promise<AlchoEntity[]|object>{
         try{
@@ -89,26 +110,6 @@ export class AdminService {
         }catch(err){
             this.logger.error(err);
             return {success:false, msg: "alcho 조회 중 에러"};
-        }
-    }
-
-    /*유저 권한 체크*/
-    async checkUser(id:number):Promise<object>{
-        
-        try{
-            const res = await this.userRepository.createQueryBuilder('user')
-                        .where("id=:id",{id:id})
-                        .getOne();
-            console.log(res);
-            console.log(userStatus)
-            if(res['userLoginType']===userStatus['admin']){
-                return {success:true};
-            }else{
-                return {success:false};
-            }
-        }catch(err){
-            this.logger.error(err);
-            return {success:false ,msg:err};
         }
     }
 
