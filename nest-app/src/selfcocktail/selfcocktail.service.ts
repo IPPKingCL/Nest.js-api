@@ -156,8 +156,10 @@ export class SelfcocktailService {
 
     async select(id:number){
         try{
-            const res = await this.selfCocktailRepository.createQueryBuilder()
-                        .where("id=:id",{id:id})
+            const res = await this.selfCocktailRepository.createQueryBuilder('selfCocktail')
+                        .leftJoinAndSelect('selfCocktail.user','user.id')
+                        .where("selfCocktail.id=:id",{id:id})
+                        .andWhere("isDeleted=false")
                         .getOne();
             
             return res;

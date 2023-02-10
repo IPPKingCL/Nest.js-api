@@ -32,6 +32,9 @@ export class SelfCocktailEntity{
     @Column()
     flag : boolean;
 
+    @Column()
+    isDeleted : boolean;
+
     @OneToMany((type)=>(SelfAlchoRecipeEntity),(selfAlchoRecipeEntity)=>selfAlchoRecipeEntity.selfCocktail)
     selfAlchoRecipeEntitys : SelfAlchoRecipeEntity[];
 
