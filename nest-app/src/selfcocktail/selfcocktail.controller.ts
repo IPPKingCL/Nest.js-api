@@ -3,6 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { InsertCocktailDto } from 'src/admin/dto/insertCocktail.Dto';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
+import { InsertSelfDto } from './dto/insertSelf.Dto';
 import { SelfcocktailService } from './selfcocktail.service';
 
 @Controller('selfcocktail')
@@ -19,7 +20,7 @@ export class SelfcocktailController {
 
     @ApiOperation({summary : "새로운 칵테일 레시피 입력"})
     @Post('/insert')
-    async insert(@Body() insertDto:InsertCocktailDto, @Headers() header){
+    async insert(@Body() insertDto:InsertSelfDto, @Headers() header){
         return await this.selfcocktailService.insert(insertDto,getToken(header));
     }
 

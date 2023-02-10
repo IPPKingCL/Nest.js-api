@@ -5,6 +5,7 @@ import { InsertCocktailDto } from 'src/admin/dto/insertCocktail.Dto';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { JuiceRecipeEntity } from 'src/entities/juiceRecipe.entity';
 import { DataSource } from 'typeorm';
+import { InsertSelfDto } from './dto/insertSelf.Dto';
 import { SelfAlchoRecipeRepository } from './repository/selfAlchoRecipe.repository';
 import { SelfCocktailRepository } from './repository/selfCocktail.repository';
 import { SelfJuiceRepository } from './repository/selfJuiceRecipe.repository';
@@ -25,7 +26,7 @@ export class SelfcocktailService {
         return await this.selfCocktailRepository.find();
     }
 
-    async insert(insertDto:InsertCocktailDto, header){
+    async insert(insertDto:InsertSelfDto, header){
         try{
             const token = this.jwtService.decode(header);
 
@@ -42,7 +43,7 @@ export class SelfcocktailService {
         }
     }
 
-    async insertSelfCocktail(insertDto:InsertCocktailDto,userId){
+    async insertSelfCocktail(insertDto:InsertSelfDto,userId){
         const queryRunner = this.dataSource.createQueryRunner(); //queryRunner 생성
         await queryRunner.connect();  //queryRunner 연결
         await queryRunner.startTransaction(); //트랜잭션 시작
@@ -52,9 +53,10 @@ export class SelfcocktailService {
             cocktail.name = insertDto.name;
             cocktail.imgUrl = insertDto.imgUrl;
             cocktail.dosu = insertDto.dosu;
+            
 
             const res = await queryRunner.query(
-                "insert into selfCocktail(name, dosu, imgUrl,userId) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"',"+ userId+")"
+                "insert into selfCocktail(name, dosu, imgUrl,userId,comment) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"',"+ userId+",'"+insertDto.comment+"')"
             );
 
             console.log(res['insertId']);
@@ -159,7 +161,7 @@ export class SelfcocktailService {
                         .getOne();
             
             return res;
-            
+
         }catch(err){
             this.logger.error(err);
             return {success : false};
