@@ -84,7 +84,7 @@ export class SelfcocktailService {
 
     async insertSelfAlchoRecipe(id,insertDto,queryRunner){
         try{
-            
+
             if(insertDto!=null){
                 return {success:true};
             }
@@ -148,6 +148,21 @@ export class SelfcocktailService {
         }catch(err){
             this.logger.error(err);
             return {success:false};
+        }
+    }
+
+
+    async select(id:number){
+        try{
+            const res = await this.selfCocktailRepository.createQueryBuilder()
+                        .where("id=:id",{id:id})
+                        .getOne();
+            
+            return res;
+            
+        }catch(err){
+            this.logger.error(err);
+            return {success : false};
         }
     }
 }

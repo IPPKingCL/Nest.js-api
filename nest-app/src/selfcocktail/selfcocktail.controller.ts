@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Post , Headers, Body, UseGuards} from '@nestjs/common';
+import { Controller, Get, Logger, Post , Headers, Body, UseGuards, Param} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { InsertCocktailDto } from 'src/admin/dto/insertCocktail.Dto';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
@@ -28,5 +28,11 @@ export class SelfcocktailController {
     @Get('/category')
     async getCategory(){
         return await this.selfcocktailService.getCategory();
+    }
+
+    @ApiOperation({summary : "자작 레시피 열람"})
+    @Get('/select/:id')
+    async select(@Param("id") id :number){
+        return await this.selfcocktailService.select(id);
     }
 }

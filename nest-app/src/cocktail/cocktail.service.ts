@@ -57,17 +57,14 @@ export class CocktailService {
                 .where("id=:id", { id: id })
                 .getOne();
 
-            const resJuice = await this.juiceRecipeRepository.query(
-                "select j.id, j.name, j.type, r.amount, j.imgUrl "
-                + "from Juice j, juiceRecipe r "
-                + "where j.id=r.juiceId and r.cocktailId=" + id + ";"
-            );
+            const resJuice = await this.resJuice(id);
 
-            const resAlcho = await this.alchoRecipeRepository.query(
-                "select a.id, a.name, a.category, a.imgUrl, r.amount , r.only "
-                + "from Alcho a, alchoRecipe r "
-                + "where a.id=r.alchoId and r.cocktailId=" + id + ";"
-            );
+            const resAlcho = await this.resAlcho(id);
+
+            if(resJuice.success===false||resAlcho.success===false){
+                return {success :false};
+            }
+            
             this.logger.log(resAlcho)
 
             const res = {
@@ -81,6 +78,37 @@ export class CocktailService {
         } catch (err) {
             this.logger.error(err);
             return { success: false }
+        }
+    }
+
+    async resJuice(id:number){
+        try{
+            const resJuice = await this.juiceRecipeRepository.query(
+                "select j.id, j.name, j.type, r.amount, j.imgUrl "
+                + "from Juice j, juiceRecipe r "
+                + "where j.id=r.juiceId and r.cocktailId=" + id + ";"
+            );
+
+            return resJuice;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false};
+        }
+    }
+
+    async resAlcho(id:number){
+        try{
+            const resAlcho = await this.alchoRecipeRepository.query(
+                "select a.id, a.name, a.category, a.imgUrl, r.amount , r.only "
+                + "from Alcho a, alchoRecipe r "
+                + "where a.id=r.alchoId and r.cocktailId=" + id + ";"
+            );
+
+            return resAlcho;
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
         }
     }
 
