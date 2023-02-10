@@ -28,7 +28,7 @@ export class SelfCocktailEntity{
 
     @Column({length:1500})
     comment : string;
-
+ 
     @Column()
     flag : boolean;
 
