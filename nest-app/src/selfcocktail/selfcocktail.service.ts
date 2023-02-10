@@ -86,8 +86,8 @@ export class SelfcocktailService {
 
     async insertSelfAlchoRecipe(id,insertDto,queryRunner){
         try{
-
-            if(insertDto!=null){
+            console.log(insertDto)
+            if(insertDto==null){
                 return {success:true};
             }
             await queryRunner.query(
@@ -105,7 +105,7 @@ export class SelfcocktailService {
     async insertSelfJuiceRecipe(id,insertDto,queryRunner){
         try{
 
-            if(insertDto!=null){
+            if(insertDto==null){
                 return {success:true};
             }
 
@@ -156,13 +156,67 @@ export class SelfcocktailService {
 
     async select(id:number){
         try{
-            const res = await this.selfCocktailRepository.createQueryBuilder('selfCocktail')
-                        .leftJoinAndSelect('selfCocktail.user','user.id')
-                        .where("selfCocktail.id=:id",{id:id})
-                        .andWhere("isDeleted=false")
-                        .getOne();
+            const resCock = await this.resCocktail(id);
+            const resJuice = await this.resJuice(id);
+            const resAlcho = await this.resAlcho(id);
+
+            if(resCock['success']===false||resJuice['success']===false||resAlcho['success']){
+                return {success:false};
+            }
+            
+            const res = {
+                cocktail: resCock,
+                cockJuice: resJuice,
+                cockAlcho: resAlcho,
+            }
+
             
             return res;
+
+        }catch(err){
+            this.logger.error(err);
+            return {success : false};
+        }
+    }
+
+    async resCocktail(id:number){
+        try{
+            const resCock =  await this.selfCocktailRepository.createQueryBuilder('selfCocktail')
+                            .leftJoinAndSelect('selfCocktail.user','user.id')
+                            .where("selfCocktail.id=:id",{id:id})
+                            .andWhere("isDeleted=false")
+                            .getOne();
+            
+            return resCock;
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+    }
+
+    async resJuice(id:number){
+        try{
+            const resJuice = await this.selfJuiceRecipeRepository.createQueryBuilder('selfJuiceRecipe')
+                            .leftJoinAndSelect('selfJuiceRecipe.juice','juice.id')
+                            .where("selfCocktailId=:id",{id:id})
+                            .getMany();
+
+            return resJuice;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false};
+        }
+    }
+
+    async resAlcho(id:number){
+        try{
+            const resAlcho = await this.selfAlchoRecipeRepository.createQueryBuilder('selfAlchoRecipe')
+                            .leftJoinAndSelect('selfAlchoRecipe.alcho','alcho.id')
+                            .where("selfCocktailId=:id",{id:id})
+                            .getMany();
+            
+            return resAlcho;
 
         }catch(err){
             this.logger.error(err);
