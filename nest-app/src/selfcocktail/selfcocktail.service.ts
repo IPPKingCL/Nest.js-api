@@ -54,12 +54,12 @@ export class SelfcocktailService {
             cocktail.dosu = insertDto.dosu;
 
             const res = await queryRunner.query(
-                "insert into selfCocktail(name, dosu, imgUrl,userId) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"'"+ userId+")"
+                "insert into selfCocktail(name, dosu, imgUrl,userId) values ('"+cocktail.name+"',"+cocktail.dosu+",'"+cocktail.imgUrl+"',"+ userId+")"
             );
 
             console.log(res['insertId']);
             const id = res['insertId'];
-
+            
             const resAlcho = await this.insertSelfAlchoRecipe(id,insertDto.alcho, queryRunner);
             const resJuice = await this.insertSelfJuiceRecipe(id,insertDto.juice,queryRunner);
 
@@ -84,8 +84,12 @@ export class SelfcocktailService {
 
     async insertSelfAlchoRecipe(id,insertDto,queryRunner){
         try{
+            
+            if(insertDto!=null){
+                return {success:true};
+            }
             await queryRunner.query(
-                'insert into selfAlchoRecipe(amount,only,unitNumId,alchoId,selfCocktailId) '
+                'insert into selfAlchoRecipe(amount,only,selfCocktailId,unitNumId,alchoId) '
                 +'values ('+insertDto[0].amount+','+insertDto[0].only+','+id+','+insertDto[0].unit+','+insertDto[0].name+')'
             );
 
@@ -98,6 +102,11 @@ export class SelfcocktailService {
 
     async insertSelfJuiceRecipe(id,insertDto,queryRunner){
         try{
+
+            if(insertDto!=null){
+                return {success:true};
+            }
+
             const juiceRecipe = new JuiceRecipeEntity();
 
             console.log(insertDto[0]);
@@ -110,7 +119,7 @@ export class SelfcocktailService {
             
             for(let i = 0; i<insertDto.length;i++){
                 await queryRunner.query(
-                    'insert into selfJuiceRecipe(amount, juiceId, cocktailId, unitNumId) '
+                    'insert into selfJuiceRecipe(amount, juiceId, selfCocktailId, unitNumId) '
                     +'values ('+insertDto[i].amount+','+insertDto[i].name+','+id+','+insertDto[i].unit+')'
                 );
             }
