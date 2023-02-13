@@ -128,8 +128,34 @@ export class CocktailController {
     @UseGuards(JwtAuthGuard)
     @Get('/recommend/contentFiltering')
     async contentFilteringRecommend(@Headers() header) {
+        this.logger.log(header.authorization);
         this.logger.log("---------------contents filtering recommend ");
-        return await this.cocktailService.CFR(getToken(header));
+
+        const cacheKey = header.authorization;
+        let value = this.cache.get(cacheKey);
+
+        if(!value){
+            const result = await this.cocktailService.CFR(getToken(header));
+            value = result;
+            this.cache.set(cacheKey, result, 60*60);
+        }
+        
+        return value;
+    }
+
+    @ApiOperation({summary : "컨텐츠 기반 필터링 다시 추천 받기"})
+    @UseGuards(JwtAuthGuard)
+    @Get('/recommend/contentFiltering/again')
+    async contentFilteringAgain(@Headers() header){
+        this.logger.log(header.authorization);
+        this.logger.log("---------------contents filtering recommend again");
+
+        const cacheKey = header.authorization;
+
+        const result = await this.cocktailService.CFR(getToken(header));
+        this.cache.set(cacheKey, result, 60*60);
+
+        return result;
     }
 
     @Get('/fucking/test')
