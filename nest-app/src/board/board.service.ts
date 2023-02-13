@@ -470,7 +470,7 @@ export class BoardService {
         }
     }
 
-    async myBoard(header){
+    async myBoard(header):Promise<BoardEntity|object>{
         try{
             const token = this.jwtService.decode(header);
             const id = token['id'];
@@ -601,6 +601,22 @@ export class BoardService {
         }
     }
 
+    async myComment(header):Promise<CommentEntity|object>{
+        try{
+            const token = this.jwtService.decode(header);
+
+            const id = token['id'];
+
+            const res = await this.coRepository.createQueryBuilder('comment')
+                        .where("userId=:id",{id:id})
+                        .getMany();
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false, msg:'내가 쓴 겟글 댓글 조회 실패'};
+        }
+    }
     
 
 

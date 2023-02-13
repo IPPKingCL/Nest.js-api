@@ -155,6 +155,13 @@ export class BoardController {
         this.logger.log('---------------'+boardId +' 번 댓글 상위 조회 ');
         return await this.boardService.commentLimit(boardId);
     }
+
+    @ApiOperation({summary:'내가 쓴 게시글 댓글 조회'})
+    @Get('/myComment')
+    async myComment(@Headers() header){
+        this.logger.log('--------------- 내가 쓴 게시글 댓글 ');
+        return await this.boardService.myComment(getToken(header));
+    }
     
 }
 
