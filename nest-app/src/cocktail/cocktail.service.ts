@@ -64,7 +64,7 @@ export class CocktailService {
             if(resJuice.success===false||resAlcho.success===false){
                 return {success :false};
             }
-            
+
             this.logger.log(resAlcho)
 
             const res = {
@@ -528,6 +528,26 @@ export class CocktailService {
         }
 
         return res;
+    }
+
+    async myCocktailList(header){
+        try{
+            const token = this.jwtService.decode(header);
+
+            const id = token['id'];
+
+            console.log(id)
+
+            const res = await this.ratingRepository.createQueryBuilder('rating')
+                        .leftJoinAndSelect('rating.cocktail','cocktail.id')
+                        .where("userId=:id",{id:id})
+                        .getMany();
+            
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success :false, msg : "내가 평가한 칵테일 조회 중 에러 발생"};
+        }
     }
 }
 

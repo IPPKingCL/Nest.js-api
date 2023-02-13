@@ -158,6 +158,13 @@ export class CocktailController {
         return result;
     }
 
+    @ApiOperation({summary : "내가 평가한 칵테일"})
+    @Get('/myCocktail/List')
+    async myCocktailList(@Headers() header){
+        this.logger.log("---------------my cocktail list");
+        return await this.cocktailService.myCocktailList(getToken(header));
+    }
+
     @Get('/fucking/test')
     async test(@Headers() header){
         this.logger.log("---------------fucking ");
