@@ -100,6 +100,13 @@ export class BoardController {
         return await this.boardService.orderbyLimit();
     }
 
+    @ApiOperation({summary : "내가 쓴 게시글"})
+    @Get('/myList')
+    async myList(@Headers() header){
+        this.logger.log('--------------- 내가 쓴 게시글 ');
+        return await this.boardService.myBoard(getToken(header));
+    }
+
     @Get('/s3url')
     async s3url(){
         return await this.boardService.s3url();

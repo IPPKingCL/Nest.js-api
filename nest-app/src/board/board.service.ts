@@ -469,6 +469,22 @@ export class BoardService {
             return { success: false, msg: "게시글 상위 추천 조회 실패" };
         }
     }
+
+    async myBoard(header){
+        try{
+            const token = this.jwtService.decode(header);
+            const id = token['id'];
+
+            const res = await this.repository.createQueryBuilder('board')
+                        .where('userId=:id',{id:id})
+                        .getMany();
+            
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success : false, msg : "내가 쓴 게시글 조회 실패"}
+        }
+    }
     /*******************comment*******************/
     async insertComment(commentData, header): Promise<object> {
 
@@ -584,6 +600,8 @@ export class BoardService {
             return {success:false,msg:"상위 추천 댓글 조회 실패"};
         }
     }
+
+    
 
 
     /* raw 쿼리 이용하는 법
