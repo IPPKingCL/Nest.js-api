@@ -11,12 +11,14 @@ import { CocktailEntity } from 'src/entities/cocktail.entity';
 
 import * as NodeCache from 'node-cache';
 import { CocktailCommentService } from './cocktailComment.service';
+import { ContentFilteringService } from './contentFiltering.service';
 
 @Controller('/cocktail')
 export class CocktailController {
     cache:NodeCache;
     constructor(private readonly cocktailService : CocktailService,
-                private readonly cocktailCoService : CocktailCommentService
+                private readonly cocktailCoService : CocktailCommentService,
+                private readonly contentFilteringService : ContentFilteringService
                 ){
         this.cache = new NodeCache();
     }
@@ -138,7 +140,7 @@ export class CocktailController {
         let value = this.cache.get(cacheKey);
 
         if(!value){
-            const result = await this.cocktailService.CFR(getToken(header));
+            const result = await this.contentFilteringService.CFR(getToken(header));
             value = result;
             this.cache.set(cacheKey, result, 60*60);
         }
@@ -155,7 +157,7 @@ export class CocktailController {
 
         const cacheKey = header.authorization;
 
-        const result = await this.cocktailService.CFR(getToken(header));
+        const result = await this.contentFilteringService.CFR(getToken(header));
         this.cache.set(cacheKey, result, 60*60);
 
         return result;
@@ -168,10 +170,6 @@ export class CocktailController {
         return await this.cocktailService.myCocktailList(getToken(header));
     }
 
-    @Get('/fucking/test')
-    async test(@Headers() header){
-        this.logger.log("---------------fucking ");
-        return await this.cocktailService.randomList(30000);
-    }
+    
 }
 

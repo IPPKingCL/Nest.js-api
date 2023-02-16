@@ -16,6 +16,7 @@ import { CocktailCommentRepository } from './repository/CocktailComment.reposito
 import { UserRepository } from './repository/User.repository';
 import { FavoriteRepository } from 'src/user/repository/favorite.repository';
 import { CocktailCommentService } from './cocktailComment.service';
+import { ContentFilteringService } from './contentFiltering.service';
 
 
 @Module({
@@ -39,6 +40,6 @@ import { CocktailCommentService } from './cocktailComment.service';
         signOptions: { expiresIn: '1y' },
     }),*/],
   controllers : [CocktailController],
-  providers: [CocktailService,JwtStrategy,CocktailCommentService]
+  providers: [CocktailService,JwtStrategy,CocktailCommentService,ContentFilteringService]
 })
 export class CocktailModule {}
