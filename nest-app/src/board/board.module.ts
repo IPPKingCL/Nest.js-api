@@ -12,6 +12,7 @@ import { ImgRepositoy } from './repository/img.repository';
 import { BoardRecommandRepository } from './repository/boardRecommand.repository';
 import { CommentRecommendRepository } from './repository/commentRecommend.repository';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
+import { CommentService } from './comment.service';
 @Module({
     imports:[
         TypeOrmExModule.forCustomRepository([BoardRepository,CommentRepository,
@@ -33,6 +34,6 @@ import { BoardVideoRepository } from './repository/boardVideo.repository';
             signOptions: { expiresIn: '1y' },
         }),*/],
     controllers :[BoardController],
-    providers : [BoardService,JwtStrategy]
+    providers : [BoardService,JwtStrategy,CommentService]
 })
 export class BoardModule {}

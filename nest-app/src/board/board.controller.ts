@@ -4,6 +4,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { BoardService } from './board.service';
+import { CommentService } from './comment.service';
 import { commentDto } from './dto/comment.Dto';
 import { delCommentDto } from './dto/delComment.Dto';
 import { deleteDto } from './dto/delete.Dto';
@@ -14,7 +15,9 @@ import { writeDataDto } from './dto/writeData.Dto';
 @Controller('board')
 export class BoardController {
 
-    constructor(private readonly boardService : BoardService){}
+    constructor(private readonly boardService : BoardService,
+                private readonly commentService : CommentService
+        ){}
     private readonly logger = new Logger(BoardController.name);
 
     @ApiOperation({summary:' 게시판 전체 조회'})
@@ -122,7 +125,7 @@ export class BoardController {
     @Get('/comment/:id')
     async commentAll(@Param("id") id:number){
         this.logger.log('---------------'+id +' 게시글 댓글 열람');
-        return await this.boardService.commentAll(id);
+        return await this.commentService.commentAll(id);
     }
 
     @ApiOperation({summary:' 게시글 댓글 저장'})
@@ -130,7 +133,7 @@ export class BoardController {
     @Post('/insertComment')
     async insertComment(@Body() commentData:commentDto, @Headers() header){
         this.logger.log('---------------'+commentData.boardId +' 게시글 댓글 저장');
-        return await this.boardService.insertComment(commentData, getToken(header));
+        return await this.commentService.insertComment(commentData, getToken(header));
     }
 
     @ApiOperation({summary:' 게시글 댓글 삭제'})
@@ -138,7 +141,7 @@ export class BoardController {
     @Post('/deleteComment')
     async deleteComment(@Body() delComment:delCommentDto,@Headers() header){
         this.logger.log('---------------'+delComment.id +' 번 댓글 삭제 ');
-        return await this.boardService.deleteComment(delComment, getToken(header));
+        return await this.commentService.deleteComment(delComment, getToken(header));
     }
 
     @ApiOperation({summary:' 게시글 댓글 추천'})
@@ -146,21 +149,21 @@ export class BoardController {
     @Post('/recommendComment')
     async recommendComment(@Body() recommend:delCommentDto , @Headers() header){
         this.logger.log('---------------'+recommend.id +' 번 댓글 추천 ');
-        return await this.boardService.recommendComment(recommend,getToken(header));
+        return await this.commentService.recommendComment(recommend,getToken(header));
     }
 
     @ApiOperation({summary: ' 게시글 추천 상위 댓글 조회'})
     @Get('/select/comment/:id')
     async commentLimit(@Param("id") boardId:number){
         this.logger.log('---------------'+boardId +' 번 댓글 상위 조회 ');
-        return await this.boardService.commentLimit(boardId);
+        return await this.commentService.commentLimit(boardId);
     }
 
     @ApiOperation({summary:'내가 쓴 게시글 댓글 조회'})
     @Get('/myComment')
     async myComment(@Headers() header){
         this.logger.log('--------------- 내가 쓴 게시글 댓글 ');
-        return await this.boardService.myComment(getToken(header));
+        return await this.commentService.myComment(getToken(header));
     }
     
 }
