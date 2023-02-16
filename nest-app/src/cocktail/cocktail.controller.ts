@@ -10,11 +10,14 @@ import { RatingDto } from './dto/rating.Dto';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 
 import * as NodeCache from 'node-cache';
+import { CocktailCommentService } from './cocktailComment.service';
 
 @Controller('/cocktail')
 export class CocktailController {
     cache:NodeCache;
-    constructor(private readonly cocktailService : CocktailService){
+    constructor(private readonly cocktailService : CocktailService,
+                private readonly cocktailCoService : CocktailCommentService
+                ){
         this.cache = new NodeCache();
     }
     private readonly logger = new Logger(CocktailController.name);
@@ -105,14 +108,14 @@ export class CocktailController {
     @Post('comment/insert')
     async commentInsert(@Body() commentDto:commentDto, @Headers() header){
         this.logger.log("---------------insert cocktail comment ");
-        return await this.cocktailService.commentInsert(commentDto, getToken(header));
+        return await this.cocktailCoService.commentInsert(commentDto, getToken(header));
     }
 
     @ApiOperation({summary: " 댓글 조회"})
     @Get('comment/all/:id')
     async commentAll(@Param("id") id:number){
         this.logger.log("---------------select cocktail comment ");
-        return await this.cocktailService.commentAll(id);
+        return await this.cocktailCoService.commentAll(id);
     }
 
     @ApiOperation({summary : " 댓글 삭제"})
@@ -120,7 +123,7 @@ export class CocktailController {
     @Post('comment/delete')
     async deleteComment(@Body() delComment:delCommentDto, @Headers() header){
         this.logger.log("---------------delete cocktail comment ");
-        return await this.cocktailService.deleteComment(delComment,getToken(header));
+        return await this.cocktailCoService.deleteComment(delComment,getToken(header));
     }
     //@Get('/juice/:id')
 
