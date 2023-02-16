@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService,ConfigModule } from '@nestjs/config';
 import { alchoCommentRepository } from './repository/alchoComment.repository';
 import { alchoCategoryRepository } from './repository/alchoCategory.repository';
+import { AlcoholCommentService } from './alcoholComment.service';
 @Module(
     {imports:[
     TypeOrmExModule.forCustomRepository([alchoRepository,alchoCommentRepository,alchoCategoryRepository]),
@@ -27,7 +28,7 @@ import { alchoCategoryRepository } from './repository/alchoCategory.repository';
         signOptions: { expiresIn: '1y' },
     }),*/],
 controllers :[AlcoholController],
-providers : [AlcoholService,JwtStrategy]})
+providers : [AlcoholService,JwtStrategy,AlcoholCommentService]})
 export class AlcoholModule {
     
 }

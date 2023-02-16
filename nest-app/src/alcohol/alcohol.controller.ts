@@ -8,11 +8,13 @@ import { AlchoCommentDto } from './dto/alchoComment.Dto';
 import * as NodeCache from 'node-cache';
 import { AlchoEntity } from 'src/entities/alcho.entity';
 import { readAlchoDto } from './dto/readAlcho.Dto';
+import { AlcoholCommentService } from './alcoholComment.service';
 
 @Controller('alcohol')
 export class AlcoholController {
     cache:NodeCache;
-    constructor(private readonly alchoService : AlcoholService){
+    constructor(private readonly alchoService : AlcoholService,
+                private readonly alchoCommentService : AlcoholCommentService){
         this.cache = new NodeCache();
     }
     private readonly logger = new Logger(AlcoholController.name);
@@ -87,14 +89,14 @@ export class AlcoholController {
     @Post('/insertComment')
     async insertComment(@Body() commentDto:AlchoCommentDto, @Headers() header){
         this.logger.log("---------------comment alcohol id : "+commentDto.alchoId);
-        return await this.alchoService.insertComment(commentDto, getToken(header));
+        return await this.alchoCommentService.insertComment(commentDto, getToken(header));
     }
 
     @ApiOperation({summary: "술 댓글 조회"})
     @Get('/commentAll/:id')
     async commentAll(@Param("id") id : number){
         this.logger.log("---------------comment alcohol id : "+id);
-        return await this.alchoService.commentAll(id);
+        return await this.alchoCommentService.commentAll(id);
     }
 
     @ApiOperation({summary: "댓글 삭제"})
@@ -102,7 +104,7 @@ export class AlcoholController {
     @Post('delete')
     async deleteComment(@Body() deleteComment:delCommentDto, @Headers() header){
         this.logger.log("---------------delete comment alcohol ");
-        return await this.alchoService.deleteComment(deleteComment,getToken(header));
+        return await this.alchoCommentService.deleteComment(deleteComment,getToken(header));
     }
 
 
