@@ -13,11 +13,13 @@ import { BoardRecommandRepository } from './repository/boardRecommand.repository
 import { CommentRecommendRepository } from './repository/commentRecommend.repository';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
 import { CommentService } from './comment.service';
+import { UserRepository } from 'src/user/repository/user.repository';
 @Module({
     imports:[
         TypeOrmExModule.forCustomRepository([BoardRepository,CommentRepository,
                                             ImgRepositoy,BoardRecommandRepository,
-                                            CommentRecommendRepository,BoardVideoRepository
+                                            CommentRecommendRepository,BoardVideoRepository,
+                                            UserRepository
                                           ]),
            // session을 사용하지 않을 예정이기 때문에 false
         PassportModule.register({ defaultStrategy: 'jwt', session: false }),

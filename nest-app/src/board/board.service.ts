@@ -19,6 +19,8 @@ import { BoardVideoEntity } from 'src/entities/boardVideo.entity';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
 import { VideoDto } from './dto/Video.Dto';
 import { ImgEntity } from 'src/entities/img.entity';
+import { userStatus } from 'src/user/enumType/userStatus';
+import { UserRepository } from 'src/user/repository/user.repository';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -32,7 +34,8 @@ export class BoardService {
         private jwtService: JwtService,
         private dataSource : DataSource,
         private readonly commentRecommendRepository : CommentRecommendRepository,
-        private readonly boardVideoRepository : BoardVideoRepository
+        private readonly boardVideoRepository : BoardVideoRepository,
+        private readonly userRepository :UserRepository,
     ) { }  //댓글
 
     async getAll(header): Promise<BoardEntity[]> {
@@ -323,7 +326,10 @@ export class BoardService {
             const token = this.jwtService.decode(header);
             this.logger.log(deleteOne.userId);
             this.logger.log(token["id"]);
-            if (deleteOne.userId == (token['id'])) {
+
+            const checkUser = await this.checkUser(token['id']);
+
+            if (deleteOne.userId == (token['id'])||checkUser['success']) {
                 await this.repository.createQueryBuilder()
                     .update('board')
                     .set({ isDeleted: true })
@@ -337,6 +343,26 @@ export class BoardService {
         } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "게시글 삭제 실패" };
+        }
+    }
+
+        /*유저 권한 체크*/
+    async checkUser(id:number):Promise<object>{
+        
+        try{
+            const res = await this.userRepository.createQueryBuilder('user')
+                        .where("id=:id",{id:id})
+                        .getOne();
+            console.log(res);
+            console.log(userStatus)
+            if(res['userLoginType']===userStatus['admin']){
+                return {success:true};
+            }else{
+                return {success:false};
+            }
+        }catch(err){
+            this.logger.error(err);
+            return {success:false ,msg:err};
         }
     }
 
