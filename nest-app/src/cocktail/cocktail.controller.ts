@@ -129,6 +129,14 @@ export class CocktailController {
     }
     //@Get('/juice/:id')
 
+    @ApiOperation({summary : "칵테일 추천"})
+    @UseGuards(JwtAuthGuard)
+    @Get('/recommend')
+    async recommendCocktail(@Headers() header){
+        this.logger.log("---------------contents filtering recommend ");
+        const res = await this.cocktailService.countRecommend(getToken(header));
+    }
+
     @ApiOperation({summary : "컨텐츠 기반 필터링 추천"})
     @UseGuards(JwtAuthGuard)
     @Get('/recommend/contentFiltering')

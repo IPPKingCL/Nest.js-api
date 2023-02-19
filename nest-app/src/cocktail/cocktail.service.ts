@@ -328,5 +328,34 @@ export class CocktailService {
             return {success :false, msg : "내가 평가한 칵테일 조회 중 에러 발생"};
         }
     }
+
+    /**칵테일 추천한 개수 세기 */
+    async countRecommend(header){
+        try{
+            const token = await this.jwtService.decode(header);
+
+            const id = token['id'];
+
+            const res = await this.ratingRepository.createQueryBuilder('rating')
+                        .select('rating.userId')
+                        .addSelect('COUNT(*) as count')
+                        .groupBy('rating.userId')
+                        .where("userId=:id",{id:id})
+                        .getMany();
+
+            console.log(res);
+
+            /**await this.commentRepository
+      .createQueryBuilder('comment')
+      .select('comment.postId AS postId')
+      .addSelect('COUNT(*) AS commentCount')
+      .groupBy('comment.postId')
+      .getRawMany(); */
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+
+    }
 }
 
