@@ -308,7 +308,7 @@ export class CocktailService {
         }
     }
 
-    
+    /**내가 평가한 칵테일 조회 */
     async myCocktailList(header){
         try{
             const token = this.jwtService.decode(header);

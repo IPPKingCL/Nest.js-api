@@ -170,12 +170,18 @@ export class CocktailController {
         this.logger.log(header.authorization);
         this.logger.log("---------------contents filtering recommend again");
 
-        const cacheKey = header.authorization;
+        const count = await this.cocktailService.countRecommend(getToken(header));//칵테일 몇 개 평가했는지
+        if(count>50){
+            //50개 넘어가면 협업기반 필터링 추천 다시 받기 로직으로 이동
+        }else{
+            const cacheKey = header.authorization;
 
-        const result = await this.contentFilteringService.CFR(getToken(header));
-        this.cache.set(cacheKey, result, 60*60);
-
-        return result;
+            const result = await this.contentFilteringService.CFR(getToken(header));
+            this.cache.set(cacheKey, result, 60*60);
+    
+            return result;
+        }
+        
     }
 
     @ApiOperation({summary : "내가 평가한 칵테일"})
