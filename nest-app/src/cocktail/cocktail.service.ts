@@ -336,21 +336,13 @@ export class CocktailService {
 
             const id = token['id'];
 
-            const res = await this.ratingRepository.createQueryBuilder('rating')
-                        .select('rating.userId')
-                        .addSelect('COUNT(*) as count')
-                        .groupBy('rating.userId')
-                        .where("userId=:id",{id:id})
-                        .getMany();
+            const res = await this.ratingRepository.query(
+                'select count(*) as count from rating where userId='+id
+            );
 
-            console.log(res);
+            console.log(res[0].count);
 
-            /**await this.commentRepository
-      .createQueryBuilder('comment')
-      .select('comment.postId AS postId')
-      .addSelect('COUNT(*) AS commentCount')
-      .groupBy('comment.postId')
-      .getRawMany(); */
+            return res[0].count;            
         }catch(err){
             this.logger.error(err);
             return {success:false};

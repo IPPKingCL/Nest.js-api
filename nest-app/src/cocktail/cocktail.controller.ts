@@ -131,10 +131,16 @@ export class CocktailController {
 
     @ApiOperation({summary : "칵테일 추천"})
     @UseGuards(JwtAuthGuard)
-    @Get('/recommend')
+    @Get('/recommend/type')
     async recommendCocktail(@Headers() header){
         this.logger.log("---------------contents filtering recommend ");
         const res = await this.cocktailService.countRecommend(getToken(header));
+
+        if(res>50){
+            return {msg:"협업 기반 필터링 ㄱㄱ"};
+        }else{
+            return await this.contentFilteringRecommend(header);
+        }
     }
 
     @ApiOperation({summary : "컨텐츠 기반 필터링 추천"})
