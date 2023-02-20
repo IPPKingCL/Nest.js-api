@@ -136,6 +136,7 @@ export class CocktailController {
         this.logger.log("---------------contents filtering recommend ");
         const res = await this.cocktailService.countRecommend(getToken(header));
 
+        /**캐시 값에 값이 저장되어 있을 때 다시 추천 받기 기능 생각해봐야됨 */
         if(res>50){
             return {msg:"협업 기반 필터링 ㄱㄱ"};
         }else{
