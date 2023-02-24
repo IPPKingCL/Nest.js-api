@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class writeDataDto{
     readonly id:number;
@@ -21,8 +21,8 @@ export class writeDataDto{
     @IsString()
     readonly boardType : string;
 
-    @IsArray()
-    readonly imgUrl : string[];
+    @IsString()
+    readonly imgUrl : string;
 
     @IsString()
     readonly videoUrl : string;

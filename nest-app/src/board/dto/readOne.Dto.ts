@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class readOneDto{
     readonly id:number;
@@ -31,8 +31,7 @@ export class readOneDto{
     recommend:number;
 
     
-    imgUrl:Array<string>|null;
-    //imgUrl:any;
+    imgUrl:string|null;
+
     videoUrl : string|null;
-    //static imgUrl: any;
 }
