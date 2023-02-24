@@ -114,7 +114,7 @@ export class BoardService {
 
             console.log(res['insertId'])
             
-            console.log(writeData.videoUrl)
+            console.log(writeData.imgUrl[0])
 
             const imgRes = await this.writeImg(writeData.imgUrl, res['insertId'], queryRunner);
             const videoRes = await this.writeVideo(writeData.videoUrl,res['insertId'], queryRunner);
@@ -147,10 +147,14 @@ export class BoardService {
             if(url===''){
                 return {success:true};
             }
-            await queryRunner.query(
-                'insert into img(boardType,boardId,imgUrl) '
-                +"values ('"+imgdto.boardType+"','"+imgdto.boardId+"','"+imgdto.imgUrl+"')"
-            );
+
+            for(let i = 0 ; i<url.length; i++){
+                await queryRunner.query(
+                    'insert into img(boardType,boardId,imgUrl) '
+                    +"values ('"+imgdto.boardType+"','"+imgdto.boardId+"','"+imgdto.imgUrl[i]+"')"
+                );
+            }
+            
 
             return { success: true };
         } catch (err) {
@@ -203,9 +207,26 @@ export class BoardService {
             readOne.userId = res.user.id;
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
-            if (resImg !== null) {
-                readOne.imgUrl = resImg['imgUrl'];
+
+            console.log(resImg[0])
+
+            while(true){
+                
+                let i = 0;
+                console.log(i)
+                if (resImg[i] !== null) {
+                    readOneDto['imgUrl']=resImg[i]['imgUrl'];
+                    i++;
+                }else{
+                    break;
+                }
             }
+            // if (resImg !== null) {
+            //     for(let i = 0 ; i<resImg.length ;i++){
+
+            //     }
+            //     readOne.imgUrl = resImg['imgUrl'];
+            // }
 
             if (resVideo !== null){
                 readOne.videoUrl = resVideo['videoUrl'];
@@ -225,7 +246,7 @@ export class BoardService {
             const res = await this.imgRepository.createQueryBuilder('img')
                         .where('boardType=:type', { type: 'b' })
                         .andWhere('boardId=:id', { id: id })
-                        .getOne();
+                        .getMany();
             
             return res;
         }catch(err){
