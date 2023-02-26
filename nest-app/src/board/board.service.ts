@@ -265,11 +265,9 @@ export class BoardService {
             readOne.nickname = res.user.nickname;
             readOne.recommend = res.recommend;
 
-            const tokenNumberId: number = parseInt(token["id"]);
-            this.logger.log(tokenNumberId);
-            this.logger.log(res.user.id);
-
-            const checkAuthUser = checkAuth(tokenNumberId, res.user.id);
+           
+            const checkAuthUser = checkAuth(token['id'], res.user.id);
+           
             if (checkAuthUser.success) {
                 return readOne;
             } else {
@@ -287,7 +285,7 @@ export class BoardService {
         const token = this.jwtService.decode(header);
         console.log(token['id']);
         console.log(writeData);
-        const checkAuthUser = checkAuth(parseInt(token['id']), writeData.userId);
+        const checkAuthUser = checkAuth(token['id'], writeData.userId);
 
         if(!checkAuthUser.success){
             return {success:false, msg : "권한이 없습니다"};
@@ -334,8 +332,8 @@ export class BoardService {
             this.logger.log(token["id"]);
 
             const checkUser = await this.checkUser(token['id']);
-            const checkAuthUser = checkAuth(parseInt(token['id']), deleteOne.userId);
-            
+            const checkAuthUser = checkAuth(token['id'], deleteOne.userId);
+
             if (checkAuthUser.success||checkUser['success']) {
                 await this.repository.createQueryBuilder()
                     .update('board')
@@ -379,6 +377,7 @@ export class BoardService {
     }
 
     //추천 orm update가 비효율적인거 같아 raw query로 작성
+    //여기 쿼리 분리하기
     async recommend(id, header): Promise<object> {
         // try{
         //     await this.repository.query(

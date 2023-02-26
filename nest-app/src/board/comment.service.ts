@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { CommentEntity } from "src/entities/comment.entity";
 import { CommentRecommendEntity } from "src/entities/commentRecommend.entity";
+import { checkAuth } from "src/util/checkAuth";
 import { DataSource } from "typeorm";
 import { BoardRepository } from "./repository/board.repository";
 import { BoardRecommandRepository } from "./repository/boardRecommand.repository";
@@ -64,7 +65,8 @@ export class CommentService{
         try {
 
             const token = this.jwtService.decode(header);
-            if (deleteComment.userId == (token['id'])) {
+            const checkAuthUser = checkAuth(token['id'], deleteComment.userId);
+            if (checkAuthUser.success) {
                 await this.coRepository.createQueryBuilder()
                     .update('comment')
                     .set({ isDeleted: true })
@@ -80,6 +82,7 @@ export class CommentService{
         }
     }
 
+    /**여기도 분리 예정 */
     async recommendComment(recommend, header) : Promise<object>{
         try{
             const token = this.jwtService.decode(header);
