@@ -292,6 +292,7 @@ export class BoardService {
         if(!checkAuthUser.success){
             return {success:false, msg : "권한이 없습니다"};
         }
+
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
@@ -333,8 +334,9 @@ export class BoardService {
             this.logger.log(token["id"]);
 
             const checkUser = await this.checkUser(token['id']);
-
-            if (deleteOne.userId == (token['id'])||checkUser['success']) {
+            const checkAuthUser = checkAuth(parseInt(token['id']), deleteOne.userId);
+            
+            if (checkAuthUser.success||checkUser['success']) {
                 await this.repository.createQueryBuilder()
                     .update('board')
                     .set({ isDeleted: true })
