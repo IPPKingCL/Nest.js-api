@@ -10,6 +10,9 @@ export class modifyDto{
     @IsString()
     readonly contents:string;
 
+    @IsNumber()
+    readonly userId : number;
+
     /*@IsDate()
     readonly dateTime:Date;
 

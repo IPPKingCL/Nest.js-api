@@ -18,6 +18,7 @@ import { BoardVideoRepository } from './repository/boardVideo.repository';
 import { ImgEntity } from 'src/entities/img.entity';
 import { userStatus } from 'src/user/enumType/userStatus';
 import { UserRepository } from 'src/user/repository/user.repository';
+import { checkAuth } from 'src/util/checkAuth';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -266,8 +267,10 @@ export class BoardService {
 
             const tokenNumberId: number = parseInt(token["id"]);
             this.logger.log(tokenNumberId);
-            this.logger.log(res.user.id)
-            if (tokenNumberId == res.user.id) {
+            this.logger.log(res.user.id);
+
+            const checkAuthUser = checkAuth(tokenNumberId, res.user.id);
+            if (checkAuthUser.success) {
                 return readOne;
             } else {
                 return { success: true, auth: false, msg: "권한이 없습니다" };
@@ -282,6 +285,13 @@ export class BoardService {
     async modifyBoard(writeData, header): Promise<object> {
 
         const token = this.jwtService.decode(header);
+        console.log(token['id']);
+        console.log(writeData);
+        const checkAuthUser = checkAuth(parseInt(token['id']), writeData.userId);
+
+        if(!checkAuthUser.success){
+            return {success:false, msg : "권한이 없습니다"};
+        }
         const board = new BoardEntity();
         board.id = writeData.id;
         board.title = writeData.title;
