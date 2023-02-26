@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { commentDto } from './dto/comment.Dto';
 import { deleteDto } from './dto/delete.Dto';
 import { imgDto } from './dto/img.Dto';
 import { modiOneDto } from './dto/modiOne.Dto';
@@ -14,10 +13,8 @@ import { BoardRecommandRepository } from './repository/boardRecommand.repository
 import { BoardRecommandEntity } from 'src/entities/boardRecommand.entity';
 import { DataSource } from 'typeorm';
 import { CommentRecommendRepository } from './repository/commentRecommend.repository';
-import { CommentRecommendEntity } from 'src/entities/commentRecommend.entity';
 import { BoardVideoEntity } from 'src/entities/boardVideo.entity';
 import { BoardVideoRepository } from './repository/boardVideo.repository';
-import { VideoDto } from './dto/Video.Dto';
 import { ImgEntity } from 'src/entities/img.entity';
 import { userStatus } from 'src/user/enumType/userStatus';
 import { UserRepository } from 'src/user/repository/user.repository';
@@ -111,11 +108,7 @@ export class BoardService {
                 +"values ('"+board.title+"','"+board.contents+"',CURRENT_TIMESTAMP,'"+board.isDeleted+"','"
                 +board.isModified+"','"+board.user+"','"+board.boardType+"')"
             );
-
-            console.log(res['insertId'])
             
-            console.log(writeData.videoUrl)
-
             const imgRes = await this.writeImg(writeData.imgUrl, res['insertId'], queryRunner);
             const videoRes = await this.writeVideo(writeData.videoUrl,res['insertId'], queryRunner);
 
@@ -139,14 +132,16 @@ export class BoardService {
 
     async writeImg(url: string, id: number, queryRunner): Promise<object> {
         try {
+            if(url===''){
+                return {success:true};
+            }
+
             const imgdto = new imgDto();
             imgdto.boardId = id;
             imgdto.boardType = 'b';
             imgdto.imgUrl = url;
 
-            if(url===''){
-                return {success:true};
-            }
+            
             await queryRunner.query(
                 'insert into img(boardType,boardId,imgUrl) '
                 +"values ('"+imgdto.boardType+"','"+imgdto.boardId+"','"+imgdto.imgUrl+"')"
@@ -161,13 +156,13 @@ export class BoardService {
 
     async writeVideo(url:string, id, queryRunner) : Promise<object>{
         try{
-            const videoDto = new BoardVideoEntity();
-            videoDto.id = id;
-            videoDto.videoUrl = url;
-
             if(url===''){
                 return {success:true};
             }
+
+            const videoDto = new BoardVideoEntity();
+            videoDto.id = id;
+            videoDto.videoUrl = url;
 
             await queryRunner.query(
                 "insert into boardVideo(videoUrl,boardId) values ('"+url+"','"+id+"')"
