@@ -18,7 +18,7 @@ import { BoardVideoRepository } from './repository/boardVideo.repository';
 import { ImgEntity } from 'src/entities/img.entity';
 import { userStatus } from 'src/user/enumType/userStatus';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { checkAuth } from 'src/util/checkAuth';
+import { CheckAuth } from 'src/util/checkAuth';
 const { generateUploadURL } = require('../util/s3');
 
 @Injectable()
@@ -266,8 +266,9 @@ export class BoardService {
             readOne.recommend = res.recommend;
 
            
-            const checkAuthUser = checkAuth(token['id'], res.user.id);
-           
+            //const checkAuthUser = checkAuth(token['id'], res.user.id);
+            const checkAuthUser = CheckAuth.checkAuth(token['id'],res.user.id);
+            
             if (checkAuthUser.success) {
                 return readOne;
             } else {
@@ -285,8 +286,9 @@ export class BoardService {
         const token = this.jwtService.decode(header);
         console.log(token['id']);
         console.log(writeData);
-        const checkAuthUser = checkAuth(token['id'], writeData.userId);
-
+        //const checkAuthUser = checkAuth(token['id'], writeData.userId);
+        const checkAuthUser = CheckAuth.checkAuth(token['id'],writeData.userId);
+        
         if(!checkAuthUser.success){
             return {success:false, msg : "권한이 없습니다"};
         }
@@ -332,7 +334,7 @@ export class BoardService {
             this.logger.log(token["id"]);
 
             const checkUser = await this.checkUser(token['id']);
-            const checkAuthUser = checkAuth(token['id'], deleteOne.userId);
+            const checkAuthUser = CheckAuth.checkAuth(token['id'], deleteOne.userId);
 
             if (checkAuthUser.success||checkUser['success']) {
                 await this.repository.createQueryBuilder()

@@ -26,6 +26,7 @@ export class ContentFilteringService{
         private readonly userRepository: UserRepository,
         private readonly favoriteRepository: FavoriteRepository
     ) { }
+    
     /**콘텐츠 기반 필터링 추천 */
     async CFR(header): Promise<object> {
 
