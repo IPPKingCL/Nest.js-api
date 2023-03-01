@@ -286,7 +286,7 @@ export class BoardService {
         const token = this.jwtService.decode(header);
         this.logger.log(token['id']);
         this.logger.log(writeData);
-        const checkAuthUser = checkAuth(token['id'], writeData.userId);
+        const checkAuthUser = CheckAuth.checkAuth(token['id'], writeData.userId);
 
         if(!checkAuthUser.success){
             return {success:false, msg : "권한이 없습니다"};
