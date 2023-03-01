@@ -102,7 +102,7 @@ export class BoardService {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
-        console.log("type of "+ typeof(queryRunner));
+        this.logger.log("type of "+ typeof(queryRunner));
         try {
             const res = await queryRunner.query(
                 "insert into board(title,contents,dateTime,isDeleted,isModified,userId,boardType) "
@@ -283,8 +283,8 @@ export class BoardService {
     async modifyBoard(writeData, header): Promise<object> {
 
         const token = this.jwtService.decode(header);
-        console.log(token['id']);
-        console.log(writeData);
+        this.logger.log(token['id']);
+        this.logger.log(writeData);
         const checkAuthUser = checkAuth(token['id'], writeData.userId);
 
         if(!checkAuthUser.success){
@@ -358,8 +358,8 @@ export class BoardService {
             const res = await this.userRepository.createQueryBuilder('user')
                         .where("id=:id",{id:id})
                         .getOne();
-            console.log(res);
-            console.log(userStatus)
+            this.logger.log(res);
+            this.logger.log(userStatus)
             if(res['userLoginType']===userStatus['admin']){
                 return {success:true};
             }else{
