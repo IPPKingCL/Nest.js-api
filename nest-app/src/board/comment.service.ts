@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { CommentEntity } from "src/entities/comment.entity";
 import { CommentRecommendEntity } from "src/entities/commentRecommend.entity";
-import { checkAuth } from "src/util/checkAuth";
+import { CheckAuth } from "src/util/checkAuth";
 import { DataSource } from "typeorm";
 import { BoardRepository } from "./repository/board.repository";
 import { BoardRecommandRepository } from "./repository/boardRecommand.repository";
@@ -65,7 +65,8 @@ export class CommentService{
         try {
 
             const token = this.jwtService.decode(header);
-            const checkAuthUser = checkAuth(token['id'], deleteComment.userId);
+            const checkAuthUser = CheckAuth.checkAuth(token['id'], deleteComment.userId);
+            
             if (checkAuthUser.success) {
                 await this.coRepository.createQueryBuilder()
                     .update('comment')
