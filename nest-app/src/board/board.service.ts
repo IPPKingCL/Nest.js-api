@@ -394,54 +394,86 @@ export class BoardService {
         //     this.logger.error(err);
         //     return {success:false, msg:"게시글 추천 실패"};
         // }
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.startTransaction();
+        
         try {
             const token = this.jwtService.decode(header);
             const res = await this.checkRecommand(id, token['id']);
+            let response;
             if (res.success && !res.isDeleted) {
                 //추천 취소
-                await this.recommandRepository.createQueryBuilder()
-                    .update('boardRecommand')
-                    .set({ isDeleted: true })
-                    .where("boardId=:id", { id: id })
-                    .andWhere("userId=:userId", { userId: token['id'] })
-                    .execute();
-                await queryRunner.commitTransaction();
-                return { success: true, msg: '추천이 취소되었습니다' };
+                response = await this.cancelRecommand(id, token['id']);
+                
+                return response;
 
             } else if (res.success && res.isDeleted) {
-                await this.recommandRepository.createQueryBuilder()
-                    .update('boardRecommand')
-                    .set({
-                        isDeleted: false,
-                        date: new Date()
-                    })
-                    .where("boardId=:id", { id: id })
-                    .andWhere("userId=:userId", { userId: token['id'] })
-                    .execute();
-                await queryRunner.commitTransaction();    
-                return { success: true, msg: '추천 완료' };
-
+                //추천 하기 (기존에 있을 때)
+                response = await this.recommendBoard(id, token['id']);
+                return response;
             } else {
+                response = await this.createRecommend(id,token['id']);
                 //추천
-                const boardRecommand = new BoardRecommandEntity();
-                boardRecommand.user = token['id'];
-                boardRecommand.board = id;
-                boardRecommand.date = new Date();
-                boardRecommand.isDeleted = false;
-
-                await this.recommandRepository.save(boardRecommand);
-                await queryRunner.commitTransaction();
-                return { success: true, msg: '추천 완료' }
+                return response;
             }
         } catch (err) {
             this.logger.error(err);
-            await queryRunner.rollbackTransaction();
             return { success: false, msg: "게시글 추천 실패" };
-        }finally{
-            await queryRunner.release();
         }
+    }
+
+    async cancelRecommand(id, userId){
+        try{
+            await this.recommandRepository.createQueryBuilder()
+            .update('boardRecommand')
+            .set({ isDeleted: true })
+            .where("boardId=:id", { id: id })
+            .andWhere("userId=:userId", { userId: userId })
+            .execute();
+               
+            return { success: true, msg: '추천이 취소되었습니다' };
+        }catch(err){
+            this.logger.error(err);
+            return {success:false , msg:"추천 도중 에러 발생"};
+        }
+        
+    }
+
+    async recommendBoard(id,userId){
+        try{
+            await this.recommandRepository.createQueryBuilder()
+                .update('boardRecommand')
+                .set({
+                    isDeleted: false,
+                    date: new Date()
+                })
+                .where("boardId=:id", { id: id })
+                .andWhere("userId=:userId", { userId: userId })
+                .execute();
+           
+            return { success: true, msg: '추천 완료' };
+        }catch(err){
+            this.logger.error(err);
+            return {success: false, msg : "추천 도중 에러 발생"};
+        }
+    }
+
+    /**새 추천 만들기 */
+    async createRecommend(id, userId){
+        try{
+            const boardRecommand = new BoardRecommandEntity();
+            boardRecommand.user = userId;
+            boardRecommand.board = id;
+            boardRecommand.date = new Date();
+            boardRecommand.isDeleted = false;
+    
+            await this.recommandRepository.save(boardRecommand);
+            
+            return { success: true, msg: '추천 완료' }
+        }catch(err){
+            this.logger.error(err);
+            return {success: false, msg : "추천 도중 에러 발생"};
+
+        }
+       
     }
 
     async checkRecommand(boardId: number, userId: number) {
