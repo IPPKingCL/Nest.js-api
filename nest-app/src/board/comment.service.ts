@@ -63,17 +63,13 @@ export class CommentService{
 
     async deleteComment(deleteComment, header: string): Promise<object> {
         try {
-
             const token = this.jwtService.decode(header);
             const checkAuthUser = CheckAuth.checkAuth(token['id'], deleteComment.userId);
             
             if (checkAuthUser.success) {
-                await this.coRepository.createQueryBuilder()
-                    .update('comment')
-                    .set({ isDeleted: true })
-                    .where("id=:id", { id: deleteComment.id })
-                    .execute();
-                return { success: true };
+                const deleteQuery = await this.deleteCommentQuery(deleteComment.id);
+                const res = deleteQuery.success ? {success:true}:{success:false};
+                return res;
             } else {
                 return { success: false, msg: 'fail' };
             }
@@ -83,15 +79,27 @@ export class CommentService{
         }
     }
 
-    /**여기도 분리 예정 */
+    async deleteCommentQuery(commentId){
+        try{
+            await this.coRepository.createQueryBuilder()
+                .update('comment')
+                .set({ isDeleted: true })
+                .where("id=:id", { id: commentId })
+                .execute();
+
+            return {success: true};
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+    }
+
+    /**여기도 분리 예정 (이거 안쓰는거 같아서 일단 그대로 둠)*/
     async recommendComment(recommend, header) : Promise<object>{
         try{
             const token = this.jwtService.decode(header);
 
-            const check = await this.commentRecommendRepository.createQueryBuilder()
-                        .where("userId=:userId",{userId:token['id']})
-                        .andWhere("commentId=:commentId",{commentId:recommend.id})
-                        .getOne();
+            const check = await this.checkRecommend(token['id'],recommend.id);
             
 
             if(check==null){
@@ -124,6 +132,22 @@ export class CommentService{
         }
     }
 
+    /**추천이 있는지 없는지 확인 */
+    async checkRecommend(userId, recommendId){
+        try{
+            const res = await this.commentRecommendRepository.createQueryBuilder()
+                        .where("userId=:userId",{userId:userId})
+                        .andWhere("commentId=:commentId",{commentId:recommendId})
+                        .getOne();
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+    }
+
+    /**사우이 추천 댓글 조회 */
     async commentLimit(boardId:number){
         try{
             const res = await this.coRepository.query(
