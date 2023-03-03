@@ -41,10 +41,12 @@ export class AlcoholService {
     async getCategory(category:number) : Promise<readAlchoDto[] | object>{
         try{
             if(category==0){
+                /**전체 조회 */
                 const res = await this.alchoRepository.find();
 
                 return res;
             }else{
+                /**해당 카테고리 조회 */
                 const res = await this.alchoRepository.createQueryBuilder('alcho')
                 .where('alchoCategoryId=:category',{category:category})
                 .getMany();
