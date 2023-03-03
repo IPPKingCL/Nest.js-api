@@ -89,12 +89,16 @@ export class UserService {
         this.logger.log("arr = " + arr);
         //console.log(id)
         try{
-            let i = 0;
-            for(i;i<arr[0].length;i++){
+            arr[0].forEach(async arr=>{
                 await this.fRepository.query(
-                    `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i].id+`)`,
+                    `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr.id+`)`,
                 );
-            }
+            });
+            // for(i;i<arr[0].length;i++){
+            //     await this.fRepository.query(
+            //         `insert into favorite(userId,alchoId) values (`+res.id+`,`+arr[0][i].id+`)`,
+            //     );
+            // }
             return {success:true};
         }catch(err){
             this.logger.error(err)
@@ -112,8 +116,8 @@ export class UserService {
         try{
             this.logger.log(userId);
             const res = await this.repository.createQueryBuilder('user')
-            .where('userId = :id',{id :userId})
-            .getOne();
+                        .where('userId = :id',{id :userId})
+                        .getOne();
             
             if(res==null){
                 return {success:true}
