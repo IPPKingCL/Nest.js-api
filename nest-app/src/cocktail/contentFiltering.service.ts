@@ -103,7 +103,7 @@ export class ContentFilteringService{
     }
 
     /**가능 금액 산정 */
-    async ablePrice(age: number) {  
+    ablePrice(age: number) {  
         console.log('age : ' + age)
         if (20 <= age && age < 23) {
             return 30000;

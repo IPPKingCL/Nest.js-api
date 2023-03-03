@@ -139,25 +139,23 @@ export class CocktailService {
 
     async alchoCock(alchoDto: AlchoCockDto): Promise<CockInfoDto[] | object> {
         try {
-            const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
-                .leftJoinAndSelect('alchoRecipe.cocktail', "cocktail.id")
-                .where("alchoId=:id", { id: alchoDto.id })
-                .getMany();
-           
-            if (res.length > 0) {
+            
+            const res = await this.getCocktailList(alchoDto.id);
+
+            if (res.length>0) {
                 const cockArr: Array<CockInfoDto> = [];
                 let i = 0;
-                for (i; i < res.length; i++) {
+                res.forEach((element) =>{
                     const cockInfoDto = new CockInfoDto();
-                    cockInfoDto.id = res[i]['cocktail'].id;
-                    cockInfoDto.name = res[i]['cocktail'].name;
-                    cockInfoDto.dosu = res[i]['cocktail'].dosu;
-                    cockInfoDto.likeOne = res[i]['cocktail'].likeOne;
-                    cockInfoDto.only = res[i]['cocktail'].only;
-                    cockInfoDto.imgUrl = res[i]['cocktail'].imgUrl;
+                    cockInfoDto.id = element['cocktail'].id;
+                    cockInfoDto.name = element['cocktail'].name;
+                    cockInfoDto.dosu = element['cocktail'].dosu;
+                    cockInfoDto.likeOne = element['cocktail'].likeOne;
+                    cockInfoDto.only = element['cocktail'].only;
+                    cockInfoDto.imgUrl = element['cocktail'].imgUrl;
                     cockArr.push(cockInfoDto);
-                }
-
+                });
+            
                 return cockArr;
             } else {
                 return { success: false, msg: "no", category: alchoDto.category };
@@ -166,6 +164,20 @@ export class CocktailService {
         } catch (err) {
             this.logger.error(err);
             return { success: false }
+        }
+    }
+
+    async getCocktailList(id): Promise<any[]>{
+        try{
+            const res = await this.alchoRecipeRepository.createQueryBuilder('alchoRecipe')
+                        .leftJoinAndSelect('alchoRecipe.cocktail', "cocktail.id")
+                        .where("alchoId=:id", { id: id})
+                        .getMany();
+
+            return res;
+        }catch(err){
+            this.logger.error(err);
+            return [];
         }
     }
 
@@ -213,17 +225,17 @@ export class CocktailService {
 
             const cockArr: Array<CockInfoDto> = [];
             
-            for(var i in res)  {
+            res.forEach(element => {
                 const cockInfoDto = new CockInfoDto();
-                cockInfoDto.id = res[i].id;
-                cockInfoDto.name = res[i].name;
-                cockInfoDto.dosu = res[i].dosu;
-                cockInfoDto.likeOne = res[i].likeOne;
-                cockInfoDto.only = res[i].only;
-                cockInfoDto.imgUrl = res[i].imgUrl;
+                cockInfoDto.id = element.id;
+                cockInfoDto.name = element.name;
+                cockInfoDto.dosu = element.dosu;
+                cockInfoDto.likeOne = element.likeOne;
+                cockInfoDto.only =element.only;
+                cockInfoDto.imgUrl = element.imgUrl;
                 cockArr.push(cockInfoDto);
-            }
-
+            });
+           
             return cockArr;
 
         } catch (err) {
