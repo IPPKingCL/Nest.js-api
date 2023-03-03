@@ -144,7 +144,7 @@ export class CocktailService {
 
             if (res.length>0) {
                 const cockArr: Array<CockInfoDto> = [];
-                let i = 0;
+                
                 res.forEach((element) =>{
                     const cockInfoDto = new CockInfoDto();
                     cockInfoDto.id = element['cocktail'].id;
