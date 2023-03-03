@@ -46,8 +46,8 @@ export class ContentFilteringService{
 
             let lastPrice: number = 0; //디비 조회 할 때 기준 금액
 
-            console.log(able);
-            console.log('프라이스 :' + price);
+            this.logger.log(able);
+            this.logger.log('프라이스 :' + price);
             if (able > price) {
                 lastPrice = (price + able) / 2
             } else {
@@ -119,22 +119,24 @@ export class ContentFilteringService{
     }
 
     /**추천 칵테일 리스트 조회 */
-    async cocktailList(favorite, lastPrice) {
+    async cocktailList(favorites, lastPrice) {
         try {
             let array = new Array<object>();
-            for (let i = 0; i < favorite.length; i++) {
+
+            favorites.array.forEach(async favorite => {
                 const res = await this.cockRepository.query(
                     'select * ' +
                     'from cocktail c ' +
                     'inner join ' +
                     '(select cocktailId, price ' +
                     'from alchoRecipe r, Alcho a ' +
-                    'where a.alchoCategoryId=' + favorite[i].alchoId + ' and r.alchoId=a.id and price<' + lastPrice + ') k ' +
+                    'where a.alchoCategoryId=' + favorite.alchoId + ' and r.alchoId=a.id and price<' + lastPrice + ') k ' +
                     'on c.id=k.cocktailId; '
 
                 )
                 array.push(res);
-            }
+            });
+           
             return array;
 
         } catch (err) {
