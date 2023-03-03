@@ -212,15 +212,15 @@ export class CocktailService {
             console.log(res);
 
             const cockArr: Array<CockInfoDto> = [];
-            let i = 0;
-            for(var cock in res)  {
+            
+            for(var i in res)  {
                 const cockInfoDto = new CockInfoDto();
-                cockInfoDto.id = cock['id'];
-                cockInfoDto.name = cock['name'];
-                cockInfoDto.dosu = cock['dosu'];
-                cockInfoDto.likeOne = cock['likeOne'];
-                cockInfoDto.only = cock['only'];
-                cockInfoDto.imgUrl = cock['imgUrl'];
+                cockInfoDto.id = res[i].id;
+                cockInfoDto.name = res[i].name;
+                cockInfoDto.dosu = res[i].dosu;
+                cockInfoDto.likeOne = res[i].likeOne;
+                cockInfoDto.only = res[i].only;
+                cockInfoDto.imgUrl = res[i].imgUrl;
                 cockArr.push(cockInfoDto);
             }
 
