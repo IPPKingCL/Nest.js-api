@@ -56,12 +56,12 @@ export class ContentFilteringService{
 
             if (favorite.length > 0) { //favorite list 가 있을 시
                 const list = await this.cocktailList(favorite, lastPrice);
-                console.log(list);
+                
                 const arr = await this.makeArray(list);
 
                 const res = await this.returnArray(arr);
 
-                //return res;
+                return res;
             } else { //favorite list 가 없을 시
                 const list = await this.randomList(lastPrice);
                 const res = await this.returnArray(list);
@@ -124,20 +124,20 @@ export class ContentFilteringService{
         try {
             let array = new Array<object>();
 
-            favorites.forEach(async favorite => {
+            for(let i = 0; i<favorites.length;i++){
                 const res = await this.cockRepository.query(
                     'select * ' +
                     'from cocktail c ' +
                     'inner join ' +
                     '(select cocktailId, price ' +
                     'from alchoRecipe r, Alcho a ' +
-                    'where a.alchoCategoryId=' + favorite.alchoId + ' and r.alchoId=a.id and price<' + lastPrice + ') k ' +
+                    'where a.alchoCategoryId=' + favorites[i].alchoId + ' and r.alchoId=a.id and price<' + lastPrice + ') k ' +
                     'on c.id=k.cocktailId; '
 
                 )
                 array.push(res);
-            });
-           
+            }
+            console.log(array);
             return array;
 
         } catch (err) {
@@ -182,13 +182,14 @@ export class ContentFilteringService{
         const res = new Array();
         let i = 0;
         
+        
         if(arr.length===0){
             return {success:false,msg:"추천 리스트를 받지 못했습니다"};
         }
 
         while (i < 3) {
             const randomValue = await arr[Math.floor(Math.random() * arr.length)];
-            console.log(randomValue);
+            //console.log(randomValue);
 
             if(res.indexOf(randomValue) === -1){
                 res.push(randomValue);
