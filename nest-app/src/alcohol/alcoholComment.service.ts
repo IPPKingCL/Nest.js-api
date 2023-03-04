@@ -66,7 +66,7 @@ export class AlcoholCommentService{
                     .execute();
                 return {success:true}
             }else{
-                return {success: false, msg:"권한이 없습니다"}
+                return {success: false, msg:"no"}
             }
         }catch(err){
             this.logger.error(err);
