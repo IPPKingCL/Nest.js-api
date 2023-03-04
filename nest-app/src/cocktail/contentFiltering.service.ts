@@ -56,11 +56,12 @@ export class ContentFilteringService{
 
             if (favorite.length > 0) { //favorite list 가 있을 시
                 const list = await this.cocktailList(favorite, lastPrice);
+                console.log(list);
                 const arr = await this.makeArray(list);
 
                 const res = await this.returnArray(arr);
 
-                return res;
+                //return res;
             } else { //favorite list 가 없을 시
                 const list = await this.randomList(lastPrice);
                 const res = await this.returnArray(list);
@@ -103,7 +104,7 @@ export class ContentFilteringService{
     }
 
     /**가능 금액 산정 */
-    ablePrice(age: number) {  
+    async ablePrice(age: number) {  
         console.log('age : ' + age)
         if (20 <= age && age < 23) {
             return 30000;
@@ -123,7 +124,7 @@ export class ContentFilteringService{
         try {
             let array = new Array<object>();
 
-            favorites.array.forEach(async favorite => {
+            favorites.forEach(async favorite => {
                 const res = await this.cockRepository.query(
                     'select * ' +
                     'from cocktail c ' +
@@ -181,6 +182,10 @@ export class ContentFilteringService{
         const res = new Array();
         let i = 0;
         
+        if(arr.length===0){
+            return {success:false,msg:"추천 리스트를 받지 못했습니다"};
+        }
+
         while (i < 3) {
             const randomValue = await arr[Math.floor(Math.random() * arr.length)];
             console.log(randomValue);
