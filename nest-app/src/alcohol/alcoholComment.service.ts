@@ -65,6 +65,8 @@ export class AlcoholCommentService{
                     .where("id=:id",{id:deleteComment.id})
                     .execute();
                 return {success:true}
+            }else{
+                return {success: false, msg:"권한이 없습니다"}
             }
         }catch(err){
             this.logger.error(err);
