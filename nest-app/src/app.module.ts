@@ -68,7 +68,7 @@ import { SelfcocktailModule } from './selfcocktail/selfcocktail.module';
       logging : true,
       
     }),
-    SelfcocktailModule,
+    
     
    
     ], 
