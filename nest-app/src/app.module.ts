@@ -38,6 +38,8 @@ import { SelfJuiceRecipeEntity } from './entities/selfJuiceRecipe.entity';
 import { SelfcocktailModule } from './selfcocktail/selfcocktail.module';
 import { FaceChatEntity } from './entities/faceChat.entity';
 import { FaceChatMemEntity } from './entities/faceChatMem.entity';
+import { FaceChatController } from './face-chat/face-chat.controller';
+import { FaceChatModule } from './face-chat/face-chat.module';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -71,11 +73,12 @@ import { FaceChatMemEntity } from './entities/faceChatMem.entity';
       logging : true,
       
     }),
+    FaceChatModule,
     
     
    
     ], 
-  controllers: [AppController,], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  controllers: [AppController, FaceChatController,], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy,],
 }) 
 export class AppModule {}   
