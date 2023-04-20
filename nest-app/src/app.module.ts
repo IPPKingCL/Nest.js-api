@@ -71,7 +71,7 @@ import { FaceChatMemEntity } from './entities/faceChatMem.entity';
       logging : true,
       
     }),
-    SelfcocktailModule,
+    
     
    
     ], 
