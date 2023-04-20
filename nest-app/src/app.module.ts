@@ -45,6 +45,7 @@ import { FaceChatModule } from './face-chat/face-chat.module';
   
   imports: [MoviesModule, UserModule, BoardModule, AlcoholModule,WeatherModule, 
     RecommandModule, AlcoholModule, CocktailModule, AdminModule, SelfcocktailModule,
+    FaceChatModule,
 
     JwtModule.register({
       secret : process.env.secretOrKey,
@@ -73,12 +74,12 @@ import { FaceChatModule } from './face-chat/face-chat.module';
       logging : true,
       
     }),
-    FaceChatModule,
+   
     
     
    
     ], 
-  controllers: [AppController, FaceChatController,], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
+  controllers: [AppController, ], //컨트롤러는 express의 라우터 같은 존재 url을 가져오고 함수를 실행함
   providers: [JwtStrategy,],
 }) 
 export class AppModule {}   
