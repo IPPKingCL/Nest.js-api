@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { AlchoEntity } from "./alcho.entity";
+import { FaceChatEntity } from "./faceChat.entity";
 
 @Entity('alchoCategory')
 export class AlchoCategoryEntity {
@@ -11,4 +12,7 @@ export class AlchoCategoryEntity {
 
     @OneToMany((type) => AlchoEntity,(alchoEntity) => alchoEntity.alchoCategory)
     alcho : AlchoEntity[];
+
+    @OneToMany((type)=>FaceChatEntity,(faceChatEntity)=>faceChatEntity.alchoCategory)
+    faceChat : FaceChatEntity[];
 }
