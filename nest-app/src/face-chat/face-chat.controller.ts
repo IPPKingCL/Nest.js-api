@@ -1,4 +1,4 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { FaceChatService } from './face-chat.service';
 
 @Controller('face-chat')
@@ -12,5 +12,11 @@ export class FaceChatController {
     async getFaceChatList(){
         this.logger.log('------------get Face Chat List');
         return await this.faceChatService.getAllFaceChat();
+    }
+
+    @Get('/faceChat/:id')
+    async getFaceChat(@Param('id') id:number){
+        this.logger.log('-------------get in the room');
+        
     }
 }

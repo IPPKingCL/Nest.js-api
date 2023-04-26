@@ -20,4 +20,14 @@ export class FaceChatService {
         }
     }
 
+    async getFaceChat(id:number){
+        try{
+            return await this.faceChatRepository.find()
+                        
+        }catch(err){
+            this.logger.error(err);
+            return {sucess:false};
+        }
+    }
+
 }
