@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Logger, Param, Post,Headers } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post,Headers, UseGuards } from '@nestjs/common';
 import { FaceChatService } from './face-chat.service';
 import { AddFaceChatDto } from './dto/AddFaceChat.Dto';
 import { getToken } from 'src/util/token';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 
 @Controller('face-chat')
 export class FaceChatController {
@@ -22,8 +24,9 @@ export class FaceChatController {
         
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('/addFaceChat')
-    async addFaceChat(@Body() addFaceChatDto : AddFaceChatDto, @Headers() header){
+    async addFaceChat(@Body() addFaceChatDto : AddFaceChatDto, @Headers() header): Promise<{ success: boolean; }>{
         this.logger.log('-------------add room');
         return await this.faceChatService.addFaceChat(addFaceChatDto,getToken(header));
     }

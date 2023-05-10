@@ -35,10 +35,12 @@ export class FaceChatService {
     async addFaceChat(addFaceChatDto, header){
         try{
             const token = this.jwtService.decode(header);
-
+            console.log(token["id"])
             const faceChatEntity = new FaceChatEntity();
 
-            faceChatEntity.roomName = addFaceChatDto.name;
+            console.log(addFaceChatDto);
+
+            faceChatEntity.roomName = addFaceChatDto.roomName;
             faceChatEntity.detailComment = addFaceChatDto.detailComment;
             faceChatEntity.alchoCategory = addFaceChatDto.category;
             faceChatEntity.user = token["id"];
@@ -47,7 +49,7 @@ export class FaceChatService {
             await this.faceChatRepository.save(faceChatEntity);
 
             return {success:true};
-            
+
         }catch(err){
             this.logger.error(err);
             return {success:false};
