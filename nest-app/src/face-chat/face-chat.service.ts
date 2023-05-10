@@ -46,9 +46,9 @@ export class FaceChatService {
             faceChatEntity.user = token["id"];
             faceChatEntity.dateTime = new Date();
             
-            await this.faceChatRepository.save(faceChatEntity);
+            const res = await this.faceChatRepository.save(faceChatEntity);
 
-            return {success:true};
+            return {success:true,id:res.id};
 
         }catch(err){
             this.logger.error(err);
