@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { FaceChatMemEntity } from "./faceChatMem.entity";
 import { AlchoCategoryEntity } from "./alchoCategory.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity('faceChat')
 export class FaceChatEntity{
@@ -21,4 +22,7 @@ export class FaceChatEntity{
 
     @ManyToOne((type)=>AlchoCategoryEntity,(alchoCategoryEntity)=>alchoCategoryEntity.faceChat)
     alchoCategory : AlchoCategoryEntity;
+
+    @ManyToOne((type)=>UserEntity,(userEntity)=>userEntity.faceChatEntitys)
+    user : UserEntity;
 }

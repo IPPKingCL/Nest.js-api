@@ -10,6 +10,7 @@ import { FavoriteEntity, } from './favoritList.entity';
 import { RatingEntity } from './rating.entity';
 import { SelfCocktailEntity } from './selfCocktail.entity';
 import { FaceChatMemEntity } from './faceChatMem.entity';
+import { FaceChatEntity } from './faceChat.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -82,5 +83,8 @@ export class UserEntity {
 
     @OneToMany((type) => FaceChatMemEntity,(faceChatMemEntity)=>faceChatMemEntity.user)
     faceChatMemEntitys : FaceChatMemEntity[];
+
+    @OneToMany((type) => FaceChatEntity,(faceChatEntity)=>faceChatEntity.user)
+    faceChatEntitys : FaceChatEntity[];
        
 }
