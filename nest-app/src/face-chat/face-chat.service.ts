@@ -29,5 +29,15 @@ export class FaceChatService {
             return {sucess:false};
         }
     }
+    
+    async addFaceChat(addFaceChatDto, header){
+        try{
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+
+    }
 
 }
