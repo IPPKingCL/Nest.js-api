@@ -4,6 +4,7 @@ import { AddFaceChatDto } from './dto/AddFaceChat.Dto';
 import { getToken } from 'src/util/token';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
+import { IntoRoomDto } from './dto/IntoRoom.Dto';
 
 @Controller('face-chat')
 export class FaceChatController {
@@ -29,6 +30,12 @@ export class FaceChatController {
     async addFaceChat(@Body() addFaceChatDto : AddFaceChatDto, @Headers() header): Promise<{ success: boolean; }>{
         this.logger.log('-------------add room');
         return await this.faceChatService.addFaceChat(addFaceChatDto,getToken(header));
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/intoRoom')
+    async intoRoom(@Body() intoRoomDto : IntoRoomDto, @Headers() header){
+        this.logger.log('-------------get in the room');
     }
 
 }

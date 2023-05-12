@@ -287,19 +287,12 @@ export class CocktailService {
         }
     }
 
+    /**칵테일 별점 다시 주기 */
     async ratingAgain(rating,header){
         try{
             const token = this.jwtService.decode(header);
 
             const res = await this.checkRating(token['id'], rating.cocktailId);
-
-            const ratingEntity = new RatingEntity();
-
-
-            ratingEntity.cocktail = rating.cocktailId;
-            ratingEntity.user = token['id'];
-            ratingEntity.rating = rating.rating;
-            ratingEntity.date = new Date();
 
             const dataId = res.id;
 
