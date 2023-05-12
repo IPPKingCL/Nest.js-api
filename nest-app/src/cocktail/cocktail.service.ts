@@ -262,7 +262,7 @@ export class CocktailService {
                 await this.ratingRepository.insert(ratingEntity);
                 return { success: true };
             } else {
-                return { success: false, msg: '이미 평가하신 칵테일입니다' };
+                return { success: false, msg: 'already' };
             }
         } catch (err) {
             this.logger.error(err);
@@ -277,13 +277,49 @@ export class CocktailService {
                 .andWhere('cocktailId=:cocktailId', { cocktailId: cocktailId })
                 .getOne();
             if (res) {
-                return { success: true };
+                return { success: true ,id:res.id};
             } else {
                 return { sucess: false };
             }
         } catch (err) {
             this.logger.error(err);
             return { success: false, msg: "별점 등록 확인 중 에러 발생" };
+        }
+    }
+
+    async ratingAgain(rating,header){
+        try{
+            const token = this.jwtService.decode(header);
+
+            const res = await this.checkRating(token['id'], rating.cocktailId);
+
+            const ratingEntity = new RatingEntity();
+
+
+            ratingEntity.cocktail = rating.cocktailId;
+            ratingEntity.user = token['id'];
+            ratingEntity.rating = rating.rating;
+            ratingEntity.date = new Date();
+
+            const dataId = res.id;
+
+            await this.ratingRepository.createQueryBuilder()
+                    .update('rating')
+                    .set({
+                        cocktail: rating.cocktailId,
+                        user : token['id'],
+                        rating : rating.rating,
+                        date : new Date()
+                    })
+                    .where("id=:id",{id:dataId})
+                    .execute();
+
+            return {success:true};
+
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
         }
     }
 

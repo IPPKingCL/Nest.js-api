@@ -87,8 +87,16 @@ export class CocktailController {
     @UseGuards(JwtAuthGuard)
     @Post('/rating')
     async rating(@Body() rating:RatingDto,@Headers() header){
-        this.logger.log("---------------like one cocktail ");
+        this.logger.log("---------------rate one cocktail ");
         return await this.cocktailService.rating(rating, getToken(header));
+    }
+
+    @ApiOperation({summary: " 칵테일 별점 다시 주기"})
+    @UseGuards(JwtAuthGuard)
+    @Post('/ratingAgain')
+    async ratingAgain(@Body() rating:RatingDto,@Headers() header){
+        this.logger.log("---------------rate one cocktail again");
+        return await this.cocktailService.ratingAgain(rating, getToken(header));
     }
 
     @ApiOperation({summary:"24시간 별점 조회"})
