@@ -67,9 +67,11 @@ export class FaceChatService {
             if(!res.success){
                 return {success:false};
             }else if(res.success==='yes'){
-                return {success:true,msg:'이미 참여하고 계신 채팅방입니다.'}
+                return {success:true,msg:'이미 참여하고 계신 채팅방입니다.'};
             }else if(res.success==='no'){
-
+                return await this.saveMem(token['id'],faceChatId);
+            }else{
+                return {success:false};
             }
 
         }catch(err){
@@ -78,17 +80,17 @@ export class FaceChatService {
         }
     }
 
-    async saveMem(userId:number,faceChatId:number){
+    async saveMem(userId,faceChatId){
         try{
             const faceMemEntity = new FaceChatMemEntity();
 
-            faceMemEntity.user.id = userId;
-            faceMemEntity.faceChat.id = faceChatId;
+            faceMemEntity.user = userId;
+            faceMemEntity.faceChat = faceChatId;
 
             await this.faceChatMemRepository.save(faceMemEntity);
 
-            return {success:true};
-            
+            return {success:true,msg:'방에 입장하셨습니다'};
+
         }catch(err){
             this.logger.error(err);
             return {success:false};
@@ -99,11 +101,11 @@ export class FaceChatService {
         try{
             const res = await this.faceChatMemRepository.createQueryBuilder('faceChatMem')
                             .leftJoinAndSelect('faceChatMem.user','user.id')
-                            .where("user.id=:userId",{userId:userId})
-                            .andWhere("faceChat.id=:faceChatId",{faceChatId:faceChatId})
+                            .where("faceChatMem.userId=:userId",{userId:userId})
+                            .andWhere("faceChatMem.faceChatId=:faceChatId",{faceChatId:faceChatId})
                             .getOne();
-
-            return res!=null ? {success:'yes'}:{success:'no'};
+            console.log(res);
+            return res!==null ? {success:'yes'}:{success:'no'};
 
         }catch(err){
             this.logger.error(err);
