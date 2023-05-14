@@ -57,4 +57,23 @@ export class FaceChatService {
 
     }
 
+    async getInFaceChat(userId:number, header){
+        try{
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+    }
+
+    async checkFaceChatMem(userId:number,header){
+        try{
+
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+
+    }
+
 }

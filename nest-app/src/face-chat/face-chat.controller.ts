@@ -19,9 +19,11 @@ export class FaceChatController {
         return await this.faceChatService.getAllFaceChat();
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('/faceChat/:id')
-    async getFaceChat(@Param('id') id:number){
+    async getInFaceChat(@Param('id') id:number,@Headers() header){
         this.logger.log('-------------get in the room');
+        return await this.faceChatService.getInFaceChat(id,getToken(header));
         
     }
 
