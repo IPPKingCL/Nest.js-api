@@ -3,6 +3,7 @@ import { FaceChatRepository } from './repository/faceChat.repository';
 import { FaceChatMemRepository } from './repository/faceChatMem.repository';
 import { FaceChatEntity } from 'src/entities/faceChat.entity';
 import { JwtService } from '@nestjs/jwt';
+import { FaceChatMemEntity } from 'src/entities/faceChatMem.entity';
 
 @Injectable()
 export class FaceChatService {
@@ -57,8 +58,19 @@ export class FaceChatService {
 
     }
 
-    async getInFaceChat(userId:number, header){
+    async getInFaceChat(faceChatId:number, header){
         try{
+            const token = this.jwtService.decode(header);
+
+            const res = await this.checkFaceChatMem(token['id'],faceChatId);
+
+            if(!res.success){
+                return {success:false};
+            }else if(res.success==='yes'){
+                return {success:true,msg:'이미 참여하고 계신 채팅방입니다.'}
+            }else if(res.success==='no'){
+
+            }
 
         }catch(err){
             this.logger.error(err);
@@ -66,8 +78,32 @@ export class FaceChatService {
         }
     }
 
-    async checkFaceChatMem(userId:number,header){
+    async saveMem(userId:number,faceChatId:number){
         try{
+            const faceMemEntity = new FaceChatMemEntity();
+
+            faceMemEntity.user.id = userId;
+            faceMemEntity.faceChat.id = faceChatId;
+
+            await this.faceChatMemRepository.save(faceMemEntity);
+
+            return {success:true};
+            
+        }catch(err){
+            this.logger.error(err);
+            return {success:false};
+        }
+    }
+
+    async checkFaceChatMem(userId:number,faceChatId:number){
+        try{
+            const res = await this.faceChatMemRepository.createQueryBuilder('faceChatMem')
+                            .leftJoinAndSelect('faceChatMem.user','user.id')
+                            .where("user.id=:userId",{userId:userId})
+                            .andWhere("faceChat.id=:faceChatId",{faceChatId:faceChatId})
+                            .getOne();
+
+            return res!=null ? {success:'yes'}:{success:'no'};
 
         }catch(err){
             this.logger.error(err);
