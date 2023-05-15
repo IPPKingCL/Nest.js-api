@@ -40,7 +40,7 @@ import { FaceChatEntity } from './entities/faceChat.entity';
 import { FaceChatMemEntity } from './entities/faceChatMem.entity';
 import { FaceChatController } from './face-chat/face-chat.controller';
 import { FaceChatModule } from './face-chat/face-chat.module';
-import { IpFilterMiddlewareModule } from './ip-filter-middleware/ip-filter-middleware.module';
+import { IpFilterMiddlewareModule } from './middleware/ip-filter-middleware.module';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   

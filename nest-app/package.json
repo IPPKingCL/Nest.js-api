@@ -40,6 +40,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
+    "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",
     "mysql2": "^2.3.3",
     "node-cache": "^5.1.2",
