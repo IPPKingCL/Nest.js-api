@@ -19,6 +19,7 @@ import { AlchoCategoryRepository } from 'src/admin/repository/alchoCategory.repo
 import { JuiceRecipeRepository } from 'src/cocktail/repository/JuiceRecipe.repository';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { SelfCocktailCommentRepository } from './repository/selfCocktailComment.repository';
+import { SelfCocktailCommentService } from './selfcocktailComment.service';
 
 @Module({
     imports:[ TypeOrmExModule.forCustomRepository([SelfCocktailRepository,SelfAlchoRecipeRepository,SelfJuiceRepository,
@@ -40,7 +41,7 @@ import { SelfCocktailCommentRepository } from './repository/selfCocktailComment.
           signOptions: { expiresIn: '1y' },
       }),*/],
       controllers : [SelfcocktailController],
-      providers : [SelfcocktailService, JwtStrategy,AdminService]
+      providers : [SelfcocktailService, JwtStrategy,AdminService,SelfCocktailCommentService]
 })
 export class SelfcocktailModule {
 
