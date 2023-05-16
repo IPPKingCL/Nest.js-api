@@ -17,7 +17,7 @@ export class SelfCocktailCommentEntity{
     nickname : string;
 
     @Column()
-    isDeleted : Boolean;
+    isDeleted : boolean;
 
     @ManyToOne((type) => SelfCocktailEntity,(selfCocktailEntity) =>selfCocktailEntity.selfCocktailCommentEntitys)
     selfCocktail : SelfCocktailEntity;

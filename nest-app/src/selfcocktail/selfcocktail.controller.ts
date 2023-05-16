@@ -5,10 +5,15 @@ import { JwtAuthGuard } from 'src/user/jwt/jwt.guard';
 import { getToken } from 'src/util/token';
 import { InsertSelfDto } from './dto/insertSelf.Dto';
 import { SelfcocktailService } from './selfcocktail.service';
+import { commentDto } from 'src/board/dto/comment.Dto';
+import { SelfCocktailCommentService } from './selfcocktailComment.service';
 
 @Controller('selfcocktail')
 export class SelfcocktailController {
-    constructor(private readonly selfcocktailService : SelfcocktailService){}
+    constructor(
+        private readonly selfcocktailService : SelfcocktailService,
+        private readonly selfCocktailCommentService : SelfCocktailCommentService,    
+    ){}
     private readonly logger = new Logger(SelfcocktailController.name);
 
     @ApiOperation({summary:'자작 레시피 공개'})
@@ -35,5 +40,20 @@ export class SelfcocktailController {
     @Get('/select/:id')
     async select(@Param("id") id :number){
         return await this.selfcocktailService.select(id);
+    }
+
+    @ApiOperation({summary : "자작 레시피 댓글 달기"})
+    @UseGuards(JwtAuthGuard)
+    @Post('comment/insert')
+    async commentInsert(@Body() commentDto:commentDto, @Headers() header){
+        this.logger.log("---------------insert cocktail comment ");
+        return await this.selfCocktailCommentService.commentInsert(commentDto, getToken(header));
+    }
+
+    @ApiOperation({summary: " 댓글 조회"})
+    @Get('comment/all/:id')
+    async commentAll(@Param("id") id:number){
+        this.logger.log("---------------select cocktail comment ");
+        return await this.selfCocktailCommentService.commentAll(id);
     }
 }
