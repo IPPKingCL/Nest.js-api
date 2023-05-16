@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { SelfAlchoRecipeEntity } from "./selfAlchoRecipe.Entity";
 import { SelfJuiceRecipeEntity } from "./selfJuiceRecipe.entity";
 import { UserEntity } from "./user.entity";
+import { SelfCocktailCommentEntity } from "./selfCocktailComment.entity";
 
 @Entity('selfCocktail')
 export class SelfCocktailEntity{
@@ -43,6 +44,9 @@ export class SelfCocktailEntity{
 
     @ManyToOne((type)=>(UserEntity),(userEntity)=>userEntity.selfCocktailEntitys)
     user : UserEntity;
+
+    @OneToMany((type)=>(SelfCocktailCommentEntity),(selfCocktailCommentEntity)=>selfCocktailCommentEntity.selfCocktail)
+    selfCocktailCommentEntitys : SelfCocktailCommentEntity[];
 
 
 

@@ -11,6 +11,7 @@ import { RatingEntity } from './rating.entity';
 import { SelfCocktailEntity } from './selfCocktail.entity';
 import { FaceChatMemEntity } from './faceChatMem.entity';
 import { FaceChatEntity } from './faceChat.entity';
+import { SelfCocktailCommentEntity } from './selfCocktailComment.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -86,5 +87,8 @@ export class UserEntity {
 
     @OneToMany((type) => FaceChatEntity,(faceChatEntity)=>faceChatEntity.user)
     faceChatEntitys : FaceChatEntity[];
+
+    @OneToMany((type) => SelfCocktailCommentEntity, (selfCocktailCommentEntity) => selfCocktailCommentEntity.user)
+    selfCocktailCommentEntitys : SelfCocktailCommentEntity[];
        
 }

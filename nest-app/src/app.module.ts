@@ -41,6 +41,7 @@ import { FaceChatMemEntity } from './entities/faceChatMem.entity';
 import { FaceChatController } from './face-chat/face-chat.controller';
 import { FaceChatModule } from './face-chat/face-chat.module';
 import { IpFilterMiddlewareModule } from './middleware/ip-filter-middleware.module';
+import { SelfCocktailCommentEntity } from './entities/selfCocktailComment.entity';
 
 @Module({  //데코레이터는 클래스에 함수 기능을 추가할 수 있음
   
@@ -69,7 +70,7 @@ import { IpFilterMiddlewareModule } from './middleware/ip-filter-middleware.modu
                  JuiceEntity,JuiceRecipeEntity,RatingEntity,BoardRecommandEntity,
                  CocktailCommentEntity,AlchoCategoryEntity,UnitEntity,CommentRecommendEntity,
                  BoardVideoEntity,SelfCocktailEntity,SelfAlchoRecipeEntity,SelfJuiceRecipeEntity,
-                 FaceChatEntity,FaceChatMemEntity
+                 FaceChatEntity,FaceChatMemEntity,SelfCocktailCommentEntity
                 ],
       synchronize: false,
       logging : true,
