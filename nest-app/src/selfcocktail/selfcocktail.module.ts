@@ -18,11 +18,12 @@ import { UnitRepository } from 'src/admin/repository/unit.repository';
 import { AlchoCategoryRepository } from 'src/admin/repository/alchoCategory.repository';
 import { JuiceRecipeRepository } from 'src/cocktail/repository/JuiceRecipe.repository';
 import { UserRepository } from 'src/user/repository/user.repository';
+import { SelfCocktailCommentRepository } from './repository/selfCocktailComment.repository';
 
 @Module({
     imports:[ TypeOrmExModule.forCustomRepository([SelfCocktailRepository,SelfAlchoRecipeRepository,SelfJuiceRepository,
         alchoRepository,JuiceRepository,CocktailRepository,AlchoRecipteRepository,
-        JuiceRecipeRepository,AlchoCategoryRepository,UnitRepository,UserRepository
+        JuiceRecipeRepository,AlchoCategoryRepository,UnitRepository,UserRepository,SelfCocktailCommentRepository
     ]),
       // session을 사용하지 않을 예정이기 때문에 false
       PassportModule.register({ defaultStrategy: 'jwt', session: false }),

@@ -19,7 +19,8 @@ export class SelfcocktailService {
         private readonly selfCocktailRepository : SelfCocktailRepository,
         private readonly selfAlchoRecipeRepository : SelfAlchoRecipeRepository,
         private readonly selfJuiceRecipeRepository : SelfJuiceRepository,  
-        private readonly adminService : AdminService
+        private readonly adminService : AdminService,
+        private readonly selfCocktailCommentRepository : SelfCocktailRepository,
     ){}
 
     async findAll(){
