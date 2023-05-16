@@ -197,10 +197,16 @@ export class SelfcocktailService {
 
     async resJuice(id:number){
         try{
-            const resJuice = await this.selfJuiceRecipeRepository.createQueryBuilder('selfJuiceRecipe')
-                            .leftJoinAndSelect('selfJuiceRecipe.juice','juice.id')
-                            .where("selfCocktailId=:id",{id:id})
-                            .getMany();
+            // const resJuice = await this.selfJuiceRecipeRepository.createQueryBuilder('selfJuiceRecipe')
+            //                 .leftJoinAndSelect('selfJuiceRecipe.juice','juice.id')
+            //                 .where("selfCocktailId=:id",{id:id})
+            //                 .getMany();
+
+            const resJuice = await this.selfJuiceRecipeRepository.query(
+                        "select j.id, j.name, j.type, r.amount, j.imgUrl "
+                        + "from Juice j, selfJuiceRecipe r "
+                        + "where j.id=r.juiceId and r.selfCocktailId=" + id + ";"
+            );
 
             return resJuice;
         }catch(err){
@@ -211,10 +217,16 @@ export class SelfcocktailService {
 
     async resAlcho(id:number){
         try{
-            const resAlcho = await this.selfAlchoRecipeRepository.createQueryBuilder('selfAlchoRecipe')
-                            .leftJoinAndSelect('selfAlchoRecipe.alcho','alcho.id')
-                            .where("selfCocktailId=:id",{id:id})
-                            .getMany();
+            // const resAlcho = await this.selfAlchoRecipeRepository.createQueryBuilder('selfAlchoRecipe')
+            //                 .leftJoinAndSelect('selfAlchoRecipe.alcho','alcho.id')
+            //                 .where("selfCocktailId=:id",{id:id})
+            //                 .getMany();
+
+            const resAlcho = await this.selfAlchoRecipeRepository.query(
+                            "select a.id, a.name, a.category, a.imgUrl, r.amount , r.only "
+                            + "from Alcho a, selfAlchoRecipe r "
+                            + "where a.id=r.alchoId and r.selfCocktailId=" + id + ";"
+            );
             
             return resAlcho;
 
