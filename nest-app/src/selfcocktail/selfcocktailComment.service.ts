@@ -48,4 +48,24 @@ export class SelfCocktailCommentService{
             return { success: false, msg: "댓글 조회 중 에러 발생" };
         }
     }
+
+    async deleteComment(deleteComment, header: string): Promise<object> {
+        try {
+
+            const token = this.jwtService.decode(header);
+            if (deleteComment.userId == (token['id'])) {
+                await this.selfCocktailCommentRepository.createQueryBuilder()
+                    .update('selfCocktailComment')
+                    .set({ isDeleted: true })
+                    .where("id=:id", { id: deleteComment.id })
+                    .execute();
+                return { success: true };
+            } else {
+                return { success: false, msg: 'fail' };
+            }
+        } catch (err) {
+            this.logger.error(err);
+            return { success: false, msg: "댓글 삭제 실패" };
+        }
+    }
 }

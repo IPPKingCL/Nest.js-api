@@ -7,6 +7,7 @@ import { InsertSelfDto } from './dto/insertSelf.Dto';
 import { SelfcocktailService } from './selfcocktail.service';
 import { commentDto } from 'src/board/dto/comment.Dto';
 import { SelfCocktailCommentService } from './selfcocktailComment.service';
+import { delCommentDto } from 'src/board/dto/delComment.Dto';
 
 @Controller('selfcocktail')
 export class SelfcocktailController {
@@ -55,5 +56,12 @@ export class SelfcocktailController {
     async commentAll(@Param("id") id:number){
         this.logger.log("---------------select cocktail comment ");
         return await this.selfCocktailCommentService.commentAll(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('comment/delete')
+    async deleteComment(@Body() delComment:delCommentDto, @Headers() header){
+        this.logger.log("---------------delete cocktail comment ");
+        return await this.selfCocktailCommentService.deleteComment(delComment,getToken(header));
     }
 }
