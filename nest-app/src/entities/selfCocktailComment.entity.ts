@@ -24,4 +24,4 @@ export class SelfCocktailCommentEntity{
 
     @ManyToOne((type) => UserEntity, userEntity => userEntity.selfCocktailCommentEntitys)
     user : UserEntity;
-}
+} 

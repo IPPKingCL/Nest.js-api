@@ -17,7 +17,7 @@ import * as bcrypt from 'bcryptjs';
 export class UserService {
     
     //constructor 하면서 에러남
-    constructor(
+    constructor( 
         private readonly repository : UserRepository,
         private jwtService: JwtService,
         private fRepository : FavoriteRepository,

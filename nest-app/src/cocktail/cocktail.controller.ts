@@ -150,7 +150,7 @@ export class CocktailController {
         }else{
             return await this.contentFilteringRecommend(header);
         }
-    }
+    }   
 
     @ApiOperation({summary : "컨텐츠 기반 필터링 추천"})
     @UseGuards(JwtAuthGuard)
@@ -169,7 +169,7 @@ export class CocktailController {
         }
         
         return value;
-    }
+    } 
 
     @ApiOperation({summary : "컨텐츠 기반 필터링 다시 추천 받기"})
     @UseGuards(JwtAuthGuard)

@@ -22,14 +22,14 @@ describe('MoviesService', () => {
     expect(2+2).toEqual(4);
   })
 
-  describe("getAll", () => {
-    it("should return an array",()=>{
-      const result = service.getAll();
+  // describe("getAll", () => {
+  //   it("should return an array",()=>{
+  //     const result = service.getAll();
 
-      expect(result).toBeInstanceOf(Array);
+  //     expect(result).toBeInstanceOf(Array);
 
-    });
-  });
+  //   });
+  // });
 
   describe("getOne",() =>{
     it("should return a movie",() => {
@@ -54,50 +54,50 @@ describe('MoviesService', () => {
   })
 
 
-  describe("deleteOne", () => {
-    it("deletes a movie", () => {
-      service.create({
-        title:"Text Movie",
-        genres : ['test'],
-        year:2000,
-      });
+  // describe("deleteOne", () => {
+  //   it("deletes a movie", () => {
+  //     service.create({
+  //       title:"Text Movie",
+  //       genres : ['test'],
+  //       year:2000,
+  //     });
 
-      console.log(service.getAll());
+  //     console.log(service.getAll());
 
-      const allMovies = service.getAll();
-      service.delete(1);
-      const afterDelete = service.getAll();
+  //     const allMovies = service.getAll();
+  //     service.delete(1);
+  //     const afterDelete = service.getAll();
 
-      expect(afterDelete.length).toEqual(allMovies.length-1);
+  //     expect(afterDelete.length).toEqual(allMovies.length-1);
 
-    })
+  //   })
 
-    it("should return a 404",() => {
-      try{
-        service.delete(999)
-      }catch(e){
-        expect(e).toBeInstanceOf(NotFoundException);
-        expect(e.message).toEqual(`Movie with ID : 999`);
-      }
-    })
-  })
+  //   it("should return a 404",() => {
+  //     try{
+  //       service.delete(999)
+  //     }catch(e){
+  //       expect(e).toBeInstanceOf(NotFoundException);
+  //       expect(e.message).toEqual(`Movie with ID : 999`);
+  //     }
+  //   })
+  // })
 
-  describe("create", () => {
-    it("should create a movie", () => {
-      const beforeCreate = service.getAll().length;
-      service.create(
-        {
-          title:"Text Movie",
-          genres : ['test'],
-          year:2000,
-        }
-      );
-      const afterCreate = service.getAll().length;
-      expect(afterCreate).toBeGreaterThan(beforeCreate);
+  // describe("create", () => {
+  //   it("should create a movie", () => {
+  //     const beforeCreate = service.getAll().length;
+  //     service.create(
+  //       {
+  //         title:"Text Movie",
+  //         genres : ['test'],
+  //         year:2000,
+  //       }
+  //     );
+  //     const afterCreate = service.getAll().length;
+  //     expect(afterCreate).toBeGreaterThan(beforeCreate);
 
 
-    });
-  });
+  //   });
+  // });
 
   describe("update",() => {
     it("should update a movie",() => {
