@@ -7,10 +7,16 @@ import { TypeOrmExModule } from 'src/typeorm-ex.module';
 import { FaceChatController } from './face-chat.controller';
 import { FaceChatMemRepository } from './repository/faceChatMem.repository';
 import { FaceChatRepository } from './repository/faceChat.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { FaceChatEntity } from '@src/entities/faceChat.entity';
+import { FaceChatMemEntity } from '@src/entities/faceChatMem.entity';
 
 @Module({
   imports: [
     TypeOrmExModule.forCustomRepository([FaceChatMemRepository,FaceChatRepository]),
+    TypeOrmModule.forFeature([
+      FaceChatMemEntity,FaceChatEntity
+    ]),
     // session을 사용하지 않을 예정이기 때문에 false
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     // jwt 생성할 때 사용할 시크릿 키와 만료일자 적어주기
