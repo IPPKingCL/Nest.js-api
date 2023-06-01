@@ -25,7 +25,7 @@ export class AdminService {
         private dataSource : DataSource,
         private jwtService :JwtService,
         private readonly cockRepository : CocktailRepository,
-        private readonly alchoRepository : alchoRepository,
+        private readonly alchoRepository : alchoRepository, 
         private readonly juiceRepository : JuiceRepository,
         private readonly alchoRecipeRepository : AlchoRecipteRepository,
         private readonly juiceRecipeRepository : JuiceRecipeRepository,
