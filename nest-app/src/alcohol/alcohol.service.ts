@@ -2,10 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { readAlchoDto } from './dto/readAlcho.Dto';
 import { AlchoEntity } from '../entities/alcho.entity';
 import { alchoRepository } from './repository/alcho.repository';
-import { alchoCommentRepository } from './repository/alchoComment.repository';
-import { AlchoCommentDto } from './dto/alchoComment.Dto';
-import { AlchoCommentEntity } from 'src/entities/alchoComment.entity';
-import { JwtService } from '@nestjs/jwt';
+
 
 import { alchoCategoryRepository } from './repository/alchoCategory.repository';
 
@@ -14,9 +11,7 @@ export class AlcoholService {
     private readonly logger = new Logger(AlcoholService.name)
     constructor(
         private readonly alchoRepository : alchoRepository,
-        private readonly alchoCommentRepository : alchoCommentRepository,
         private readonly alchoCategoryRepository : alchoCategoryRepository,
-        private jwtService: JwtService
     ){}
 
     async getAll() : Promise<AlchoEntity[]>{

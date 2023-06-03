@@ -1,21 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { alchoRepository } from 'src/alcohol/repository/alcho.repository';
-import { AlchoRecipteRepository } from 'src/cocktail/repository/AlchoRecipe.repository';
-import { CocktailRepository } from 'src/cocktail/repository/Cocktail.repository';
 import { JuiceRepository } from 'src/cocktail/repository/Juice.repository';
-import { JuiceRecipeRepository } from 'src/cocktail/repository/JuiceRecipe.repository';
 import { AlchoEntity } from 'src/entities/alcho.entity';
-import { AlchoCategoryEntity } from 'src/entities/alchoCategory.entity';
 import { CocktailEntity } from 'src/entities/cocktail.entity';
 import { JuiceEntity } from 'src/entities/juice.entity';
 import { UnitEntity } from 'src/entities/unit.entity';
 import { userStatus } from 'src/user/enumType/userStatus';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { AlchoCategoryRepository } from './repository/alchoCategory.repository';
 import { UnitRepository } from './repository/unit.repository';
 import { DataSource } from 'typeorm';
-import { AlchoRecipeEntity } from 'src/entities/alchoRecipe.entity';
 import { JuiceRecipeEntity } from 'src/entities/juiceRecipe.entity';
 
 @Injectable()
@@ -24,13 +18,9 @@ export class AdminService {
     constructor(
         private dataSource : DataSource,
         private jwtService :JwtService,
-        private readonly cockRepository : CocktailRepository,
         private readonly alchoRepository : alchoRepository, 
         private readonly juiceRepository : JuiceRepository,
-        private readonly alchoRecipeRepository : AlchoRecipteRepository,
-        private readonly juiceRecipeRepository : JuiceRecipeRepository,
         private readonly unitRepository : UnitRepository,
-        private readonly alchoCategoryRepository : AlchoCategoryRepository,
         private readonly userRepository :UserRepository,
         
     ){}
